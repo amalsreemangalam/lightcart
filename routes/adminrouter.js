@@ -35,6 +35,6 @@ router.get('/block/:id',admincontroller.userToBlock);
 router.get('/unblock/:id',admincontroller.userToUnblock);// Example
 router.get('/productmanagement',admincontroller.productmanagement)
 router.get('/editproduct',admincontroller.editproductget)
-// router.post('/editproduct',admincontroller.editproductpost)
+// router.post('/editproduct',admincontroller.editproductpost) 
 
 module.exports = router;
