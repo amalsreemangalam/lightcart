@@ -32,6 +32,7 @@ router.post("/adminlogin",admincontroller.adminloginpost)
 router.get('/adminside',admincontroller.dashboard)
 router.get('/usermanagement',admincontroller.usermanagement)
 router.get('/block/:id',admincontroller.userToBlock);
+
 router.get('/unblock/:id',admincontroller.userToUnblock);// Example
 router.get('/productmanagement',admincontroller.productmanagement)
 router.get('/editproduct',admincontroller.editproductget)
