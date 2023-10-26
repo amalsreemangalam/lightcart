@@ -76,11 +76,15 @@
     <div class="container">
         <h1>Login</h1>
         <form action="/userlogin" method="post">
-            <input type="text" name="name" placeholder="email">
+            <input type="text" name="email" placeholder="email">
             <input type="password" name="password" placeholder="Password">
             <!-- <input type="submit" value="Submit"> -->
-            <button class="otp-button"  id="requestOtp">Request OTP</button>
-            
+            <button class="otp-button"  id="requestOtp">submit</button>
+            <a style="margin-left: 100px;" href="/usersignup">Signup</a>
+            <% if (msg) { %>
+                <div id="error-message" class="error-message"><%= msg %></div>
+            <% } %>
+         
         </form>
         <a href=""></a>
     </div>
@@ -90,20 +94,29 @@
         if (window.history.replaceState) {
             window.history.replaceState(null, null, window.location.href);
         }
-//         document.getElementById('requestOtp').addEventListener('click', function() {
-//     var xhr = new XMLHttpRequest();
-//     xhr.open('GET', '/getotp', true);
-//     xhr.onload = function() {
-//         if (xhr.status === 200) {
-//             document.open();
-//             document.write(xhr.responseText);
-//             document.close();
-//         }
-//     };
-//     xhr.send();
-// });
+
         
     </script>
+    <script>
+        // Function to show error message
+        function showErrorMessage() {
+            var errorMessage = document.getElementById("error-message");
+            errorMessage.removeAttribute("hidden");
+    
+            // Hide the error message after 10 seconds (10000 milliseconds)
+            setTimeout(function() {
+                errorMessage.setAttribute("hidden", true);
+            }, 5000);
+        }
+    
+        // Call the function when the page loads (if there is an error message)
+        window.onload = function() {
+            if (document.getElementById("error-message").innerText.trim() !== "") {
+                showErrorMessage();
+            }
+        }
+    </script>
+    
    </body>
    </html>
    

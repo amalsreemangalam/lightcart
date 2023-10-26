@@ -71,6 +71,14 @@
             <input type="submit" value="Verify OTP">
            
         </form>
+        <!-- otp.ejs -->
+
+<% if (typeof error !== 'undefined') { %>
+    <div class="error-message"><%= error %></div>
+<% } %>
+
+<!-- Your other HTML content goes here -->
+
     </div>
 </body>
 </html>

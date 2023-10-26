@@ -7,7 +7,7 @@ mongoose.connect("mongodb://0.0.0.0/Logindetails")
 })
 
 const LogInSchema=new mongoose.Schema({
-    name:{
+    email:{
        type:String, 
        required:true
     },

@@ -60,6 +60,35 @@
 <body>
 
 
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Admin Control Panel</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/usermanagement">User Management</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/productmanagement">Product Management</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/couponmanagement">Coupon Management</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Categorymanagement">Categorymanagement</a>
+                    </li>
+                    <a href="/admin/logout" class="border rounded py-1 px-3 nav-link d-flex align-items-center">
+                        <i class="fas fa-sign-out-alt m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Logout</p>
+                      </a>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
 
 
 
@@ -79,7 +108,7 @@
                                 <tr>
 
                                     <td><%= user._id %></td>
-                                    <td><%= user.name %></td>
+                                    <td><%= user.email %></td>
                                     <td><%= user.password %></td>
                                     <!-- <td><%= user.phone %></td> -->
 
