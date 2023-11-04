@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<style>
+   body {
+    background-image: url('http://www.pixelstalk.net/wp-content/uploads/2016/04/Grey-backgrounds-for-desktop.jpg'); /* Replace 'path_to_your_image.jpg' with the actual path to your image file */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+  
+    .navbar {
+    background-image: url('https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=996&t=st=1698591589~exp=1698592189~hmac=c99fe729580f2db3b78e232eec4de426cf83b5ad133debe48b18841b62e8d65e'); /* Replace 'path_to_your_image.jpg' with the actual path to your image file */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+</style>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light"> -->
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Admin Control Panel</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/usermanagement">User Management</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/productmanagement">Product Management</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/couponmanagement">Coupon Management</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/categorymanagement">categorymanagement</a>
+                    </li>
+                </ul>
+                <a href="/admin/logout" class="border rounded py-1 px-3 nav-link d-flex align-items-center">
+                  <i class="fas fa-sign-out-alt m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Logout</p>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+
+
+
+
+
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Add category
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item" href="/addcategory">add categorymanagement</a>
+                  <!-- <a class="dropdown-item" href="/editcategory">editcategory</a>   -->
+                
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+   
+       <!-- ... Your existing code ... -->
+
+<table class="table">
+  <thead class="thead-light">
+      <tr>
+          <th scope="col">categoryname</th>
+           <!-- <th scope="col">productprice</th>  -->
+          <th scope="col">categorydescription</th>
+         
+          <th scope="col">Action</th>
+      </tr>
+  </thead>
+  <tbody>
+      <% category.forEach(product => { %>
+          <tr>
+              <td><%= product.categoryname %></td>
+            
+              <td><%= product.categorydescription %></td>
+            <td>
+                  <a href="/editcategory/<%= product._id %>" class="btn btn-primary">Edit</a>
+                  <a href="/deletecategory/<%= product._id %>" class="btn btn-primary" style="background-color: red; font-size: 12px;">Delete</a>
+             </td>
+          </tr>
+      <% }) %>
+  </tbody>
+</table>
+
+<!-- ... Your existing code ... -->
+
+   
+
+
+
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script>
+  
+</script>
+
+</body>
+</html>

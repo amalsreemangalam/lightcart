@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Your Cart - Your E-Commerce Website</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background-image: url('https://th.bing.com/th/id/R.0b3441917b0cb5bb8120f88b444621de?rik=dmPsLnjHlUWxiA&riu=http%3a%2f%2fgetwallpapers.com%2fwallpaper%2ffull%2f9%2f0%2f4%2f589375.jpg&ehk=ErYzeUkvRrV7Ubd6ox5Aj7z5dtjmvGLIxLqkA%2fyjO04%3d&risl=&pid=ImgRaw&r=0');
+            /* Replace 'path-to-your-background-image.jpg' with the actual path to your image */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+    </header>
+    <div class="container mt-5">
+        <h1 class="mb-4">Your Shopping Cart</h1>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Product</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% let total=0 %>
+                        <% if (cart && cart.items) {%>
+                            <% for (const item of cart.items) { %>
+                                <tr>
+
+                                    <td>
+                                        <h4>
+                                            <% let product=products.find((ele)=>ele._id.equals(item.product)) %> <%= product.productname%>
+                                </h4>
+                            </td>
+                            <td>
+                                <% let image=products.find((ele)=>ele._id.equals(item.product))%>
+                                    <img src=" <%=image.productimage[0]%>" alt="Product Image"
+                                                    style="width: 100px; height: 100px;" />
+                                    </td>
+                                    <td>
+                                        <% singleprice=item.single_product_total_price / item.quantity %>
+                                            <%= singleprice %>
+                                    </td>
+                                    <td class="">
+                                        <div class="d-flex">
+                                            <div class="minus plus-minus" data-item-id="<%=item.product%>">
+                                                <svg width="12" height="4" xmlns="http://www.w3.org/2000/svg"
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                    <defs>
+                                                        <path
+                                                            d="M11.357 3.332A.641.641 0 0 0 12 2.69V.643A.641.641 0 0 0 11.357 0H.643A.641.641 0 0 0 0 .643v2.046c0 .357.287.643.643.643h10.714Z"
+                                                            id="a" />
+                                                    </defs>
+                                                    <use fill="#FF7E1B" fill-rule="nonzero" xlink:href="#a" />
+                                                </svg>
+                                            </div>
+                                            <span id="" data-item-id="<%=item.product %>" class="amount">
+                                                <%= item.quantity %>
+                                            </span>
+                                            <div class="plus plus-minus" data-item-id="<%=item.product%>">
+                                                <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg"
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink" id="plus">
+                                                    <defs>
+                                                        <path
+                                                            d="M12 7.023V4.977a.641.641 0 0 0-.643-.643h-3.69V.643A.641.641 0 0 0 7.022 0H4.977a.641.641 0 0 0-.643.643v3.69H.643A.641.641 0 0 0 0 4.978v2.046c0 .356.287.643.643.643h3.69v3.691c0 .356.288.643.644.643h2.046a.641.641 0 0 0 .643-.643v-3.69h3.691A.641.641 0 0 0 12 7.022Z"
+                                                            id="b" />
+                                                    </defs>
+                                                    <use fill="#FF7E1B" fill-rule="nonzero" xlink:href="#b" id="plus" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>₹<%= item.single_product_total_price %>
+                                    </td>
+                                    <td>
+                                        <a href="/removeProduct/<%=item.product%>"><button class="btn btn-danger">Remove</button></a>
+                                    </td>
+                                </tr>
+                                <% total+=item.single_product_total_price %>
+                                    <% } %>
+                                        <%} %>
+
+
+                </tbody>
+
+            </table>
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-md-4">
+                <h4>Total: ₹<%=total.toFixed(2) %>
+                </h4>
+                
+                <% if (cart.items.length>0) {%>
+                    <a href="/checkout" class="btn btn-success btn-block mt-3">Checkout</a>
+                    <% } %>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-12 text-center">
+                <a href="/home" class="btn btn-primary">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <!-- Include your website's footer here -->
+    </footer>
+
+    <!-- item amount toggle  -->
+    <script>
+        let pluses = document.getElementsByClassName("plus");
+        let minuses = document.getElementsByClassName("minus");
+        let amounts = document.getElementsByClassName("amount");
+
+        for (let i = 0; i < pluses.length; i++) {
+            pluses[i].addEventListener("click", function () {
+                amounts[i].innerHTML = parseInt(amounts[i].innerHTML) + 1;
+
+                let itemId = this.dataset.itemId;
+
+                let newAmount = parseInt(amounts[i].innerHTML);
+
+                // Send the updated amount to the server
+                fetch('/updateCart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ itemId: itemId, amount: newAmount }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data);
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+                window.location.reload()
+
+
+            });
+
+            minuses[i].addEventListener("click", function () {
+
+                if (parseInt(amounts[i].innerHTML) >= 0) {
+                    amounts[i].innerHTML = parseInt(amounts[i].innerHTML) - 1;
+
+                    let itemId = this.dataset.itemId;
+                    let newAmount = parseInt(amounts[i].innerHTML);
+                    // chek if its less than 0
+                    if (newAmount <= 0) {
+                        window.location.href = `/removeProduct/${itemId}`
+                    } else {
+                        // Send the updated amount to the server
+                        fetch('/updateCart', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ itemId: itemId, amount: newAmount }),
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log('Success:', data);
+                            })
+                            .catch((error) => {
+                                console.error('Error:', error);
+                            });
+                        window.location.reload()
+
+                    }
+                }
+            });
+        }
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+    </script>
+</body>
+
+</html>

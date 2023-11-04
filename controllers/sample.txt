@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<style>
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #f1f1f1;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+</style>
+
+
+<body>
+
+
+    <header>
+        <!-- Jumbotron -->
+
+        <!-- Jumbotron -->
+
+        <!-- Heading -->
+        <div class="bg-primary">
+            <div class="container py-4">
+                <!-- Breadcrumb -->
+              
+                <!-- Breadcrumb -->
+            </div>
+        </div>
+        <!-- Heading -->
+    </header>
+
+    <section class="bg-light py-5">
+        <div class="container">
+            <div class="row">
+
+                <button>
+                    <a href="/checkoutaddress">ADD ADDRESS</a>
+                </button>
+
+
+
+                <div class="col-md-8">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <form action="" method="post">
+
+
+
+
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Address</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        <% if (user.address && user.address.length> 0) { %>
+                                            <% user.address.forEach((address, index)=> { %>
+                                                <%= address.houseName %>,
+                                                    <%= address.street %>,
+                                                        <%= address.city %>,
+                                                            <%= address.state %>,
+                                                                <%= address.pincode %>,
+                                                                    <%= address.country %>
+                                                                        <% if (index !==user.address.length - 1) { %>
+                                                                            <br>
+                                                                            <br>
+                                                                            <!-- Add line break between addresses -->
+                                                                            <% } %>
+                                                                                <% }) %>
+                                                                                    <% } %>
+                                                                                        <div class="row">
+                                                                                            <div class="col-sm-12">
+
+                                                                                            </div>
+                                                                                        </div>
+                                    </div>
+
+                                </div>
+</form>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+
+
+
+
+            <div class="dropdown">
+                <button class="dropbtn">Select Payment Method</button>
+                <div class="dropdown-content">
+                    <a href="/orderplaced">Cash on Delivery</a>
+                    <a href="#">Online Payment</a>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            <div class="col-xl-4 col-lg-4 d-flex justify-content-center justify-content-lg-end">
+                <div class="ms-lg-4 mt-4 mt-lg-0" style="max-width: 320px;">
+                    <h6 class="mb-3">Summary</h6>
+                    <div class="d-flex justify-content-between">
+
+                    </div>
+                    <div class="d-flex justify-content-between">
+
+                    </div>
+                    <div class="d-flex justify-content-between">
+
+                    </div>
+                    <hr />
+                    <% for (const item of cart.items) { %>
+                        <div class="d-flex justify-content-between">
+                            <p class="mb-2">Total price:</p>
+                            <p class="mb-2 fw-bold">₹<%= item.single_product_total_price %>
+                            </p>
+                        </div>
+                        <% } %>
+
+                            <div class="input-group mt-3 mb-4">
+
+
+
+                            </div>
+                            <% for (const item of cart.items) { %>
+                                <tr>
+        
+                                    <td>
+                                        <h4>
+                                           <% let product=products.find((ele)=>ele._id.equals(item.product)) %> <%= product.productname%>
+                                        </h4>
+                                    </td>
+                                    <td>
+                                        <% let image=products.find((ele)=>ele._id.equals(item.product))%>
+                                            <img src="<%=image.productimage[0]%>" alt="Product Image"
+                                                style="width: 100px; height: 100px;" />
+                                                <div>
+                                                    <h4>quantity</h4>
+                                                    <span id="" data-item-id="<%=item.product %>" class="amount">
+                                                        <%= item.quantity %>
+                                                    </span>
+                                                </div>
+                                    </td>
+
+                                    <% } %>
+
+
+
+
+
+
+
+                            <hr />
+                            
+                            <h6 class="text-dark my-4">Items in cart</h6>
+
+                            <div class="d-flex align-items-center mb-4">
+                                <div class="me-3 position-relative">
+                                    <span
+                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-secondary">
+                                        1
+                                    </span>
+                                    <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/7.webp"
+                                        style="height: 96px; width: 96x;" class="img-sm rounded border" />
+                                </div>
+                                <div class="">
+                                    <a href="#" class="nav-link">
+                                        Gaming Headset with Mic <br />
+                                        Darkblue color
+                                    </a>
+                                    <div class="price text-muted">Total: $295.99</div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex align-items-center mb-4">
+                                <div class="me-3 position-relative">
+                                    <span
+                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-secondary">
+                                        1
+                                    </span>
+                                    <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/5.webp"
+                                        style="height: 96px; width: 96x;" class="img-sm rounded border" />
+                                </div>
+                                <div class="">
+                                    <a href="#" class="nav-link">
+                                        Apple Watch Series 4 Space <br />
+                                        Large size
+                                    </a>
+                                    <div class="price text-muted">Total: $217.99</div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex align-items-center mb-4">
+                                <div class="me-3 position-relative">
+                                    <span
+                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-secondary">
+                                        3
+                                    </span>
+                                    <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/1.webp"
+                                        style="height: 96px; width: 96x;" class="img-sm rounded border" />
+                                </div>
+                                <div class="">
+                                    <a href="#" class="nav-link">GoPro HERO6 4K Action Camera - Black</a>
+                                    <div class="price text-muted">Total: $910.00</div>
+                                </div>
+                            </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center text-lg-start text-muted bg-primary mt-3">
+        <!-- Section: Links  -->
+        <section class="">
+            <div class="container text-center text-md-start pt-4 pb-4">
+                <!-- Grid row -->
+                <div class="row mt-3">
+                    <!-- Grid column -->
+                    <div class="col-12 col-lg-3 col-sm-12 mb-2">
+                        <!-- Content -->
+                        <a href="https://mdbootstrap.com/" target="_blank" class="text-white h2">
+                            MDB
+                        </a>
+                        <p class="mt-1 text-white">
+                            © 2023 Copyright: MDBootstrap.com
+                        </p>
+                    </div>
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <!-- Links -->
+                        <h6 class="text-uppercase text-white fw-bold mb-2">
+                            Store
+                        </h6>
+                        <ul class="list-unstyled mb-4">
+                            <li><a class="text-white-50" href="#">About us</a></li>
+                            <li><a class="text-white-50" href="#">Find store</a></li>
+                            <li><a class="text-white-50" href="#">Categories</a></li>
+                            <li><a class="text-white-50" href="#">Blogs</a></li>
+                        </ul>
+                    </div>
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <!-- Links -->
+                        <h6 class="text-uppercase text-white fw-bold mb-2">
+                            Information
+                        </h6>
+                        <ul class="list-unstyled mb-4">
+                            <li><a class="text-white-50" href="#">Help center</a></li>
+                            <li><a class="text-white-50" href="#">Money refund</a></li>
+                            <li><a class="text-white-50" href="#">Shipping info</a></li>
+                            <li><a class="text-white-50" href="#">Refunds</a></li>
+                        </ul>
+                    </div>
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <!-- Links -->
+                        <h6 class="text-uppercase text-white fw-bold mb-2">
+                            Support
+                        </h6>
+                        <ul class="list-unstyled mb-4">
+                            <li><a class="text-white-50" href="#">Help center</a></li>
+                            <li><a class="text-white-50" href="#">Documents</a></li>
+                            <li><a class="text-white-50" href="#">Account restore</a></li>
+                            <li><a class="text-white-50" href="#">My orders</a></li>
+                        </ul>
+                    </div>
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-12 col-sm-12 col-lg-3">
+                        <!-- Links -->
+                        <h6 class="text-uppercase text-white fw-bold mb-2">Newsletter</h6>
+                        <p class="text-white">Stay in touch with latest updates about our products and offers</p>
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control border" placeholder="Email" aria-label="Email"
+                                aria-describedby="button-addon2" />
+                            <button class="btn btn-light border shadow-0" type="button" id="button-addon2"
+                                data-mdb-ripple-color="dark">
+                                Join
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Grid column -->
+                </div>
+                <!-- Grid row -->
+            </div>
+        </section>
+        <!-- Section: Links  -->
+
+        <div class="">
+            <div class="container">
+                <div class="d-flex justify-content-between py-4 border-top">
+                    <!--- payment --->
+                    <div>
+                        <i class="fab fa-lg fa-cc-visa text-white"></i>
+                        <i class="fab fa-lg fa-cc-amex text-white"></i>
+                        <i class="fab fa-lg fa-cc-mastercard text-white"></i>
+                        <i class="fab fa-lg fa-cc-paypal text-white"></i>
+                    </div>
+                    <!--- payment --->
+
+                    <!--- language selector --->
+                    <div class="dropdown dropup">
+                        <a class="dropdown-toggle text-white" href="#" id="Dropdown" role="button"
+                            data-mdb-toggle="dropdown" aria-expanded="false"> <i
+                                class="flag-united-kingdom flag m-0 me-1"></i>English </a>
+
+                        <ul class="dropdown-menu dropdown-menu-endp" aria-labelledby="Dropdown">
+                            <li>
+                                <a class="dropdown-item" href="#"><i class="flag-united-kingdom flag"></i>English <i
+                                        class="fa fa-check text-success ms-2"></i></a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider" />
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#"><i class="flag-poland flag"></i>Polski</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#"><i class="flag-china flag"></i>中文</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#"><i class="flag-japan flag"></i>日本語</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#"><i class="flag-germany flag"></i>Deutsch</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#"><i class="flag-france flag"></i>Français</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#"><i class="flag-spain flag"></i>Español</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#"><i class="flag-russia flag"></i>Русский</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#"><i class="flag-portugal flag"></i>Português</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--- language selector --->
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer -->
+</body>
+
+</html>

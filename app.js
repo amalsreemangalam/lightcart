@@ -8,6 +8,7 @@ const adminrouter=require('./routes/adminrouter');
 const { router } = require('./controllers/admincontroller');
 const nocache=require('nocache')
 app.use(nocache())
+app.use(express.json())
 
 
 

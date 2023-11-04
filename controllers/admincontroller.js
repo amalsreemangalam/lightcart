@@ -3,7 +3,8 @@ const router = express.Router()
 const productcollection = require("../models/productmongo");
 
 const admincollection = require("../models/adminmongo")
-const newcollection = require("../models/userloginmongodb")
+const newcollection = require("../models/userloginmongodb");
+const categorycollection = require('../models/category.mongo');
 
 
 
@@ -155,11 +156,8 @@ const addProductPost = async (req, res) => {
     try {
         console.log('addproducts');
         const { productname, productprice, productdescription, productstocks, productcategory,Productimage } = req.body;
-        //  const productimage=req.file.filename;
-         // Get the uploaded image file path
-        let imagePath = req.files.map(file => { return file.path.substring(6) }); // Assuming 'path' is the property where multer stores the file path
-        console.log('imagepath1:', imagePath);
-        // Check if the path includes "public/" (Windows uses backslashes)
+        
+        let imagePath = req.files.map(file => { return file.path.substring(6) }); 
         
 
 console.log('imagePath2',imagePath);
@@ -187,11 +185,11 @@ const deleteproduct = async (req, res) => {
     try {
         const deletedProduct = await  productcollection.findByIdAndDelete(productId);
 
-        if (!deletedProduct) {
-            return res.status(404).json({ message: 'Product not found' });
-        }
+        // if (!deletedProduct) {
+        //     return res.status(404).json({ message: 'Product not found' });
+        // }
 
-        return res.status(200).json({ message: 'Product deleted successfully', deletedProduct });
+        return res.status(200).json({ message: 'Product deleted successfully'});
     } catch (error) {
         return res.status(500).json({ message: 'Internal Server Error', error: error.message });
     }
@@ -206,7 +204,76 @@ const logout = (req, res) => {
     })
 }
 
+ const showcategoryManagementPage= async (req, res) => {
+    console.log("hi here");
+    try {
+        const category = await categorycollection.find();
+      console.log(category);
+        res.render('categorymanagement', {category}); // Pass the products to the EJS template
+    } catch (error) {
+        console.error(error);
+        // Handle the error and send a response to the client
+    }
+};
 
+const addcategoryget=(req,res)=>{
+    res.render('addcategory')
+}
+
+
+
+const addcategory=async (req, res) => {
+   const categorydata={
+    categoryname:req.body.categoryname,
+    categorydescription:req.body.categorydescription
+
+
+   }
+
+await categorycollection.insertMany([categorydata]);
+
+res.redirect("/categorymanagement")
+
+}
+const deletecategory = async (req, res) => {
+    const productId = req.params.id; 
+
+    try {
+        const deletedcategory = await  categorycollection.findByIdAndDelete(productId);
+
+        // if (!deletedProduct) {
+        //     return res.status(404).json({ message: 'Product not found' });
+        // }
+
+        return res.status(200).json({ message: 'category deleted successfully'});
+    } catch (error) {
+        return res.status(500).json({ message: 'Internal Server Error', error: error.message });
+    }
+};    
+const editcategoryget = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const category = await categorycollection.findById(productId);
+        res.render('editcategory', { category:category});
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching product data');
+    }
+};
+
+const editcategorypost=async(req,res)=>{
+    const productId = req.params.id;
+    const updatedcategoryData = {
+        categoryname: req.body.categoryname,
+        categorydescription: req.body.categorydescription
+    };
+
+    const result=await categorycollection.findByIdAndUpdate(productId, updatedcategoryData,{new:true})
+    if(result){
+
+        res.redirect('/categorymanagement')
+    }
+}
 
 
 
@@ -225,7 +292,13 @@ module.exports = {
     addProductPost,
     showProductManagementPage,
     deleteproduct,
-    logout
+    logout,
+    showcategoryManagementPage,
+    addcategory,
+    addcategoryget,
+    deletecategory,
+    editcategoryget,
+    editcategorypost
 
 
 

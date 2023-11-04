@@ -46,13 +46,19 @@ router.get('/adminside',admincontroller.dashboard)
 router.get('/usermanagement',authenticate,admincontroller.usermanagement)
 router.get('/block/:id',admincontroller.userToBlock);
 
-router.get('/unblock/:id',admincontroller.userToUnblock);// Example
+router.get('/unblock/:id',admincontroller.userToUnblock);
 router.get('/productmanagement',authenticate,admincontroller.showProductManagementPage)
 router.get('/editproduct/:id', admincontroller.editproductget);
 router.post('/editproduct/:id',upload.array('filename'), admincontroller.editproductpost);
 router.get('/addproduct',admincontroller.addproductget)
 router.post('/addproduct',upload.array('image'),admincontroller.addProductPost)
-// router.get('/productmanagement',admincontroller.showProductManagementPage)
 router.get('/deleteproduct/:id',admincontroller.deleteproduct)
-router.get('/admin/logout',admincontroller.logout)
+router.get('/admin/logout',authenticate,admincontroller.logout)
+router.get('/categorymanagement',authenticate,admincontroller.showcategoryManagementPage)
+router.get('/addcategory',admincontroller.addcategoryget)
+router.post('/addcategory',admincontroller.addcategory)
+router.get('/deletecategory/:id',admincontroller.deletecategory)
+router.get('/editcategory/:id',admincontroller.editcategoryget)
+router.post('/editcategory/:id',admincontroller.editcategorypost)
+
 module.exports = router;

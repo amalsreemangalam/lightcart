@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .address-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .payment-method {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .summary-section {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .product-card {
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .product-card img {
+            max-width: 100px;
+            max-height: 100px;
+        }
+
+        .footer {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        
+                    /* Custom styles */
+                    .payment-card {
+                      max-width: 400px;
+                      margin: 0 auto;
+                      border: 1px solid #ccc;
+                      border-radius: 8px;
+                      padding: 20px;
+                      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    }
+                    .payment-options {
+                      display: flex;
+                      justify-content: space-between;
+                      margin-top: 20px;
+                    }
+                  
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">LIGHT CART</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i> My Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/userprofile"><i class="fas fa-user-circle"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+   
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-8">
+                <div class="address-section">
+                    <h3>Delivery Address</h3>
+                    <% if (user.address && user.address.length > 0) { %>
+                        <% user.address.forEach((address, index) => { %>
+                            <p><%= address.houseName %>, <%= address.street %>, <%= address.city %>, <%= address.state %>,
+                                <%= address.pincode %>, <%= address.country %></p>
+                            <% if (index !== user.address.length - 1) { %>
+                                <hr>
+                            <% } %>
+                        <% }) %>
+                    <% } %>
+                </div>
+
+                <div class="container mt-5">
+                    <div class="card payment-card">
+                      <h3 class="card-title text-center mb-4">Choose a Payment Option</h3>
+                      <div class="card-body">
+                        <p>Select your preferred payment method:</p>
+                  
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="paymentOption" id="codRadio" value="cod">
+                          <label class="form-check-label" for="codRadio">
+                            Cash on Delivery (COD)
+                          </label>
+                        </div>
+                  
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="paymentOption" id="onlineRadio" value="online">
+                          <label class="form-check-label" for="onlineRadio">
+                            Online Payment
+                          </label>
+                        </div>
+                  
+                        <a href="/orderplaced">
+                            <button class="btn btn-primary btn-block mt-4">Submit</button>
+                        </a>
+                                              </div>
+                    </div>
+                  </div>
+                
+
+            </div>
+
+            <div class="col-md-4">
+                <div class="summary-section">
+                    <h3>Order Summary</h3>
+                    <% let total=0 %>
+                    <% for (const item of cart.items) { %>
+                        <div class="product-card">
+                            <% let image=products.find((ele)=>ele._id.equals(item.product))%>
+                                    <img src="<%=image.productimage[0]%>" alt="Product Image"
+                                        style="width: 100px; height: 100px;" />
+                                        <% let product=products.find((ele)=>ele._id.equals(item.product)) %> <%= product.productname%>
+                                        <p>Quantity: <%= item.quantity %></p>
+                            <td>₹<%= item.single_product_total_price %>
+                            </td>                        </div>
+                   
+                    <hr>
+                    <%  total+= item.single_product_total_price %>  
+                    <h4>Total Price: ₹<%=total.toFixed(2) %></h4>
+                    <% } %>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+ 
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-3Nlkv3DLWJr0HYp2kXjC1a90oSzv8leDi4VRKtukF7bq3TIstHqh/lSWwIqbCt9PL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-Ra7me1g+IdK7Lp+gPBhB8JhPqDgpgcMkI9zKMm5EksdPmxzplGrMykTtDkOZs7Np" crossorigin
