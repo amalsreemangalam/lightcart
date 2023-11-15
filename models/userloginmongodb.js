@@ -21,6 +21,8 @@ const LogInSchema=new mongoose.Schema({
      },
      otp:{
         type:String,
+        expires:'1m',
+
       
 
      },
@@ -53,11 +55,33 @@ const LogInSchema=new mongoose.Schema({
           type: Number,
           required: true,
       },
-      country: {
-          type: String,
-          required: true,
-      }
+    //   country: {
+    //       type: String,
+    //       required: true,
+    //   }
   }],
+  orders:[{
+    product: {
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'Productcollection' ,
+    required: true,
+},
+productName: String,
+quantity: {
+type: Number,
+ required: true,
+default: 1
+},
+status:{
+    type:String,
+    default:'Pending',
+},
+orderDate: {
+    type: Date,
+    required: true,
+    default: Date.now
+},
+}]
 })
 
 

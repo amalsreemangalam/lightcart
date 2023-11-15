@@ -393,3 +393,800 @@
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Your Cart - Your E-Commerce Website</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background-image: url('https://th.bing.com/th/id/R.0b3441917b0cb5bb8120f88b444621de?rik=dmPsLnjHlUWxiA&riu=http%3a%2f%2fgetwallpapers.com%2fwallpaper%2ffull%2f9%2f0%2f4%2f589375.jpg&ehk=ErYzeUkvRrV7Ubd6ox5Aj7z5dtjmvGLIxLqkA%2fyjO04%3d&risl=&pid=ImgRaw&r=0');
+            /* Replace 'path-to-your-background-image.jpg' with the actual path to your image */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">LIGHT CART</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i> My Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/userprofile"><i class="fas fa-user-circle"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header>
+    </header>
+    <div class="container mt-5">
+        <h1 class="mb-4">Your Shopping Cart</h1>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Product</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% let total=0 %>
+                        <% if (cart && cart.items) {%>
+                            <% for (const item of cart.items) { %>
+                                <tr>
+
+                                    <td>
+                                        <h4>
+                                            <% let product=products.find((ele)=>ele._id.equals(item.product)) %> <%= product.productname%>
+                                </h4>
+                            </td>
+                            <td>
+                                <% let image=products.find((ele)=>ele._id.equals(item.product))%>
+                                    <img src=" <%=image.productimage[0]%>" alt="Product Image"
+                                                    style="width: 100px; height: 100px;" />
+                                    </td>
+                                    <td>
+                                        <% singleprice=item.single_product_total_price / item.quantity %>
+                                            <%= singleprice %>
+                                    </td>
+                                    <td class="">
+                                        <div class="d-flex">
+                                            <div class="minus plus-minus" data-item-id="<%=item.product%>">
+                                                <svg width="12" height="4" xmlns="http://www.w3.org/2000/svg"
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                    <defs>
+                                                        <path
+                                                            d="M11.357 3.332A.641.641 0 0 0 12 2.69V.643A.641.641 0 0 0 11.357 0H.643A.641.641 0 0 0 0 .643v2.046c0 .357.287.643.643.643h10.714Z"
+                                                            id="a" />
+                                                    </defs>
+                                                    <use fill="#FF7E1B" fill-rule="nonzero" xlink:href="#a" />
+                                                </svg>
+                                            </div>
+                                            <span id="" data-item-id="<%=item.product %>" class="amount">
+                                                <%= item.quantity %>
+                                            </span>
+                                            <div class="plus plus-minus" data-item-id="<%=item.product%>">
+                                                <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg"
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink" id="plus">
+                                                    <defs>
+                                                        <path
+                                                            d="M12 7.023V4.977a.641.641 0 0 0-.643-.643h-3.69V.643A.641.641 0 0 0 7.022 0H4.977a.641.641 0 0 0-.643.643v3.69H.643A.641.641 0 0 0 0 4.978v2.046c0 .356.287.643.643.643h3.69v3.691c0 .356.288.643.644.643h2.046a.641.641 0 0 0 .643-.643v-3.69h3.691A.641.641 0 0 0 12 7.022Z"
+                                                            id="b" />
+                                                    </defs>
+                                                    <use fill="#FF7E1B" fill-rule="nonzero" xlink:href="#b" id="plus" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>₹<%= item.single_product_total_price %>
+                                    </td>
+                                    <td>
+                                        <a href="/removeProduct/<%=item.product%>"><button class="btn btn-danger">Remove</button></a>
+                                    </td>
+                                </tr>
+                                <% total+=item.single_product_total_price %>
+                                    <% } %>
+                                        <%} %>
+
+
+                </tbody>
+
+            </table>
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-md-4">
+                <h4>Total: ₹<%=total.toFixed(2) %>
+                </h4>
+                
+                <% if (cart.items.length>0) {%>
+                    <a href="/checkout" class="btn btn-success btn-block mt-3">Checkout</a>
+                    <% } %>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-12 text-center">
+                <a href="/home" class="btn btn-primary">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <!-- Include your website's footer here -->
+    </footer>
+
+    <!-- item amount toggle  -->
+    <script>
+        let pluses = document.getElementsByClassName("plus");
+        let minuses = document.getElementsByClassName("minus");
+        let amounts = document.getElementsByClassName("amount");
+
+        for (let i = 0; i < pluses.length; i++) {
+            pluses[i].addEventListener("click", function () {
+                amounts[i].innerHTML = parseInt(amounts[i].innerHTML) + 1;
+
+                let itemId = this.dataset.itemId;
+
+                let newAmount = parseInt(amounts[i].innerHTML);
+
+                // Send the updated amount to the server
+                fetch('/updateCart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ itemId: itemId, amount: newAmount }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data);
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+                window.location.reload()
+
+
+            });
+
+            minuses[i].addEventListener("click", function () {
+
+                if (parseInt(amounts[i].innerHTML) >= 0) {
+                    amounts[i].innerHTML = parseInt(amounts[i].innerHTML) - 1;
+
+                    let itemId = this.dataset.itemId;
+                    let newAmount = parseInt(amounts[i].innerHTML);
+                    // chek if its less than 0
+                    if (newAmount <= 0) {
+                        window.location.href = `/removeProduct/${itemId}`
+                    } else {
+                        // Send the updated amount to the server
+                        fetch('/updateCart', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ itemId: itemId, amount: newAmount }),
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log('Success:', data);
+                            })
+                            .catch((error) => {
+                                console.error('Error:', error);
+                            });
+                        window.location.reload()
+
+                    }
+                }
+            });
+        }
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Control Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        /* Add your custom styles here */
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Admin Control Panel</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/usermanagement">User Management</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/productmanagement">Product Management</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/couponmanagement">Coupon Management</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/categorymanagement">categorymanagement</a>
+                    </li>
+                  
+                </ul>
+                <!-- <a href="/admin/logout" class="border rounded py-1 px-3 nav-link d-flex align-items-center">
+                    <i class="fas fa-sign-out-alt m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Logout</p>
+                  </a> -->
+            </div>
+        </div>
+    </nav>
+
+    <section id="user-management" class="container my-4">
+        <!-- User Management Content Goes Here -->
+    </section>
+
+    <section id="product-management" class="container my-4" style="display: none;">
+        <!-- Product Management Content Goes Here -->
+    </section>
+
+    <section id="coupon-management" class="container my-4" style="display: none;">
+        <!-- Coupon Management Content Goes Here -->
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+    <script>
+        // Add your custom JavaScript here
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        p {
+            text-align: center;
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>OTP Verification</h1>
+        <form action="/verifyotp" method="post">
+            <input type="text" name="otp" placeholder="Enter OTP">
+            <input type="submit" value="Verify OTP">
+            <div id="countdown">00:59</div>
+                            <div id="hiddenButton" style="display: none;"> <!-- Initially hidden -->
+                                <!-- <a id="showButton" href="">Resend OTP</a> -->
+                                <!-- <button id="showButton">Show Me!</button> -->
+                            </div>
+           
+        </form>
+        <!-- otp.ejs -->
+<!-- 
+ <!-- <% if (typeof error !== 'undefined') { %>     <div class="error-message"><%= error %></div> -->
+<% } %> 
+
+<!-- Your other HTML content goes here -->
+
+    <!-- </div>
+    <script>
+        let seconds = 60;
+
+        function countdown() {
+            const countdownDisplay = document.getElementById('countdown');
+            const interval = setInterval(function () {
+                countdownDisplay.textContent = seconds;
+
+                if (seconds === 0) {
+                    clearInterval(interval);
+                } else {
+                    seconds--;
+                }
+            }, 1000);
+        } -->
+
+        <!-- countdown();  -->
+<!--     </script>
+</body>
+</html> --> -->
+
+cart
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Your Cart - Your E-Commerce Website</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background-image: url('https://th.bing.com/th/id/R.0b3441917b0cb5bb8120f88b444621de?rik=dmPsLnjHlUWxiA&riu=http%3a%2f%2fgetwallpapers.com%2fwallpaper%2ffull%2f9%2f0%2f4%2f589375.jpg&ehk=ErYzeUkvRrV7Ubd6ox5Aj7z5dtjmvGLIxLqkA%2fyjO04%3d&risl=&pid=ImgRaw&r=0');
+            /* Replace 'path-to-your-background-image.jpg' with the actual path to your image */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">LIGHT CART</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i> My Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/userprofile"><i class="fas fa-user-circle"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header>
+    </header>
+    <div class="container mt-5">
+        <h1 class="mb-4">Your Shopping Cart</h1>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Product</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% let total=0 %>
+                        <% if (cart && cart.items) {%>
+                            <% for (const item of cart.items) { %>
+                                <tr>
+
+                                    <td>
+                                        <h4>
+                                            <% let product=products.find((ele)=>ele._id.equals(item.product)) %> <%= product.productname%>
+                                </h4>
+                            </td>
+                            <td>
+                                <% let image=products.find((ele)=>ele._id.equals(item.product))%>
+                                    <img src=" <%=image.productimage[0]%>" alt="Product Image"
+                                                    style="width: 100px; height: 100px;" />
+                                    </td>
+                                    <td>
+                                        <% singleprice=item.single_product_total_price / item.quantity %>
+                                            <%= singleprice %>
+                                    </td>
+                                    <td class="">
+                                        <div class="d-flex">
+                                            <div class="minus plus-minus" data-item-id="<%=item.product%>">
+                                                <svg width="12" height="4" xmlns="http://www.w3.org/2000/svg"
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                    <defs>
+                                                        <path
+                                                            d="M11.357 3.332A.641.641 0 0 0 12 2.69V.643A.641.641 0 0 0 11.357 0H.643A.641.641 0 0 0 0 .643v2.046c0 .357.287.643.643.643h10.714Z"
+                                                            id="a" />
+                                                    </defs>
+                                                    <use fill="#FF7E1B" fill-rule="nonzero" xlink:href="#a" />
+                                                </svg>
+                                            </div>
+                                            <span id="" data-item-id="<%=item.product %>" class="amount">
+                                                <%= item.quantity %>
+                                            </span>
+                                            <div class="plus plus-minus" data-item-id="<%=item.product%>">
+                                                <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg"
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink" id="plus">
+                                                    <defs>
+                                                        <path
+                                                            d="M12 7.023V4.977a.641.641 0 0 0-.643-.643h-3.69V.643A.641.641 0 0 0 7.022 0H4.977a.641.641 0 0 0-.643.643v3.69H.643A.641.641 0 0 0 0 4.978v2.046c0 .356.287.643.643.643h3.69v3.691c0 .356.288.643.644.643h2.046a.641.641 0 0 0 .643-.643v-3.69h3.691A.641.641 0 0 0 12 7.022Z"
+                                                            id="b" />
+                                                    </defs>
+                                                    <use fill="#FF7E1B" fill-rule="nonzero" xlink:href="#b" id="plus" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>₹<%= item.single_product_total_price %>
+                                    </td>
+                                    <td>
+                                        <a href="/removeProduct/<%=item.product%>"><button class="btn btn-danger">Remove</button></a>
+                                    </td>
+                                </tr>
+                                <% total+=item.single_product_total_price %>
+                                    <% } %>
+                                        <%} %>
+
+
+                </tbody>
+
+            </table>
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-md-4">
+                <h4>Total: ₹<%=total.toFixed(2) %>
+                </h4>
+                
+                <% if (cart.items.length>0) {%>
+                    <a href="/checkout" class="btn btn-success btn-block mt-3">Checkout</a>
+                    <% } %>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-12 text-center">
+                <a href="/home" class="btn btn-primary">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <!-- Include your website's footer here -->
+    </footer>
+
+    <!-- item amount toggle  -->
+    <script>
+        let pluses = document.getElementsByClassName("plus");
+        let minuses = document.getElementsByClassName("minus");
+        let amounts = document.getElementsByClassName("amount");
+
+        for (let i = 0; i < pluses.length; i++) {
+            pluses[i].addEventListener("click", function () {
+                amounts[i].innerHTML = parseInt(amounts[i].innerHTML) + 1;
+
+                let itemId = this.dataset.itemId;
+
+                let newAmount = parseInt(amounts[i].innerHTML);
+
+                // Send the updated amount to the server
+                fetch('/updateCart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ itemId: itemId, amount: newAmount }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data);
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+                window.location.reload()
+
+
+            });
+
+            minuses[i].addEventListener("click", function () {
+
+                if (parseInt(amounts[i].innerHTML) >= 0) {
+                    amounts[i].innerHTML = parseInt(amounts[i].innerHTML) - 1;
+
+                    let itemId = this.dataset.itemId;
+                    let newAmount = parseInt(amounts[i].innerHTML);
+                    // chek if its less than 0
+                    if (newAmount <= 0) {
+                        window.location.href = `/removeProduct/${itemId}`
+                    } else {
+                        // Send the updated amount to the server
+                        fetch('/updateCart', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ itemId: itemId, amount: newAmount }),
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log('Success:', data);
+                            })
+                            .catch((error) => {
+                                console.error('Error:', error);
+                            });
+                        window.location.reload()
+
+                    }
+                }
+            });
+        }
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+    </script>
+</body>
+
+</html>
+
+
+
+
+  <th scope="col">Action</th>
+      </tr>
+  </thead>
+  <tbody>
+
+
+
+
+
+
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .navbar {
+            background-image: url('https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=996&t=st=1698591589~exp=1698592189~hmac=c99fe729580f2db3b78e232eec4de426cf83b5ad133debe48b18841b62e8d65e');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            width: 250px;
+            height: 100%;
+            overflow: auto;
+            position: fixed;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            margin-left: 250px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/usermanagement">User Management</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/productmanagement">Product Management</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/couponmanagement">Coupon Management</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/categorymanagement">Category Management</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Add product
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="/addproduct">Add product</a>
+                </div>
+            </li>
+        </ul>
+        <a href="/admin/logout" class="border rounded py-1 px-3 nav-link d-flex align-items-center">
+            <i class="fas fa-sign-out-alt m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Logout</p>
+        </a>
+    </nav>
+
+    <div class="main-content">
+        <% if (allproduct) { %>
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Productname</th>
+                        <th scope="col">productprice</th>
+                        <th scope="col">productdescription</th>
+                        <th scope="col">productcategory</th```
+                            Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% allproduct.forEach(product => { %>
+                            <tr>
+                                <td><%= product.productname %></td>
+                                <td><%= product.productprice %></td>
+                                <td><%= product.productdescription %></td>
+                                <td><%= product.productcategory %></td>
+                                <td><%= product.productstocks %></td>
+                                <td><img src="<%= product.productimage[0] %>" alt="this is imagae" width="110px" height="150px" ></td>
+                                <td>
+                                    <a href="/editproduct/<%= product._id %>" class="btn btn-primary">Edit</a>
+                                    <a href="/deleteproduct/<%= product._id %>" class="btn btn-primary" style="background-color: red; font-size: 12px;">Delete</a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } %>
+        </div>
+    
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const deleteButtons = document.querySelectorAll('.delete-product');
+    
+                deleteButtons.forEach(button => {
+                    button.addEventListener('click', function(event) {
+                        event.preventDefault();
+    
+                        const productId = this.getAttribute('data-product-id');
+    
+                        if (confirm('Are you sure you want to delete this product?')) {
+                            fetch('/deleteproduct/' + productId, {
+                                method: 'DELETE'
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    alert('Product deleted successfully');
+                                    window.location.reload();
+                                } else {
+                                    alert(data.message);
+                                }
+                            })
+                            .catch(error => console.error('Error:', error));
+                        }
+                    });
+                });
+            });
+        </script>
+    
+    </body>
+    </html>
+    
+
+
+
+                      <a href="/deletecategory/<%= product._id %>" class="btn btn-primary" style="background-color: red; font-size: 12px;">Delete</a>

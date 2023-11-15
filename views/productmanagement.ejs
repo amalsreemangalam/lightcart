@@ -1,147 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <style>
-          body {
-    background-image: url('http://www.pixelstalk.net/wp-content/uploads/2016/04/Grey-backgrounds-for-desktop.jpg'); /* Replace 'path_to_your_image.jpg' with the actual path to your image file */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
+        body {
+            display: flex;
+            height: 100vh;
+            margin: 0;
+            background-image: url('');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
 
-         .navbar {
-    background-image: url('https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=996&t=st=1698591589~exp=1698592189~hmac=c99fe729580f2db3b78e232eec4de426cf83b5ad133debe48b18841b62e8d65e'); /* Replace 'path_to_your_image.jpg' with the actual path to your image file */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
+        .navbar {
+            background-color: #333;
+            width: 250px;
+            height: 100%;
+            overflow: auto;
+            position: fixed;
+            padding-top: 20px;
+        }
+
+        .navbar a {
+            display: block;
+            color: white;
+            padding: 16px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            margin-left: 250px;
+        }
+
+        /* Responsive layout - when the screen is less than 700px wide, make the sidebar and main content stack on top of each other */
+        @media screen and (max-width: 700px) {
+
+            .navbar,
+            .main-content {
+                width: 100%;
+                height: auto;
+                position: relative;
+                margin-left: 0;
+            }
+        }
     </style>
 </head>
+
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light"> -->
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Admin Control Panel</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/usermanagement">User Management</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/productmanagement">Product Management</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/couponmanagement">Coupon Management</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/categorymanagement">categorymanagement</a>
-                    </li>
-                </ul>
-                <a href="/admin/logout" class="border rounded py-1 px-3 nav-link d-flex align-items-center">
-                  <i class="fas fa-sign-out-alt m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Logout</p>
-                </a>
+
+
+
+    
+    <nav class="navbar">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/usermanagement">User Management</a>
+        <a href="/productmanagement">Product Management</a>
+        <a href="/couponmanagement">Coupon Management</a>
+        <a href="/categorymanagement">Category Management</a>
+        <a href="/ordermanagement">Order management</a>
+        <div class="dropdown">
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="/addproduct">Add product</a>
             </div>
         </div>
+        <a href="/admin/logout" class="border rounded py-1 px-3 nav-link d-flex align-items-center">
+            <i class="fas fa-sign-out-alt m-1 me-md-2"></i>
+            <p class="d-none d-md-block mb-0">Logout</p>
+        </a>
     </nav>
 
+    <div class="main-content">
+        <% if (allproduct) { %>
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Productname</th>
+                        <th scope="col">productprice</th>
+                        <th scope="col">productdescription</th>
+                        <th scope="col">productcategory</th>
+                        <th scope="col">productstocks</th>
+                        <th scope="col">productimage</th>
+                        <th scope="col">Action</th>
+                        <a href="/addproduct"><button style="background-color: gray;">add new product</button></a>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% allproduct.forEach(product=> { %>
+                        <tr>
+                            <td>
+                                <%= product.productname %>
+                            </td>
+                            <td>
+                                <%= product.productprice %>
+                            </td>
+                            <td>
+                                <%= product.productdescription %>
+                            </td>
+                            <td>
+                                <%= product.productcategory %>
+                            </td>
+                            <td>
+                                <%= product.productstocks %>
+                            </td>
+                            <td><img src="<%= product.productimage[0] %>" alt="this is image" width="110px"
+                                    height="150px"></td>
+                            <td>
+                                <a href="/editproduct/<%= product._id %>" class="btn btn-primary">Edit</a>
+                                <a href="/deleteproduct/<%= product._id %>" class="btn btn-primary" onclick="return confirmDelete()">Delete</a>
+
+                            </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+            <% } %>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteButtons = document.querySelectorAll('.delete-product');
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+
+                    const productId = this.getAttribute('data-product-id');
+
+                    if (confirm('Are you sure you want to delete this product?')) {
+                        fetch('/deleteproduct/' + productId, {
+                            method: 'DELETE'
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    alert('Product deleted successfully');
+                                    window.location.reload();
+                                } else {
+                                    alert(data.message);
+                                }
+                            })
+                            .catch(error => console.error('Error:', error));
+                    }
+                });
+            });
+        });
+    </script>
+    <!-- ... Your existing HTML code ... -->
+
+    <script>
+        // Check if there's a success message in the URL query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const successMessage = urlParams.get('success');
+
+        // If there's a success message, display it as an alert
+        if (successMessage) {
+            window.alert(`Success: ${successMessage}`);
+        }
+    </script>
+    <script>
+        function confirmDelete() {
+   return confirm('Are you sure you want to delete this product?');
+}
+
+    </script>
 
 
 
-
-
-
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Add product
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item" href="/addproduct">Addproduct</a>
-                <!-- <a class="dropdown-item" href="/editproduct">editproduct</a> -->
-                
-              </div>
-            </li>
-          </ul>
-        </div>
-      </nav>
-      <% if (allproduct) { %>
-       <!-- ... Your existing code ... -->
-
-<table class="table">
-  <thead class="thead-light">
-      <tr>
-          <th scope="col">Productname</th>
-          <th scope="col">productprice</th>
-          <th scope="col">productdescription</th>
-          <th scope="col">productcategory</th>
-          <th scope="col">productstocks</th>
-          <th scope="col">productimage</th>
-          <th scope="col">Action</th>
-      </tr>
-  </thead>
-  <tbody>
-      <% allproduct.forEach(product => { %>
-          <tr>
-              <td><%= product.productname %></td>
-              <td><%= product.productprice %></td>
-              <td><%= product.productdescription %></td>
-              <td><%= product.productcategory %></td>
-              <td><%= product.productstocks %></td>
-              <td><img src="<%= product.productimage[0] %>" alt="this is imagae" width="110px" height="150px" ></td>
-              <td>
-                  <a href="/editproduct/<%= product._id %>" class="btn btn-primary">Edit</a>
-                  <a href="/deleteproduct/<%= product._id %>" class="btn btn-primary" style="background-color: red; font-size: 12px;">Delete</a>
-             </td>
-          </tr>
-      <% }) %>
-  </tbody>
-</table>
-
-<!-- ... Your existing code ... -->
-
-      <% } %>
-
-
-
-      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-      const deleteButtons = document.querySelectorAll('.delete-product');
-
-      deleteButtons.forEach(button => {
-          button.addEventListener('click', function(event) {
-              event.preventDefault();
-
-              const productId = this.getAttribute('data-product-id');
-
-              if (confirm('Are you sure you want to delete this product?')) {
-                  fetch('/deleteproduct/' + productId, {
-                      method: 'DELETE'
-                  })
-                  .then(response => response.json())
-                  .then(data => {
-                      if (data.success) {
-                          // Display a pop-up message
-                          alert('Product deleted successfully');
-                          window.location.reload();
-                      } else {
-                          alert(data.message);
-                      }
-                  })
-                  .catch(error => console.error('Error:', error));
-              }
-          });
-      });
-  });
-</script>
 
 </body>
+
 </html>

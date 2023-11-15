@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const productcollection = require("../models/productmongo");
-
 const admincollection = require("../models/adminmongo")
 const newcollection = require("../models/userloginmongodb");
 const categorycollection = require('../models/category.mongo');
+const mongoose = require('mongoose');
 
 
 
@@ -14,7 +14,7 @@ const adminlogin = (req, res) => {
 const adminloginpost = (req, res) => {
     const thisname = "amal"
     const thispassword = 1234
-    req.session.admin=true
+    req.session.admin = true
     console.log(req.body);
     if (thisname === req.body.username && thispassword == req.body.password) {
 
@@ -74,11 +74,9 @@ const userToUnblock = async (req, res) => {
 }
 
 const showProductManagementPage = async (req, res) => {
-    console.log("hi here");
     try {
         const allproduct = await productcollection.find();
-        console.log(allproduct); // Retrieve all products from the database
-        res.render('productmanagement', {allproduct}); // Pass the products to the EJS template
+        res.render('productmanagement', { allproduct }); // Pass the products to the EJS template
     } catch (error) {
         console.error(error);
         // Handle the error and send a response to the client
@@ -87,22 +85,16 @@ const showProductManagementPage = async (req, res) => {
 
 
 
-const editproductpost = async (req,res) => {
+const editproductpost = async (req, res) => {
     try {
         const productId = req.params.id;
         console.log("workkkkk");
-        console.log(productId);
         let imagePath = req.files.map(file => { return file.path.substring(6) }); // Assuming 'path' is the property where multer stores the file path
-        console.log('imagepath1:', imagePath);
-        // Check if the path includes "public/" (Windows uses backslashes)
         if (imagePath.includes('public\\')) {
-            // Remove the "public/" prefix for Windows
             imagePath = imagePath.replace('public\\', '');
         } else if (imagePath.includes('public/')) {
-            // Remove the "public/" prefix for Unix-like systems
             imagePath = imagePath.replace('public/', '');
         }
-        console.log(req.body);
         const updatedProductData = {
             productname: req.body.productname,
             productprice: req.body.productprice,
@@ -112,13 +104,13 @@ const editproductpost = async (req,res) => {
 
         };
         // Assuming you have a function to update a product in your model
-        const result=await productcollection.findByIdAndUpdate(productId, updatedProductData,{new:true});
+        const result = await productcollection.findByIdAndUpdate(productId, updatedProductData, { new: true });
         productimage: imagePath
-        if (imagePath.length>0) {
-            const result=await productcollection.updateOne({_id:productId},{$push:{productimage:imagePath}});
+        if (imagePath.length > 0) {
+            const result = await productcollection.updateOne({ _id: productId }, { $push: { productimage: imagePath } });
         }
         console.log(`detauks of tehe ${result}`);
-        res.redirect('/productmanagement'); 
+        res.redirect('/productmanagement');
     } catch (error) {
         console.error(error);
         res.status(500).send('Error editing product');
@@ -140,37 +132,42 @@ const editproductget = async (req, res) => {
 };
 
 
-   const addproductget=async(req,res)=>{
+const addproductget = async (req, res) => {
     // try {
     //     const product = await productcollection.findById(req.params.productId);
     //     res.render('editproduct', { product });
     // } catch (error) {
     //     console.error(error);
-    // }
-    res.render('addproduct')
+    // }\
+
+    const categorydata = await categorycollection.find()
+    console.log(categorydata);
+
+    res.render('addproduct', { categorydata })
 }
 
 
 
 const addProductPost = async (req, res) => {
+
     try {
         console.log('addproducts');
-        const { productname, productprice, productdescription, productstocks, productcategory,Productimage } = req.body;
-        
-        let imagePath = req.files.map(file => { return file.path.substring(6) }); 
-        
+        const { productname, productprice, productdescription, productstocks, productcategory, Productimage } = req.body;
 
-console.log('imagePath2',imagePath);
+        let imagePath = req.files.map(file => { return file.path.substring(6) });
+
+
+        console.log('imagePath2', imagePath);
         const newProduct = new productcollection({
             productname,
             productprice,
             productdescription,
             productstocks,
-            productcategory,
             productimage: imagePath,
+            productcategory,
 
         });
-        console.log('newproducts',newProduct);
+        console.log('newproducts', newProduct);
 
         await newProduct.save();
         res.redirect('/productmanagement'); // Redirect to a different page after adding the product
@@ -180,20 +177,23 @@ console.log('imagePath2',imagePath);
     }
 };
 const deleteproduct = async (req, res) => {
-    const productId = req.params.id; 
+    const productId = req.params.id;
 
     try {
-        const deletedProduct = await  productcollection.findByIdAndDelete(productId);
+        const deletedProduct = await productcollection.findByIdAndDelete(productId);
 
-        // if (!deletedProduct) {
-        //     return res.status(404).json({ message: 'Product not found' });
-        // }
+        if (!deletedProduct) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
 
-        return res.status(200).json({ message: 'Product deleted successfully'});
+        // Redirect back to the product management page with a success message
+        return res.redirect('/productmanagement?success=Product+deleted+successfully');
     } catch (error) {
         return res.status(500).json({ message: 'Internal Server Error', error: error.message });
     }
 };
+
+
 const logout = (req, res) => {
     req.session.destroy((err) => {
         if (err) {
@@ -204,79 +204,162 @@ const logout = (req, res) => {
     })
 }
 
- const showcategoryManagementPage= async (req, res) => {
+const showcategoryManagementPage = async (req, res) => {
     console.log("hi here");
     try {
         const category = await categorycollection.find();
-      console.log(category);
-        res.render('categorymanagement', {category}); // Pass the products to the EJS template
+        console.log(category);
+        res.render('categorymanagement', { category }); // Pass the products to the EJS template
     } catch (error) {
         console.error(error);
         // Handle the error and send a response to the client
     }
 };
 
-const addcategoryget=(req,res)=>{
+const addcategoryget = (req, res) => {
     res.render('addcategory')
 }
 
 
 
-const addcategory=async (req, res) => {
-   const categorydata={
-    categoryname:req.body.categoryname,
-    categorydescription:req.body.categorydescription
+const addcategory = async (req, res) => {
+    const categoryname = req.body.categoryname;
+    const categorydescription = req.body.categorydescription;
 
+    // Check if a category with the same name already exists
+    const existingCategory = await categorycollection.findOne({ categoryname: categoryname });
 
-   }
+    if (existingCategory) {
+        // If a category with the same name is found, return an error message
+        return res.status(400).send("This category already exists");
+    }
 
-await categorycollection.insertMany([categorydata]);
+    const categorydata = {
+        categoryname: categoryname,
+        categorydescription: categorydescription
+    }
 
-res.redirect("/categorymanagement")
+    // Insert the new category if no category with the same name is found
+    await categorycollection.insertMany([categorydata]);
 
+    res.redirect("/categorymanagement");
 }
+
 const deletecategory = async (req, res) => {
-    const productId = req.params.id; 
+    const productId = req.params.id;
 
     try {
-        const deletedcategory = await  categorycollection.findByIdAndDelete(productId);
+        const deletedcategory = await categorycollection.findByIdAndDelete(productId);
 
         // if (!deletedProduct) {
         //     return res.status(404).json({ message: 'Product not found' });
         // }
 
-        return res.status(200).json({ message: 'category deleted successfully'});
+        return res.status(200).json({ message: 'category deleted successfully' });
     } catch (error) {
         return res.status(500).json({ message: 'Internal Server Error', error: error.message });
     }
-};    
+};
 const editcategoryget = async (req, res) => {
     try {
         const productId = req.params.id;
         const category = await categorycollection.findById(productId);
-        res.render('editcategory', { category:category});
+        res.render('editcategory', { category: category });
     } catch (error) {
         console.error(error);
         res.status(500).send('Error fetching product data');
     }
 };
 
-const editcategorypost=async(req,res)=>{
+const editcategorypost = async (req, res) => {
     const productId = req.params.id;
     const updatedcategoryData = {
         categoryname: req.body.categoryname,
         categorydescription: req.body.categorydescription
     };
 
-    const result=await categorycollection.findByIdAndUpdate(productId, updatedcategoryData,{new:true})
-    if(result){
+    const result = await categorycollection.findByIdAndUpdate(productId, updatedcategoryData, { new: true })
+    if (result) {
 
         res.redirect('/categorymanagement')
     }
 }
+const loadordermanagement = async (req, res) => {
+    try {
+        const users = await newcollection.find({ orders: { $exists: true, $ne: [] } }).populate('orders.product');
+
+        res.render('ordermanagement', { users: users });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Internal Server Error');
+    }
+
+}
+
+
+const updateOrderStatus = async (req, res) => {
+
+    const userId = req.params.userId;
+    const orderId = req.params.orderId;
+    const newStatus = req.params.newStatus;
+
+    try {
+        const order = await newcollection.findOneAndUpdate(
+            { 'orders._id': orderId },
+            { $set: { 'orders.$.status': newStatus } },
+            { new: true }
+
+        )
+        console.log('oo', order)
+        res.redirect('/ordermanagement')
+
+    } catch (error) {
+        console.error('Error loading :', error);
+        res.status(500).send('Internal Server Error');
+    }
+
+}
+const admindashboard = (req, res) => {
+    res.render('adminside')
+}
+
+
+const deleteimage = async (req, res) => {
+    console.log("deleteimage");
+    try {
+        const productId = req.query.productId;
+        let imageUrl = req.query.imageUrl;
+ 
+        // Escape backslashes
+        console.log('query ', imageUrl);
+ 
+        const product = await productcollection.findById(productId);
+        console.log('product.productimage ', product.productimage);
+ 
+        if (!product) {
+            return res.status(404).send("Product not found.");
+        }
+ 
+        const escapedProductImages = product.productimage.map(image => image);
+ 
+        product.productimage = escapedProductImages.filter(image => image !== imageUrl);
+        console.log('product.productimage after deletion: ', product.productimage);
+ 
+        const updatedProduct = await product.save();
+ 
+        console.log('updatedProduct ', updatedProduct);
+ 
+        res.redirect('/productmanagement');
+    } catch (error) {
+        console.log("Error during image delete:", error);
+        return res.status(500).send({ success: false, message: "Error during image delete." });
+    }
+ };
+ 
 
 
 
+   
 
 module.exports = {
     adminlogin,
@@ -298,8 +381,17 @@ module.exports = {
     addcategoryget,
     deletecategory,
     editcategoryget,
-    editcategorypost
+    editcategorypost,
+    loadordermanagement,
+    updateOrderStatus,
+    admindashboard,
+    deleteimage
 
 
 
 };
+
+
+
+
+

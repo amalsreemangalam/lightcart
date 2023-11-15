@@ -8,8 +8,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
+
+.footer {
+
         body {
-            background-color: #f8f9fa;
+            background-image: url('https://img.archiexpo.com/images_ae/photo-m2/59228-17634232.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
         }
 
         .header {
@@ -56,27 +61,30 @@
             padding: 10px;
             text-align: center;
         }
-        
-                    /* Custom styles */
-                    .payment-card {
-                      max-width: 400px;
-                      margin: 0 auto;
-                      border: 1px solid #ccc;
-                      border-radius: 8px;
-                      padding: 20px;
-                      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                    }
-                    .payment-options {
-                      display: flex;
-                      justify-content: space-between;
-                      margin-top: 20px;
-                    }
-                  
+
+        /* Custom styles */
+        .payment-card {
+            display: flex;
+            justify-content: flex-start;
+            gap: 10px;
+            max-width: 400px;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-options {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
     </style>
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
             <a class="navbar-brand" href="#">LIGHT CART</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -85,6 +93,9 @@
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/home"><i class="fas fa-user-circle"></i> Home</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i> My Cart</a>
                     </li>
@@ -98,82 +109,240 @@
             </div>
         </div>
     </nav>
-   
+
 
     <div class="container">
         <div class="row">
 
-            <div class="col-md-8">
+            <div class="col-md-8" style="margin-top: 50px;">
                 <div class="address-section">
                     <h3>Delivery Address</h3>
-                    <% if (user.address && user.address.length > 0) { %>
-                        <% user.address.forEach((address, index) => { %>
-                            <p><%= address.houseName %>, <%= address.street %>, <%= address.city %>, <%= address.state %>,
-                                <%= address.pincode %>, <%= address.country %></p>
-                            <% if (index !== user.address.length - 1) { %>
+
+                    <% if (user.address && user.address.length> 0) { %>
+                        <form action="/checkoutaddaddressedit/edit" method="GET">
+                            <% user.address.forEach((address, index)=> { %>
+                                <label>
+                                    <input type="radio" name="selectedAddress" value="<%= index %>" />
+                                    <%= address.houseName %>, <%= address.street %>, <%= address.city %>, <%=
+                                                    address.state %>,
+                                                    <%= address.pincode %>, <%= address.country %>
+                                </label>
+                                <br>
                                 <hr>
-                            <% } %>
-                        <% }) %>
-                    <% } %>
+                                <% }) %>
+
+                                    <button type="submit" class="btn btn-primary btn-block mt-4">Edit Selected
+                                        Address</button>
+                        </form>
+                        <% } %>
+
+                            <a href="/checkoutaddaddress">
+                                <button class="btn btn-primary btn-block mt-4">Add Address</button>
+                            </a>
                 </div>
+
 
                 <div class="container mt-5">
                     <div class="card payment-card">
-                      <h3 class="card-title text-center mb-4">Choose a Payment Option</h3>
-                      <div class="card-body">
-                        <p>Select your preferred payment method:</p>
-                  
-                        <div class="form-check">
-                          <input class="form-check-input" type="radio" name="paymentOption" id="codRadio" value="cod">
-                          <label class="form-check-label" for="codRadio">
-                            Cash on Delivery (COD)
-                          </label>
+                        <h3 class="card-title text-center mb-4">Choose a Payment Option</h3>
+                        <div class="card-body">
+                            <p>Select your preferred payment method:</p>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentOption" id="codRadio"
+                                    value="cod">
+                                <label class="form-check-label" for="codRadio">
+                                    Cash on Delivery (COD)
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentOption" id="onlineRadio"
+                                    value="online">
+                                <label class="form-check-label" for="onlineRadio">
+                                    Online Payment
+                                </label>
+                            </div>
+
+                            <a href="/orderplaced">
+                                <button class="btn btn-primary btn-block mt-4">conform order</button>
+                            </a>
                         </div>
-                  
-                        <div class="form-check">
-                          <input class="form-check-input" type="radio" name="paymentOption" id="onlineRadio" value="online">
-                          <label class="form-check-label" for="onlineRadio">
-                            Online Payment
-                          </label>
-                        </div>
-                  
-                        <a href="/orderplaced">
-                            <button class="btn btn-primary btn-block mt-4">Submit</button>
-                        </a>
-                                              </div>
                     </div>
-                  </div>
-                
+                </div>
+
 
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-4" style="margin-top: 50px;">
                 <div class="summary-section">
                     <h3>Order Summary</h3>
                     <% let total=0 %>
-                    <% for (const item of cart.items) { %>
-                        <div class="product-card">
-                            <% let image=products.find((ele)=>ele._id.equals(item.product))%>
+                        <% for (const item of cart.items) { %>
+                            <div class="product-card">
+                                <% let image=products.find((ele)=>ele._id.equals(item.product))%>
                                     <img src="<%=image.productimage[0]%>" alt="Product Image"
                                         style="width: 100px; height: 100px;" />
-                                        <% let product=products.find((ele)=>ele._id.equals(item.product)) %> <%= product.productname%>
-                                        <p>Quantity: <%= item.quantity %></p>
-                            <td>₹<%= item.single_product_total_price %>
-                            </td>                        </div>
-                   
-                    <hr>
-                    <%  total+= item.single_product_total_price %>  
-                    <h4>Total Price: ₹<%=total.toFixed(2) %></h4>
-                    <% } %>
+                                    <% let product=products.find((ele)=>ele._id.equals(item.product)) %> <%=
+                                            product.productname%>
+                                            <p>Quantity: <%= item.quantity %>
+                                            </p>
+                                            <td>₹<%= item.single_product_total_price %>
+                                            </td>
+                            </div>
+
+                            <hr>
+                            <% total+=item.single_product_total_price %>
+                                <h4>Total Price: ₹<%=total.toFixed(2) %>
+                                </h4>
+                                <% } %>
                 </div>
             </div>
 
         </div>
     </div>
 
- 
+    <div style="background-color:gray;">
+        <!-- Footer -->
+    <!-- Your footer content remains unchanged -->
+    <footer class="text-center text-lg-start text-muted bg-gray-300 mt-3">
+		<!-- Section: Links  -->
+		<section class="">
+		  <div class="container text-center text-md-start pt-4 pb-4">
+			<!-- Grid row -->
+			<div class="row mt-3">
+			  <!-- Grid column -->
+			  <div class="col-12 col-lg-3 col-sm-12 mb-2">
+				<!-- Content -->
+				<a href="https://mdbootstrap.com/" target="_blank" class="text-white h2">
+				  LIGHTCART
+				</a>
+				<p class="mt-1 text-white">
+				
+				</p>
+			  </div>
+			  <!-- Grid column -->
+	  
+			  <!-- Grid column -->
+			  <div class="col-6 col-sm-4 col-lg-2">
+				<!-- Links -->
+				<h6 class="text-uppercase text-white fw-bold mb-2">
+				  Store
+				</h6>
+				<ul class="list-unstyled mb-4">
+				  <li><a class="text-white-50" href="#">About us</a></li>
+				  <li><a class="text-white-50" href="#">Find store</a></li>
+				  <li><a class="text-white-50" href="#">Categories</a></li>
+				  <li><a class="text-white-50" href="#">Blogs</a></li>
+				</ul>
+			  </div>
+			  <!-- Grid column -->
+	  
+			  <!-- Grid column -->
+			  <div class="col-6 col-sm-4 col-lg-2">
+				<!-- Links -->
+				<h6 class="text-uppercase text-white fw-bold mb-2">
+				  Information
+				</h6>
+				<ul class="list-unstyled mb-4">
+				  <li><a class="text-white-50" href="#">Help center</a></li>
+				  <li><a class="text-white-50" href="#">Money refund</a></li>
+				  <li><a class="text-white-50" href="#">Shipping info</a></li>
+				  <li><a class="text-white-50" href="#">Refunds</a></li>
+				</ul>
+			  </div>
+			  <!-- Grid column -->
+	  
+			  <!-- Grid column -->
+			  <div class="col-6 col-sm-4 col-lg-2">
+				<!-- Links -->
+				<h6 class="text-uppercase text-white fw-bold mb-2">
+				  Support
+				</h6>
+				<ul class="list-unstyled mb-4">
+				  <li><a class="text-white-50" href="#">Help center</a></li>
+				  <li><a class="text-white-50" href="#">Documents</a></li>
+				  <li><a class="text-white-50" href="#">Account restore</a></li>
+				  <li><a class="text-white-50" href="#">My orders</a></li>
+				</ul>
+			  </div>
+			  <!-- Grid column -->
+	  
+			  <!-- Grid column -->
+			  <div class="col-12 col-sm-12 col-lg-3">
+				<!-- Links -->
+				<h6 class="text-uppercase text-white fw-bold mb-2">Newsletter</h6>
+				<p class="text-white">Stay in touch with latest updates about our products and offers</p>
+				<div class="input-group mb-3">
+				  <input type="email" class="form-control border" placeholder="Email" aria-label="Email" aria-describedby="button-addon2" />
+				  <button class="btn btn-light border shadow-0" type="button" id="button-addon2" data-mdb-ripple-color="dark">
+					Join
+				  </button>
+				</div>
+			  </div>
+			  <!-- Grid column -->
+			</div>
+			<!-- Grid row -->
+		  </div>
+		</section>
+		<!-- Section: Links  -->
+	  
+		<div class="">
+		  <div class="container">
+			<div class="d-flex justify-content-between py-4 border-top">
+			  <!--- payment --->
+			  <div>
+				<i class="fab fa-lg fa-cc-visa text-white"></i>
+				<i class="fab fa-lg fa-cc-amex text-white"></i>
+				<i class="fab fa-lg fa-cc-mastercard text-white"></i>
+				<i class="fab fa-lg fa-cc-paypal text-white"></i>
+			  </div>
+			  <!--- payment --->
+	  
+			  <!--- language selector --->
+			  <div class="dropdown dropup">
+				<a class="dropdown-toggle text-white" href="#" id="Dropdown" role="button" data-mdb-toggle="dropdown" aria-expanded="false"> <i class="flag-united-kingdom flag m-0 me-1"></i>English </a>
+	  
+				<ul class="dropdown-menu dropdown-menu-endp" aria-labelledby="Dropdown">
+				  <li>
+					<a class="dropdown-item" href="#"><i class="flag-united-kingdom flag"></i>English <i class="fa fa-check text-success ms-2"></i></a>
+				  </li>
+				  <li><hr class="dropdown-divider" /></li>
+				  <li>
+					<a class="dropdown-item" href="#"><i class="flag-poland flag"></i>Polski</a>
+				  </li>
+				  <li>
+					<a class="dropdown-item" href="#"><i class="flag-china flag"></i>中文</a>
+				  </li>
+				  <li>
+					<a class="dropdown-item" href="#"><i class="flag-japan flag"></i>日本語</a>
+				  </li>
+				  <li>
+					<a class="dropdown-item" href="#"><i class="flag-germany flag"></i>Deutsch</a>
+				  </li>
+				  <li>
+					<a class="dropdown-item" href="#"><i class="flag-france flag"></i>Français</a>
+				  </li>
+				  <li>
+					<a class="dropdown-item" href="#"><i class="flag-spain flag"></i>Español</a>
+				  </li>
+				  <li>
+					<a class="dropdown-item" href="#"><i class="flag-russia flag"></i>Русский</a>
+				  </li>
+				  <li>
+					<a class="dropdown-item" href="#"><i class="flag-portugal flag"></i>Português</a>
+				  </li>
+				</ul>
+			  </div>
+			  <!--- language selector --->
+			</div>
+		  </div>
+		</div>
+	  </footer>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-        integrity="sha384-3Nlkv3DLWJr0HYp2kXjC1a90oSzv8leDi4VRKtukF7bq3TIstHqh/lSWwIqbCt9PL" crossorigin="anonymous"></script>
+        integrity="sha384-3Nlkv3DLWJr0HYp2kXjC1a90oSzv8leDi4VRKtukF7bq3TIstHqh/lSWwIqbCt9PL"
+        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
         integrity="sha384-Ra7me1g+IdK7Lp+gPBhB8JhPqDgpgcMkI9zKMm5EksdPmxzplGrMykTtDkOZs7Np" crossorigin

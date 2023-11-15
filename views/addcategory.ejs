@@ -15,7 +15,7 @@
 
         /* Container for the signup form */
         .container {
-            background-color: #fff;
+            background: linear-gradient(to right, #ff9966, #ff5e62);
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             max-width: 400px;
@@ -27,6 +27,7 @@
         /* Form styling */
         h2 {
             text-align: center;
+            color: #fff;
         }
 
         form {
@@ -36,6 +37,7 @@
 
         label {
             margin-bottom: 5px;
+            color: #fff;
         }
 
         input[type="text"],
@@ -44,9 +46,11 @@
         input[type="tel"] {
             padding: 10px;
             margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            background-color: #fff;
+            color: #333;
         }
 
         button[type="submit"] {
@@ -54,7 +58,7 @@
             color: #fff;
             padding: 10px;
             border: none;
-            border-radius: 3px;
+            border-radius: 5px;
             cursor: pointer;
             font-size: 18px;
             transition: background-color 0.3s;
@@ -79,14 +83,8 @@
             <label for="username">categoryname</label>
             <input type="text" id="username" name="categoryname" required>
 
-           
-
             <label for="password">categorydescription</label>
             <input type="text" id="description" name="categorydescription" required>
-
-           
-
-
 
             <button type="submit">SAVE</button>
         </form>

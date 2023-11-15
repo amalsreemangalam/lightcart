@@ -60,5 +60,9 @@ router.post('/addcategory',admincontroller.addcategory)
 router.get('/deletecategory/:id',admincontroller.deletecategory)
 router.get('/editcategory/:id',admincontroller.editcategoryget)
 router.post('/editcategory/:id',admincontroller.editcategorypost)
+router.get("/ordermanagement",admincontroller.loadordermanagement)
+router.get('/updateOrderStatus/:userId/:orderId/:newStatus',admincontroller.updateOrderStatus)
+router.get('/dashboard',admincontroller.admindashboard)
+router.get("/deleteimage", admincontroller.deleteimage)
 
 module.exports = router;

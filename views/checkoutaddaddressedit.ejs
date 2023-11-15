@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    body {
+      margin-top: 20px;
+      color: #1a202c;
+      text-align: left;
+      background-color: #e2e8f0;
+    }
+
+    .main-body {
+      padding: 15px;
+    }
+
+    .card {
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
+    }
+
+    .card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      word-wrap: break-word;
+      background-color: #fff;
+      background-clip: border-box;
+      border: 0 solid rgba(0, 0, 0, .125);
+      border-radius: .25rem;
+    }
+
+    .card-body {
+      flex: 1 1 auto;
+      min-height: 1px;
+      padding: 1rem;
+    }
+
+    .gutters-sm {
+      margin-right: -8px;
+      margin-left: -8px;
+    }
+
+    .gutters-sm>.col,
+    .gutters-sm>[class*=col-] {
+      padding-right: 8px;
+      padding-left: 8px;
+    }
+
+    .mb-3,
+    .my-3 {
+      margin-bottom: 1rem !important;
+    }
+
+    .bg-gray-300 {
+      background-color: #e2e8f0;
+    }
+
+    .h-100 {
+      height: 100% !important;
+    }
+
+    .shadow-none {
+      box-shadow: none !important;
+    }
+  </style>
+</head>
+
+<body>
+
+
+
+
+
+
+
+  <div class="container">
+    <div class="main-body">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="main-breadcrumb">
+        <ol class="breadcrumb">
+
+          <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+        </ol>
+      </nav>
+      <!-- /Breadcrumb -->
+
+      <div class="row gutters-sm">
+    
+
+        <div class="col-md-8">
+          <div class="card mb-3">
+            <div class="card-body">
+              <form action="/checkoutaddaddressedit/edit?selectedAddress=0" method="post">
+
+                <div class="row">
+                  <div class="col-sm-3">
+                    <!-- <h6 class="mb-0">Full Name</h6> -->
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                    <!-- <input type="text" value=" <%=userdetails.name%>" name="name"> -->
+
+                  </div>
+                </div>
+          
+                <div class="row">
+                  <div class="col-sm-3">
+                    <!-- <h6 class="mb-0">Email</h6> -->
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                    <!-- <input type="email" value=" <%=userdetails.email%>" name="email"> -->
+                  </div>
+                </div>
+                
+                <div class="row">
+                  <div class="col-sm-3">
+                    <!-- <h6 class="mb-0">Phone</h6> -->
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                    <!-- <input type="text" value=" <%=userdetails.phone%>" name="phone"> -->
+                  </div>
+                </div>
+                <!-- <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Mobile</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      (320) 380-4539
+                    </div>
+                  </div> -->
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h5 class="mb-0">Address edit</h5>
+                  </div>
+
+                </div>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Housename</h6>
+                  </div>
+                  <input type="text" value=" <%=userdetails.address[selectedAddress].houseName%>" name="houseName">
+                </div>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">street</h6>
+                  </div>
+                  <input type="text" value=" <%=userdetails.address[selectedAddress].street%>" name="street">
+                </div>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">city</h6>
+                  </div>
+                  <input type="text" value=" <%=userdetails.address[selectedAddress].city%>" name="city">
+                </div>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">state</h6>
+                  </div>
+                  <input type="text" value=" <%=userdetails.address[selectedAddress].state%>" name="state">
+                </div>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">pincode</h6>
+                  </div>
+                  <input type="text" value=" <%=userdetails.address[selectedAddress].pincode%>" name="pincode">
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <!-- <a class="btn btn-info " target="__blank" href="/editprofile">Edit</a> -->
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Submit</button>
+                
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <!-- <a class="btn btn-info" href="/addadress">AddAdress</a> -->
+        <!-- <a class="btn btn-info" href="editadress">Edit address</a>   -->
+      </div>
+    </div>
+  </div>
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+
+    <script>
+
+function validateForm() {
+   // Get input values
+   var houseName = document.getElementById("houseName").value;
+   var street = document.getElementById("street").value;
+   var city = document.getElementById("city").value;
+   var state = document.getElementById("state").value;
+   var pincode = document.getElementById("zip").value;
+
+   // Validate house name
+   if (houseName.trim() == "") {
+       alert("House name must be filled out");
+       return false;
+   }
+
+   // Validate street
+   if (street.trim() == "") {
+       alert("Street must be filled out");
+       return false;
+   }
+
+   // Validate city
+   if (city.trim() == "") {
+       alert("City must be filled out");
+       return false;
+   }
+
+   // Validate state
+   if (state.trim() == "") {
+       alert("State must be filled out");
+       return false;
+   }
+
+   // Validate pincode
+   if (pincode.length != 6) {
+       alert("Pincode must be exactly 6 digits");
+       return false;
+   }
+
+   return true; // If all fields are valid, form will be submitted
+}
+    </script>
+
+
+</body>
+
+</html>

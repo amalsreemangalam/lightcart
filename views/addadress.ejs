@@ -82,5 +82,48 @@ input[type="submit"]:hover {
 
         <input type="submit" value="Submit">
     </form>
+
+    <script>
+        function validateForm() {
+   // Get input values
+   var houseName = document.getElementById("houseName").value;
+   var street = document.getElementById("street").value;
+   var city = document.getElementById("city").value;
+   var state = document.getElementById("state").value;
+   var pincode = document.getElementById("zip").value;
+
+   // Validate house name
+   if (houseName.trim() == "") {
+       alert("House name must be filled out");
+       return false;
+   }
+
+   // Validate street
+   if (street.trim() == "") {
+       alert("Street must be filled out");
+       return false;
+   }
+
+   // Validate city
+   if (city.trim() == "") {
+       alert("City must be filled out");
+       return false;
+   }
+
+   // Validate state
+   if (state.trim() == "") {
+       alert("State must be filled out");
+       return false;
+   }
+
+   // Validate pincode
+   if (pincode.length != 6) {
+       alert("Pincode must be exactly 6 digits");
+       return false;
+   }
+
+   return true; // If all fields are valid, form will be submitted
+}
+    </script>
 </body>
 </html>
