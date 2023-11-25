@@ -1,126 +1,244 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-   <title>Add Address</title>
-   <link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+    <title>Add Address</title>
+    <style>
+        /* style.css */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-   <style>
-       /* style.css */
-       body {
-           font-family: Arial, sans-serif;
-           background-color: #f4f4f4;
-           margin: 0;
-           display: flex;
-           justify-content: center;
-           align-items: center;
-           height: 100vh;
-       }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-       .container {
-           background-color: #fff;
-           padding: 20px;
-           border-radius: 10px;
-           box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-       }
+        h1 {
+            text-align: center;
+        }
 
-       h1 {
-           text-align: center;
-       }
+        form {
+            max-width: 500px;
+            margin: auto;
+        }
 
-       form {
-           max-width: 500px;
-           margin: auto;
-       }
+        label {
+            font-weight: bold;
+        }
 
-       label {
-           font-weight: bold;
-       }
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
 
-       input[type="text"] {
-           width: 100%;
-           padding: 8px;
-           margin-bottom: 10px;
-           box-sizing: border-box;
-           border: 1px solid #ccc;
-           border-radius: 4px;
-       }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
 
-       input[type="submit"] {
-           background-color: #007bff;
-           color: #fff;
-           border: none;
-           padding: 10px 20px;
-           border-radius: 4px;
-           cursor: pointer;
-           font-size: 16px;
-       }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        
 
-       input[type="submit"]:hover {
-           background-color: #0056b3;
-       }
-   </style>
+
+
+.custom-navbar {
+   background-color: #123456; /* Replace with your desired color */
+}
+     body {
+    background-image: url('http://www.pixelstalk.net/wp-content/uploads/2016/04/Grey-backgrounds-for-desktop.jpg'); /* Replace 'path_to_your_image.jpg' with the actual path to your image file */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.price-pro {
+    color: #920808;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+
+        .navbar-brand {
+            color: #000;
+        }
+
+        .navbar-toggler-icon {
+            background-color: #000;
+        }
+
+        .product-images img {
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .product-info h4 {
+            color: #000;
+        }
+
+        .price-pro {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .product-description {
+            color: #ccc;
+            font-size: 1.1rem;
+        }
+
+        .btn-add-to-cart,
+        .btn-buy-now {
+            background-color: #ff8800;
+            color: #fff;
+            border: none;
+            margin-top: 10px;
+            font-size: 1.2rem;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-add-to-cart:hover,
+        .btn-buy-now:hover {
+            background-color: #cc6e00;
+        }
+
+        .message {
+            display: none;
+            background-color: #28a745;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .product-images img {
+    width: 250px; /* Set a specific width */
+    height: 250px; /* Set a specific height */
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+
+    </style>
+    
 </head>
+
 <body>
-   <h1>Add Address</h1>
-   <form action="/checkoutaddaddress" method="post" onsubmit="return validateForm()">
-       <label for="name">HouseName:</label>
-       <input type="text" id="houseName" name="houseName" required><br><br>
 
-       <label for="street">Street:</label>
-       <input type="text" id="street" name="street" required><br><br>
 
-       <label for="city">City:</label>
-       <input type="text" id="city" name="city" required><br><br>
+    <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container"  style="display: flex;">
+            <a class="navbar-brand" href="#">LIGHT CART</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i> My Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/home"><i class="fas fa-user-circle"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav> -->
 
-       <label for="state">State:</label>
-       <input type="text" id="state" name="state" required><br><br>
 
-       <label for="pincode">pincode:</label>
-       <input type="number" id="zip" name="pincode" required><br><br>
 
-       <input type="submit" value="Submit">
-   </form>
 
-   <script>
-       function validateForm() {
-           // Get input values
-           var houseName = document.getElementById("houseName").value;
-           var street = document.getElementById("street").value;
-           var city = document.getElementById("city").value;
-           var state = document.getElementById("state").value;
-           var pincode = document.getElementById("zip").value;
+    <h1>Add Delivery Address</h1>
+    <form action="/checkoutaddaddress" method="post" onsubmit="return validateForm()">
+        <label for="houseName">House Name:</label>
+        <input type="text" id="houseName" name="houseName" required><br><br>
 
-           // Validate house name
-           if (houseName.trim() == "") {
-               alert("House name must be filled out");
-               return false;
-           }
+        <label for="street">Street:</label>
+        <input type="text" id="street" name="street" required><br><br>
 
-           // Validate street
-           if (street.trim() == "") {
-               alert("Street must be filled out");
-               return false;
-           }
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" required><br><br>
 
-           // Validate city
-           if (city.trim() == "") {
-               alert("City must be filled out");
-               return false;
-           }
+        <label for="state">State:</label>
+        <input type="text" id="state" name="state" required><br><br>
 
-           // Validate state
-           if (state.trim() == "") {
-               alert("State must be filled out");
-               return false;
-           }
+        <label for="pincode">Pincode:</label>
+        <input type="number" id="pincode" name="pincode" required><br><br>
 
-           // Validate pincode
-           if (pincode.length != 6) {
-               alert("Pincode must be exactly 6 digits");
-               return false;
-           }
+        <input type="submit" value="Submit">
+    </form>
 
-           return true; // If all fields are valid, form will be submitted
-       }
-   </script>
+    <script>
+        function validateForm() {
+            // Get input values
+            var houseName = document.getElementById("houseName").value.trim();
+            var street = document.getElementById("street").value.trim();
+            var city = document.getElementById("city").value.trim();
+            var state = document.getElementById("state").value.trim();
+            var pincode = document.getElementById("pincode").value.trim();
+
+            // Validate house name
+            if (houseName === "") {
+                alert("House name must be filled out");
+                return false;
+            }
+
+            // Validate street
+            if (street === "") {
+                alert("Street must be filled out");
+                return false;
+            }
+
+            // Validate city
+            if (city === "") {
+                alert("City must be filled out");
+                return false;
+            }
+
+            // Validate state
+            if (state === "") {
+                alert("State must be filled out");
+                return false;
+            }
+
+            // Validate pincode
+            if (!/^\d{6}$/.test(pincode)) {
+                alert("Pincode must be exactly 6 digits");
+                return false;
+            }
+
+            return true; // If all fields are valid, form will be submitted
+        }
+    </script>
 </body>
+
 </html>

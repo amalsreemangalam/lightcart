@@ -67,7 +67,10 @@
             <input type="text" id="description" name="productdescription" required>
 
             <label for="stocks">Productstocks</label>
-            <input type="tel" id="stocks" name="productstocks" required>
+            <input type="number" id="stocks" name="productstocks" required>
+            <span id="error" style="color: red;"></span>
+            
+
 
             <label for="category">Product Category</label>
           
@@ -94,14 +97,17 @@
         </form>
     </div>
     <script>
-    function validateForm() {
-        var stocks = document.getElementById("stocks");
-        if (isNaN(stocks.value)) {
-            alert("Stock must be a number!");
-            return false;
-        }
-        return true;
-    }
+  function validateForm() {
+ var stocks = document.getElementById("stocks");
+ if (isNaN(stocks.value) || stocks.value < 0) {
+     alert("Stock must be a number greater than or equal to zero!");
+     return false;
+ }
+ return true;
+}
+
+
+
 </script>
 </body>
 

@@ -59,21 +59,28 @@
     <h1>Sign Up</h1>
     <form action="/usersignup" method="post" class="rounded" onsubmit="return validateForm()">
         <div class="mb-3">
-            <label for="name" class="form-label">Name</label>
+            <label for="name" class="form-label"></label>
             <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
         </div>
         <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
+            <label for="email" class="form-label"></label>
             <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
         </div>
         <div class="mb-3">
-            <label for="phone" class="form-label">Phone</label>
+            <label for="phone" class="form-label"></label>
             <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your phone number" required>
         </div>
         <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
+            <label for="password" class="form-label"></label>
             <input type="password" class="form-control" id="password" placeholder="Enter your password" name="password" required>
         </div>
+
+        <div class="mb-3">
+            <label for="confirmPassword" class="form-label"></label>
+            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" name="confirmPassword" required>
+        </div>
+        
+
         <button type="submit" class="btn btn-primary">Request OTP</button>
     </form>
 
@@ -82,55 +89,59 @@
         if (window.history.replaceState) {
             window.history.replaceState(null, null, window.location.href);
         }
-        document.getElementById('requestOtp').addEventListener('click', function() {
-            document.querySelector('form').submit();
-        });
     </script>
-     <script>
-      function validateForm() {
- // Get input values
- var name = document.getElementById("name").value;
- var email = document.getElementById("email").value;
- var phone = document.getElementById("phone").value;
- var password = document.getElementById("password").value;
+    <script>
+        function validateForm() {
+            // Get input values
+            var name = document.getElementById("name").value;
+            var email = document.getElementById("email").value;
+            var phone = document.getElementById("phone").value;
+            var password = document.getElementById("password").value;
+            if (name.trim() === ""  || /\./.test(name)) {
+        // Display validation message using a Bootstrap alert
+        var alertDiv = document.createElement("div");
+        // alertDiv.className = "alert alert-danger";
+        alertDiv.innerHTML = "Name must be filled properly";
 
- // Validate name
- if (name.trim() == "") {
-     alert("Name must be filled out");
-     return false;
- }
+        // Append the alert to the form
+        var form = document.querySelector('form');
+        form.insertBefore(alertDiv, form.firstChild);
 
- // Validate email format
- var emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
- if (!emailRegex.test(email)) {
-     alert("Invalid email format");
-     return false;
- }
-
- // Validate phone number format (assuming a US phone number format)
- var phoneRegex = /^\d{10}$/;
- if (!phoneRegex.test(phone)) {
-     alert("Invalid phone number format");
-     return false;
- }
-
- // Validate password length
- if (password.length < 8) {
-     alert("Password must be at least 8 characters long");
-     return false;
- }
-
- // Validate password format (assuming a format with at least one uppercase letter, one lowercase letter, one number, and one special character)
- var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
- if (!passwordRegex.test(password)) {
-     alert("Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character");
-     return false;
- }
-
- return true; // If all fields are valid, form will be submitted
-}
+        // Prevent form submission
+        return false;
+    }
 
 
+            // Validate email format
+            var emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+            if (!emailRegex.test(email)) {
+                alert("Invalid email format");
+                return false;
+            }
+
+            // Validate phone number format (assuming a US phone number format)
+            var phoneRegex = /^\d{10}$/;
+            if (!phoneRegex.test(phone)) {
+                alert("Invalid phone number format");
+                return false;
+            }
+
+            // Validate password length
+            if (password.length < 8) {
+                alert("Password must be at least 8 characters long");
+                return false;
+            }
+
+            var confirmPassword = document.getElementById("confirmPassword").value;
+            
+            // Validate password confirmation
+            if (confirmPassword !== password) {
+                alert("Password and Confirm Password must match");
+                return false;
+            }
+
+            return true; // If all fields are valid, form will be submitted
+        }
     </script>
 </body>
 </html>

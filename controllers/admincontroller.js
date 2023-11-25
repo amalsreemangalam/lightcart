@@ -4,6 +4,7 @@ const productcollection = require("../models/productmongo");
 const admincollection = require("../models/adminmongo")
 const newcollection = require("../models/userloginmongodb");
 const categorycollection = require('../models/category.mongo');
+const ordercollection = require("../models/order")
 const mongoose = require('mongoose');
 
 
@@ -217,33 +218,37 @@ const showcategoryManagementPage = async (req, res) => {
 };
 
 const addcategoryget = (req, res) => {
-    res.render('addcategory')
+    const error = "";
+    res.render('addcategory', { error })
 }
 
 
 
 const addcategory = async (req, res) => {
-    const categoryname = req.body.categoryname;
+    const categoryname = req.body.categoryname.toLowerCase(); // Convert to lowercase
     const categorydescription = req.body.categorydescription;
 
-    // Check if a category with the same name already exists
-    const existingCategory = await categorycollection.findOne({ categoryname: categoryname });
+    // Check if a category with the same name (case-insensitive) already exists
+    const existingCategory = await categorycollection.findOne({
+        categoryname: { $regex: new RegExp(`^${categoryname}$`, 'i') }
+    });
 
     if (existingCategory) {
-        // If a category with the same name is found, return an error message
-        return res.status(400).send("This category already exists");
+        const error = "Category already exists";
+        res.render("addcategory", { error });
+    } else {
+        const categorydata = {
+            categoryname: categoryname,
+            categorydescription: categorydescription
+        }
+
+        // Insert the new category
+        await categorycollection.insertMany([categorydata]);
+
+        res.redirect("/categorymanagement");
     }
+};
 
-    const categorydata = {
-        categoryname: categoryname,
-        categorydescription: categorydescription
-    }
-
-    // Insert the new category if no category with the same name is found
-    await categorycollection.insertMany([categorydata]);
-
-    res.redirect("/categorymanagement");
-}
 
 const deletecategory = async (req, res) => {
     const productId = req.params.id;
@@ -284,17 +289,45 @@ const editcategorypost = async (req, res) => {
         res.redirect('/categorymanagement')
     }
 }
+// const loadordermanagement = async (req, res) => {
+//     try {
+//         // const users = await newcollection.find({ orders: { $exists: true, $ne: [] } }).populate('orders.product');
+//         const orders= await ordercollection.find({})
+
+//         // res.render('ordermanagement', { users: users });
+//         res.render('ordermanagement',{orders:orders})
+//     } catch (error) {
+//         console.error('Error:', error);
+//         res.status(500).send('Internal Server Error');
+//     }
+
+// }
 const loadordermanagement = async (req, res) => {
     try {
-        const users = await newcollection.find({ orders: { $exists: true, $ne: [] } }).populate('orders.product');
+        const orders = await ordercollection.find({})
+            .populate('user', 'name') // Populate the 'user' field and include only the 'name' property
+            .populate('products.productId', 'productname'); // Populate the 'products' array and include only the 'productname' property of the referenced product
 
-        res.render('ordermanagement', { users: users });
+        // Extract the desired details from the orders
+        const formattedOrders = orders.map(order => ({
+            orderId: order._id,
+            username: order.user.name,
+            orderDate: order.orderDate,
+            status: order.status,
+            products: order.products.map(product => ({
+                productName: product.productId.productname,
+                quantity: product.quantity,
+            })),
+        }));
+
+        res.render('ordermanagement', { orders: formattedOrders });
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('Internal Server Error');
     }
-
 }
+
+
 
 
 const updateOrderStatus = async (req, res) => {
@@ -329,37 +362,37 @@ const deleteimage = async (req, res) => {
     try {
         const productId = req.query.productId;
         let imageUrl = req.query.imageUrl;
- 
+
         // Escape backslashes
         console.log('query ', imageUrl);
- 
+
         const product = await productcollection.findById(productId);
         console.log('product.productimage ', product.productimage);
- 
+
         if (!product) {
             return res.status(404).send("Product not found.");
         }
- 
+
         const escapedProductImages = product.productimage.map(image => image);
- 
+
         product.productimage = escapedProductImages.filter(image => image !== imageUrl);
         console.log('product.productimage after deletion: ', product.productimage);
- 
+
         const updatedProduct = await product.save();
- 
+
         console.log('updatedProduct ', updatedProduct);
- 
+
         res.redirect('/productmanagement');
     } catch (error) {
         console.log("Error during image delete:", error);
         return res.status(500).send({ success: false, message: "Error during image delete." });
     }
- };
- 
+};
 
 
 
-   
+
+
 
 module.exports = {
     adminlogin,

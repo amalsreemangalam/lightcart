@@ -9,14 +9,38 @@
     <link rel="stylesheet" href="/css/otp.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+<style>
+    
+       body {
+           background-image: url('http://www.pixelstalk.net/wp-content/uploads/2016/04/Grey-backgrounds-for-desktop.jpg');
+           background-repeat: no-repeat;
+           background-attachment: fixed; 
+           background-size: cover;
+       }
 
+</style>
 </head>
 
 <body>
-    <form action="/verifyotp" method="post">
-        <div class="container height-100 d-flex justify-content-center align-items-center">
 
-            <div class="position-relative">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">LIGHT CART</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+           
+        </div>
+    </nav>
+
+
+
+    
+    <form action="/verifyotp" method="post">
+        <div class="container d-flex justify-content-center align-items-center  " style="height: 100vh;">
+
+            <div class="position-relative justify-content-center " >
                 <div class="card p-2 text-center">
                     <h6>Please enter the one time password <br> to verify your account</h6>
 
@@ -25,7 +49,7 @@
                             <input type="text" id="otp" name="otp">
                             <!-- <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2"> <input name="otp" class="m-2 text-center form-control rounded" type="text" id="first" maxlength="1" /> <input name="otp" class="m-2 text-center form-control rounded" type="text" id="second" maxlength="1" /> <input  name="otp" class="m-2 text-center form-control rounded" type="text" id="third" maxlength="1" /> <input name="otp" class="m-2 text-center form-control rounded" type="text" id="fourth" maxlength="1" /> <input name="otp" class="m-2 text-center form-control rounded" type="text" id="fifth" maxlength="1" /> <input name="otp" class="m-2 text-center form-control rounded" type="text" id="sixth" maxlength="1" /> </div> -->
                             <div class="mt-4"> <button class="btn btn-danger px-4 validate"
-                                    type="submit">Submit</button> </div>
+                                    type="submit" id="sub">Submit</button> </div>
                             <div id="countdown">00:59</div>
                             <div id="hiddenButton" style="display: none;"> <!-- Initially hidden -->
                                 <a id="showButton" href="/resentotp">Resend OTP</a>
@@ -40,29 +64,29 @@
 
     <script>
         let seconds = 59;
-
-        function countdown() {
-            const countdownDisplay = document.getElementById('countdown');
-            const interval = setInterval(function () {
-                countdownDisplay.textContent = seconds;
-
-                if (seconds === 0) {
-                    clearInterval(interval);
-                } else {
-                    seconds--;
-                }
-            }, 1000);
+let submitbtn=document.getElementById('sub')
+function countdown() {
+    const countdownDisplay = document.getElementById('countdown');
+    const interval = setInterval(function () {
+        countdownDisplay.textContent = seconds;
+        
+        if (seconds === 0) {
+            clearInterval(interval);
+            submitbtn.setAttribute("disabled",true)
+            countdownDisplay.textContent = "OTP expired try Resend";
+            showResendButton();  // Call the function to show the resend button
+        } else {
+            seconds--;
         }
+    }, 1000);
+}
 
-        countdown(); 
-    </script>
+countdown();  // Start the countdown
 
-    <script>
-        // Function to show the hidden button after 1 minute
-        function showButtonAfterOneMinute() {
-            const hiddenButton = document.getElementById('hiddenButton');
-            hiddenButton.style.display = 'block'; // Show the hidden button
-        }
+function showResendButton() {
+    const hiddenButton = document.getElementById('hiddenButton');
+    hiddenButton.style.display = 'block'; // Show the hidden button
+}
 
         // Set a timeout to call the function after 1 minute (60,000 milliseconds)
         setTimeout(showButtonAfterOneMinute, 15000);

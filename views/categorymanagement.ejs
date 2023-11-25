@@ -1,35 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <style>
-        body {
-            background-image: url('');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+        .bg-grey {
+            background-color: grey;
         }
 
-        .navbar {
+        body {
+    height: 100%;
+    margin: 0;
+    background-image: url('https://th.bing.com/th/id/OIP.JfSoCom_PMG2HWUDFwb28gHaEo?rs=1&pid=ImgDetMain'); /* Replace with the actual path to your image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: 'Arial', sans-serif; /* Use Arial as a web-safe font, and fallback to sans-serif if not available */}
+
+        .sidebar {
             background-color: #333;
             width: 250px;
             height: 100%;
             overflow: auto;
-            position: fixed;
+            position:absolute;
             padding-top: 20px;
         }
 
-        .navbar a {
+        .sidebar a {
             display: block;
             color: white;
             padding: 16px;
             text-decoration: none;
         }
 
-        .navbar a:hover {
+        .sidebar a:hover {
             background-color: #ddd;
             color: black;
         }
@@ -42,7 +50,8 @@
 
         /* Responsive layout - when the screen is less than 700px wide, make the sidebar and main content stack on top of each other */
         @media screen and (max-width: 700px) {
-            .navbar,
+
+            .sidebar,
             .main-content {
                 width: 100%;
                 height: auto;
@@ -52,8 +61,38 @@
         }
     </style>
 </head>
+
 <body>
-    <nav class="navbar">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-grey ">
+        <div class="container">
+            <a class="navbar-brand" href="#">LIGHT CART</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i> My Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/home"><i class="fas fa-user-circle"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+
+
+
+
+    <nav class="sidebar">
         <a href="/dashboard">Dashboard</a>
         <a href="/usermanagement">User Management</a>
         <a href="/productmanagement">Product Management</a>
@@ -67,56 +106,91 @@
             </div>
         </div>
         <a href="/admin/logout" class="border rounded py-1 px-3 nav-link d-flex align-items-center">
-            <i class="fas fa-sign-out-alt m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Logout</p>
+            <i class="fas fa-sign-out-alt m-1 me-md-2"></i>
+            <p class="d-none d-md-block mb-0">Logout</p>
         </a>
     </nav>
 
     <div class="main-content">
         <% if (category) { %>
-            <table class="table">
+            <table class="table ">
                 <thead class="thead-light">
                     <tr>
                         <th scope="col">categoryname</th>
                         <th scope="col">categorydescription</th>
+
                         <th scope="col">Action</th>
+                        <th scope="col">List/Unlist</th>
+
+
                         <a href="/addcategory"><button style="background-color:gray;">add new category</button></a>
 
                     </tr>
                 </thead>
                 <tbody>
-                    <% category.forEach(product => { %>
-                        <tr>
-                            <td><%= product.categoryname %></td>
-                            <td><%= product.categorydescription %></td>
-                            <td>
-                                <a href="/editcategory/<%= product._id %>" class="btn btn-primary">Edit</a>
-                                <a href="/deletecategory/<%= product._id %>" class="btn btn-primary" style="background-color: red; font-size: 12px;">Delete</a>
-                            </td>
-                            
-                        </tr>
-                    <% }) %>
+                    <% category.forEach(product=> { %>
+                            <tr>
+                                <td>
+                                    <%= product.categoryname %>
+                                </td>
+                                <td>
+                                    <%= product.categorydescription %>
+                                </td>
+                                <td>
+                                    <a href="/editcategory/<%= product._id %>" class="btn btn-primary">Edit</a>
+                                   
+                                      
+                                </td>
+                                <td>
+                                    <% if(product.list){ %>
+                                        <a href="/list-product/<%=product._id %>"> <button class="btn btn-primary">list
+                                                Product</button></a>
+                                        <% }else{ %>
+                                            <a href="/unlist-product/<%=product._id %>"><button
+                                                    class="btn btn-primary">Unlist Product</button></a>
+                                            <% } %>
+                                <td>
+
+                                    </script>
+                                </td>
+
+                                </td>
+
+                            </tr>
+
+                            <% }) %>
+
                 </tbody>
             </table>
-        <% } %>
+            <% } %>
+
     </div>
+</body>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const deleteButtons = document.querySelectorAll('.delete-category');
 
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function(event) {
-                    event.preventDefault();
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteButtons = document.querySelectorAll('.delete-category');
 
-                    const categoryId = this.getAttribute('data-category-id');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
 
-                    if (confirm('Are you sure you want to delete this category?')) {
-                        fetch('/deletecategory/' + categoryId, {
-                            method: 'DELETE'
-                        })
+                const categoryId = this.getAttribute('data-category-id');
+
+                if (confirm('Are you sure you want to delete this category?')) {
+                    fetch('/deletecategory/' + categoryId, {
+                        method: 'DELETE'
+                    })
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
@@ -127,45 +201,122 @@
                             }
                         })
                         .catch(error => console.error('Error:', error));
-                    }
-                });
+                }
             });
         });
-    </script>
-    <script>
-        document.getElementById('addCategoryForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-    
-            const categoryname = this.elements.categoryname.value;
-            const categorydescription = this.elements.categorydescription.value;
-    
-            const categorydata = {
-                categoryname: categoryname,
-                categorydescription: categorydescription
-            };
-    
-            fetch('/addcategory', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(categorydata),
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(errorMessage => {
-                        throw new Error(errorMessage);
-                    });
+    });
+</script>
+<script>
+    document.getElementById('addCategoryForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const categoryname = this.elements.categoryname.value;
+        const categorydescription = this.elements.categorydescription.value;
+
+        const categorydata = {
+            categoryname: categoryname,
+            categorydescription: categorydescription
+        };
+
+        fetch('/deletecategory/' + categoryId, {
+            method: 'DELETE'
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Category deleted successfully');
+                    window.location.reload();
+                } else {
+                    alert(data.message);
                 }
-                window.location.href = "/categorymanagement";
             })
             .catch(error => {
-                alert(error.message);
+                alert('An error occurred while trying to delete the category. Please try again.');
+            });
+    })
+
+
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteButtons = document.querySelectorAll('.delete-product');
+
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                const productId = this.getAttribute('data-product-id');
+
+                if (confirm('Are you sure you want to delete this category?')) {
+                    fetch('/deleteproduct/' + productId, {
+                        method: 'DELETE'
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert('Product deleted successfully');
+                                window.location.reload();
+                            } else {
+                                alert(data.message);
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                }
             });
         });
-    </script>
-    
-    
-</body>
-</html>
+    });
+</script>
+<!-- ... Your existing HTML code ... -->
 
+<script>
+    // Check if there's a success message in the URL query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const successMessage = urlParams.get('success');
+
+    // If there's a success message, display it as an alert
+    if (successMessage) {
+        window.alert(`Success: ${successMessage}`);
+    }
+</script>
+<script>
+    function confirmDelete() {
+        return confirm('Are you sure you want to delete this category?');
+    }
+
+</script>
+
+
+
+<script>
+    function showErrorModal(message) {
+        const errorMessageElement = document.getElementById('errorMessage');
+        errorMessageElement.innerText = message;
+
+        // Show the modal
+        $('#errorModal').modal('show');
+    }
+
+    document.getElementById('addCategoryForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const categoryname = this.elements.categoryname.value;
+        const categorydescription = this.elements.categorydescription.value;
+
+        const categorydata = {
+            categoryname: categoryname,
+            categorydescription: categorydescription
+        };
+
+        // Assuming there is an issue with the category name
+        if (!categoryname.trim()) {
+            showErrorModal('Category name cannot be empty.');
+            return;
+        }
+
+        // Your existing fetch code for category addition goes here
+    });
+</script>
+
+
+</html>

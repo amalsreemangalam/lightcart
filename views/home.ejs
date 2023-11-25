@@ -14,13 +14,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
   <link rel="stylesheet" href="../public/assets/style.css">
   <style>
-    
-    .carousel-inner img {
-            max-height: 100%;
-            width: auto;
-            margin: auto;
-        }
-
     body {
       background-image: url('https://th.bing.com/th/id/OIP.uincY3qmVUiYMOzkGIItcAAAAA?pid=ImgDet&w=300&h=300&rs=1');
       background-size: cover;
@@ -58,6 +51,13 @@
     .dropdown-item:hover {
       background-color: #ffffff;
     }
+    .items :hover{
+      scale: 1.02;
+    }
+    .prod:hover{
+      transform: scale(1.1);
+      transition:transform  ease-in .1s;
+    }
   </style>
 
 </head>
@@ -67,12 +67,12 @@
 
   <header>
 
-    <div class="p-3 text-center bg-white border-bottom">
+    <div class="p-3 text-center bg-dark border-bottom">
       <div class="container">
         <div class="row gy-3">
           <div class="d-flex justify-content-between w-100">
             <div>
-              <h4>LIGHT CART</h4>
+              <h4 style="color: #ffffff;">LIGHT CART</h4>
             </div>
             <div class="d-flex">
               <!-- <a href="https://github.com/mdbootstrap/bootstrap-material-design" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"> 
@@ -127,7 +127,7 @@
     </div>
 
 
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color:gray;"> <!-- Container wrapper -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-grey">
       <div class="container justify-content-center justify-content-md-between">
         <!-- Toggle button -->
         <button class="navbar-toggler border py-2 text-dark" type="button" data-mdb-toggle="collapse"
@@ -141,15 +141,18 @@
 
 
 
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton">
+          <button  class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton">
             categories
           </button>
           <% category.forEach(element=> { %>
             <div class="dropdown-content" aria-labelledby="dropdownMenuButton">
+            <% if(!element.list){ %>
+              <a class="dropdown-item" href="/usercategory/<%= element.categoryname %>">
+            
 
-              <a class="dropdown-item" href="/usercategory">
                 <%= element.categoryname %>
               </a>
+              <% } %>
               <!-- <a class="dropdown-item" href="#">indoor lights</a> -->
               <!-- <a class="dropdown-item" href="#">Something else here</a> -->
               <% }) %>
@@ -163,32 +166,25 @@
     <!-- Navbar -->
     <!-- Jumbotron -->
     <div class="bg-primary text-white py-5">
-
-    
-<div id="carouselExample" class="carousel slide" data-ride="carousel">
-  <div class="carousel-inner">
-      <div class="carousel-item active">
-          <img src="https://th.bing.com/th/id/OIP.bs-J5y5cEnl37dh01fA-FAHaHa?pid=ImgDet&w=1024&h=1024&rs=1" class="d-block w-100 img-fluid" alt="Image 1">
-          <div class="carousel-caption d-none d-md-block">
-              <h5>Best Products & Brands</h5>
-              <p>Trendy Products, Factory Prices, Excellent Service</p>
-          </div>
+      <div class="container py-5">
+        <h1>
+          Best products & <br />
+          brands in our store
+        </h1>
+        <p>
+          Trendy Products, Factory Prices, Excellent Service
+        </p>
+        <button type="button" class="btn btn-outline-light">
+          Learn more
+        </button>
+        <button type="button" class="btn btn-light shadow-0 text-primary pt-2 border border-white">
+          <span class="pt-1">Purchase now</span>
+        </button>
       </div>
-      <!-- Add more carousel items as needed -->
-  </div>
-  <a class="carousel-control-prev" href="#carouselExample" role="button" data-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-  </a>
-  <a class="carousel-control-next" href="#carouselExample" role="button" data-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-  </a>
-</div
-    
-     
-     <!-- Carousel -->
-     </div>
+    </div>
+
+    <!-- Carousel -->
+    </div>
     <!-- Jumbotron -->
   </header>
   <!-- Products -->
@@ -197,14 +193,15 @@
       <header class="mb-4">
         <h3>New products</h3>
       </header>
-      <div class="row">
+      <div class=" row">
         <% product.forEach(prod=> { %>
-          <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="card my-2 shadow-2-strong">
+         
+          <div class="col-lg-3 col-md-6 col-sm-6 " >
+            <div class="card my-2 shadow-2-strong  prod" style="height: 400px; border-radius: 10px;" >
               <div style="width: 250px; height: 200px; position: relative; overflow: hidden;">
                 <a href="/product/<%= prod._id %>">
                   <img src="<%= prod.productimage[0] %>" class="card-img-top img-fluid" alt=""
-                    style="object-fit:scale-down;position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); " />
+                    style="object-fit:scale-down;position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);border-radius: 10px; " />
                 </a>
               </div>
 
@@ -212,9 +209,9 @@
                 <h5 class="card-title">
                   <%= prod.productname %>
                 </h5>
-                <p class="card-text">Rs <%= prod.productprice %>
+                <p class="card-text">Rs<%= prod.productprice %>
                 </p>
-                <div class="card-footer d-flex justify-content-between">
+                <div class="card-footer d-flex justify-content-between" style="position: absolute ; bottom: 0;width: -webkit-fill-available">
                   <a href="/cart/<%= prod._id %> " class="btn btn-primary shadow-0">Add to cart</a>
                   <a href="wishlist.html">
                     <i class="fas fa-heart"></i>
@@ -225,6 +222,20 @@
           </div>
           <% }) %>
       </div>
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
 
     </div>
   </section>
@@ -273,142 +284,148 @@
   </script>
   <div style="background-color:gray;">
     <!-- Footer -->
-<!-- Your footer content remains unchanged -->
-<footer class="text-center text-lg-start text-muted bg-black mt-3">
-<!-- Section: Links  -->
-<section class="">
-  <div class="container text-center text-md-start pt-4 pb-4">
-  <!-- Grid row -->
-  <div class="row mt-3">
-    <!-- Grid column -->
-    <div class="col-12 col-lg-3 col-sm-12 mb-2">
-    <!-- Content -->
-    <a href="https://mdbootstrap.com/" target="_blank" class="text-white h2">
-      LIGHTCART
-    </a>
-    <p class="mt-1 text-white">
-    
-    </p>
-    </div>
-    <!-- Grid column -->
+    <!-- Your footer content remains unchanged -->
+    <footer class="text-center text-lg-start text-muted bg-black mt-3">
+      <!-- Section: Links  -->
+      <section class="">
+        <div class="container text-center text-md-start pt-4 pb-4">
+          <!-- Grid row -->
+          <div class="row mt-3">
+            <!-- Grid column -->
+            <div class="col-12 col-lg-3 col-sm-12 mb-2">
+              <!-- Content -->
+              <a href="https://mdbootstrap.com/" target="_blank" class="text-white h2">
+                LIGHTCART
+              </a>
+              <p class="mt-1 text-white">
 
-    <!-- Grid column -->
-    <div class="col-6 col-sm-4 col-lg-2">
-    <!-- Links -->
-    <h6 class="text-uppercase text-white fw-bold mb-2">
-      Store
-    </h6>
-    <ul class="list-unstyled mb-4">
-      <li><a class="text-white-50" href="#">About us</a></li>
-      <li><a class="text-white-50" href="#">Find store</a></li>
-      <li><a class="text-white-50" href="#">Categories</a></li>
-      <li><a class="text-white-50" href="#">Blogs</a></li>
-    </ul>
-    </div>
-    <!-- Grid column -->
+              </p>
+            </div>
+            <!-- Grid column -->
 
-    <!-- Grid column -->
-    <div class="col-6 col-sm-4 col-lg-2">
-    <!-- Links -->
-    <h6 class="text-uppercase text-white fw-bold mb-2">
-      Information
-    </h6>
-    <ul class="list-unstyled mb-4">
-      <li><a class="text-white-50" href="#">Help center</a></li>
-      <li><a class="text-white-50" href="#">Money refund</a></li>
-      <li><a class="text-white-50" href="#">Shipping info</a></li>
-      <li><a class="text-white-50" href="#">Refunds</a></li>
-    </ul>
-    </div>
-    <!-- Grid column -->
+            <!-- Grid column -->
+            <div class="col-6 col-sm-4 col-lg-2">
+              <!-- Links -->
+              <h6 class="text-uppercase text-white fw-bold mb-2">
+                Store
+              </h6>
+              <ul class="list-unstyled mb-4">
+                <li><a class="text-white-50" href="#">About us</a></li>
+                <li><a class="text-white-50" href="#">Find store</a></li>
+                <li><a class="text-white-50" href="#">Categories</a></li>
+                <li><a class="text-white-50" href="#">Blogs</a></li>
+              </ul>
+            </div>
+            <!-- Grid column -->
 
-    <!-- Grid column -->
-    <div class="col-6 col-sm-4 col-lg-2">
-    <!-- Links -->
-    <h6 class="text-uppercase text-white fw-bold mb-2">
-      Support
-    </h6>
-    <ul class="list-unstyled mb-4">
-      <li><a class="text-white-50" href="#">Help center</a></li>
-      <li><a class="text-white-50" href="#">Documents</a></li>
-      <li><a class="text-white-50" href="#">Account restore</a></li>
-      <li><a class="text-white-50" href="#">My orders</a></li>
-    </ul>
-    </div>
-    <!-- Grid column -->
+            <!-- Grid column -->
+            <div class="col-6 col-sm-4 col-lg-2">
+              <!-- Links -->
+              <h6 class="text-uppercase text-white fw-bold mb-2">
+                Information
+              </h6>
+              <ul class="list-unstyled mb-4">
+                <li><a class="text-white-50" href="#">Help center</a></li>
+                <li><a class="text-white-50" href="#">Money refund</a></li>
+                <li><a class="text-white-50" href="#">Shipping info</a></li>
+                <li><a class="text-white-50" href="#">Refunds</a></li>
+              </ul>
+            </div>
+            <!-- Grid column -->
 
-    <!-- Grid column -->
-    <div class="col-12 col-sm-12 col-lg-3">
-    <!-- Links -->
-    <h6 class="text-uppercase text-white fw-bold mb-2">Newsletter</h6>
-    <p class="text-white">Stay in touch with latest updates about our products and offers</p>
-    <div class="input-group mb-3">
-      <input type="email" class="form-control border" placeholder="Email" aria-label="Email" aria-describedby="button-addon2" />
-      <button class="btn btn-light border shadow-0" type="button" id="button-addon2" data-mdb-ripple-color="dark">
-      Join
-      </button>
-    </div>
-    </div>
-    <!-- Grid column -->
+            <!-- Grid column -->
+            <div class="col-6 col-sm-4 col-lg-2">
+              <!-- Links -->
+              <h6 class="text-uppercase text-white fw-bold mb-2">
+                Support
+              </h6>
+              <ul class="list-unstyled mb-4">
+                <li><a class="text-white-50" href="#">Help center</a></li>
+                <li><a class="text-white-50" href="#">Documents</a></li>
+                <li><a class="text-white-50" href="#">Account restore</a></li>
+                <li><a class="text-white-50" href="#">My orders</a></li>
+              </ul>
+            </div>
+            <!-- Grid column -->
+
+            <!-- Grid column -->
+            <div class="col-12 col-sm-12 col-lg-3">
+              <!-- Links -->
+              <h6 class="text-uppercase text-white fw-bold mb-2">Newsletter</h6>
+              <p class="text-white">Stay in touch with latest updates about our products and offers</p>
+              <div class="input-group mb-3">
+                <input type="email" class="form-control border" placeholder="Email" aria-label="Email"
+                  aria-describedby="button-addon2" />
+                <button class="btn btn-light border shadow-0" type="button" id="button-addon2"
+                  data-mdb-ripple-color="dark">
+                  Join
+                </button>
+              </div>
+            </div>
+            <!-- Grid column -->
+          </div>
+          <!-- Grid row -->
+        </div>
+      </section>
+      <!-- Section: Links  -->
+
+      <div class="">
+        <div class="container">
+          <div class="d-flex justify-content-between py-4 border-top">
+            <!--- payment --->
+            <div>
+              <i class="fab fa-lg fa-cc-visa text-white"></i>
+              <i class="fab fa-lg fa-cc-amex text-white"></i>
+              <i class="fab fa-lg fa-cc-mastercard text-white"></i>
+              <i class="fab fa-lg fa-cc-paypal text-white"></i>
+            </div>
+            <!--- payment --->
+
+            <!--- language selector --->
+            <div class="dropdown dropup">
+              <a class="dropdown-toggle text-white" href="#" id="Dropdown" role="button" data-mdb-toggle="dropdown"
+                aria-expanded="false"> <i class="flag-united-kingdom flag m-0 me-1"></i>English </a>
+
+              <ul class="dropdown-menu dropdown-menu-endp" aria-labelledby="Dropdown">
+                <li>
+                  <a class="dropdown-item" href="#"><i class="flag-united-kingdom flag"></i>English <i
+                      class="fa fa-check text-success ms-2"></i></a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#"><i class="flag-poland flag"></i>Polski</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#"><i class="flag-china flag"></i>中文</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#"><i class="flag-japan flag"></i>日本語</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#"><i class="flag-germany flag"></i>Deutsch</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#"><i class="flag-france flag"></i>Français</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#"><i class="flag-spain flag"></i>Español</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#"><i class="flag-russia flag"></i>Русский</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#"><i class="flag-portugal flag"></i>Português</a>
+                </li>
+              </ul>
+            </div>
+            <!--- language selector --->
+          </div>
+        </div>
+      </div>
+    </footer>
   </div>
-  <!-- Grid row -->
-  </div>
-</section>
-<!-- Section: Links  -->
-
-<div class="">
-  <div class="container">
-  <div class="d-flex justify-content-between py-4 border-top">
-    <!--- payment --->
-    <div>
-    <i class="fab fa-lg fa-cc-visa text-white"></i>
-    <i class="fab fa-lg fa-cc-amex text-white"></i>
-    <i class="fab fa-lg fa-cc-mastercard text-white"></i>
-    <i class="fab fa-lg fa-cc-paypal text-white"></i>
-    </div>
-    <!--- payment --->
-
-    <!--- language selector --->
-    <div class="dropdown dropup">
-    <a class="dropdown-toggle text-white" href="#" id="Dropdown" role="button" data-mdb-toggle="dropdown" aria-expanded="false"> <i class="flag-united-kingdom flag m-0 me-1"></i>English </a>
-
-    <ul class="dropdown-menu dropdown-menu-endp" aria-labelledby="Dropdown">
-      <li>
-      <a class="dropdown-item" href="#"><i class="flag-united-kingdom flag"></i>English <i class="fa fa-check text-success ms-2"></i></a>
-      </li>
-      <li><hr class="dropdown-divider" /></li>
-      <li>
-      <a class="dropdown-item" href="#"><i class="flag-poland flag"></i>Polski</a>
-      </li>
-      <li>
-      <a class="dropdown-item" href="#"><i class="flag-china flag"></i>中文</a>
-      </li>
-      <li>
-      <a class="dropdown-item" href="#"><i class="flag-japan flag"></i>日本語</a>
-      </li>
-      <li>
-      <a class="dropdown-item" href="#"><i class="flag-germany flag"></i>Deutsch</a>
-      </li>
-      <li>
-      <a class="dropdown-item" href="#"><i class="flag-france flag"></i>Français</a>
-      </li>
-      <li>
-      <a class="dropdown-item" href="#"><i class="flag-spain flag"></i>Español</a>
-      </li>
-      <li>
-      <a class="dropdown-item" href="#"><i class="flag-russia flag"></i>Русский</a>
-      </li>
-      <li>
-      <a class="dropdown-item" href="#"><i class="flag-portugal flag"></i>Português</a>
-      </li>
-    </ul>
-    </div>
-    <!--- language selector --->
-  </div>
-  </div>
-</div>
-</footer>
-</div>
 </body>
 
 </html>

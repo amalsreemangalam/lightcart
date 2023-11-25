@@ -22,6 +22,11 @@ const productSchema = new mongoose.Schema({
         type: Number,
         // required: true
     },
+    individualquantity: {
+        type: Number,
+        // required: true,
+    },
+
     productimage:[{
         type: String ,
         

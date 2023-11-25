@@ -14,6 +14,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
   <link rel="stylesheet" href="../public/assets/style.css">
   <style>
+
+.custom-navbar {
+   background-color: #123456; /* Replace with your desired color */
+}
     .gradient-custom {
       /* fallback for old browsers */
       background: #cd9cf2;
@@ -30,31 +34,28 @@
 <body>
 
 
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-      <a class="navbar-brand" href="#">LIGHT CART</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="/home"><i class="fas fa-user-circle"></i> Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i> My Cart</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/userprofile"><i class="fas fa-user-circle"></i> Profile</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
-          </li>
-        </ul>
-      </div>
+        <a class="navbar-brand" href="#">LIGHT CART</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i> My Cart</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/home"><i class="fas fa-user-circle"></i> Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
     </div>
-  </nav>
+</nav>
 
 
 
@@ -73,36 +74,36 @@
                 <p class="lead fw-normal mb-0" style="color: #a8729a;">Receipt</p>
                 <p class="small text-muted mb-0">Receipt Voucher : 1KAU9-84UIL</p>
               </div>
+              <% console.log(orderItems) %>
               <%orderItems.forEach(item=>{%>
-
-
+                <% console.log('orderItems0000',item); %>
+                <% item.products.forEach((prod)=>{ console.log(prod)%>
+                  
                 <div class="card shadow-0 border mb-4">
                   <div class="card-body">
-                    <div class="row">
+                    <div class="row"> 
                       <div class="col-md-2">
-
-                        <img src="<%= item.product.productimage[0]%>" class="border rounded me-3"
-                          style="width: 96px; height: 96px;" />
-
+                        <% if (prod.productId.productimage[0]) { %>
+                          <img src="<%= prod.productId.productimage[0] %>" class="border rounded me-3" style="width: 96px; height: 96px;" />
+                        <% } else { %>
+                          <p>No Image Available</p>
+                        <% } %>
                       </div>
-                      <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                        <p class="text-muted mb-0">
-                          <%=item.productName%>
-                        </p>
-                      </div>
+                      
+                    
                       <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                         <p class="text-muted mb-0 small">
-                          <%=item.product.productcategory%>
-                        </p>
+                          <%= prod.productId.productcategory %>  </p>
                       </div>
 
                       <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                        <p class="text-muted mb-0 small">Qty: <%=item.quantity%>
+                        <p class="text-muted mb-0 small">Qty: <%= prod.individualquantity %>
                         </p>
                       </div>
+                      
                       <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                        <p class="text-muted mb-0 small">₹<%= item.product.productprice %>
-                        </p>
+                        <p class="text-muted mb-0 small">₹<%= prod.individualquantity * prod.productId.productprice %></p>
+                        
                       </div>
                       <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                         <% if (item.status !=='Cancelled' ) { %>
@@ -118,8 +119,12 @@
                                   <p class="text-muted mb-0 small">Cancelled</p>
                                   <% } %>
                       </div>
-
+                    
                     </div>
+
+                    <% }) %>
+
+
                     <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
                     <div class="row d-flex align-items-center">
                       <div class="col-md-2">

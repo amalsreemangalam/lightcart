@@ -94,5 +94,19 @@
         </form>
         
     </div>
+    <script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+   const categoryName = document.getElementById('categoryname').value;
+   const existingCategories = ['Category1', 'Category2', 'Category3']; // Replace with your actual categories
+
+   if (existingCategories.includes(categoryName)) {
+       event.preventDefault();
+       document.getElementById('categoryname').setCustomValidity('Category exists');
+   } else {
+       document.getElementById('categoryname').setCustomValidity('');
+   }
+});
+
+    </script>
 </body>
 </html>

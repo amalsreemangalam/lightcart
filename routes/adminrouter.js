@@ -29,8 +29,8 @@ const upload = multer({ storage: storage });
   
   
 //   const filterFile =  (req,file,callback) =>{
-//     if(file.mimetype === 'image/png' || file.mimetype === 'image/jpeg'){
-//         callback(null,true);
+//     if(file.mikmetype === 'image/png' || file.mimetype === 'image/jpeg'){
+//         callbac(null,true);
 //         console.log("filter passed");
 //     }else{
 //         callback(null,false);

@@ -4,6 +4,10 @@
 <head>
     <title>Add Address</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-n/yqgxQg2JO2w0lf/PmjZgn+7wP5FzYb7JcfnJtvQdhwTOnAZp1uSmDBf34JhJYg9YiZ4PyN6C6YjNe2vXsWvA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
         /* style.css */
@@ -63,10 +67,35 @@ input[type="submit"]:hover {
     </style>
 </head>
 <body>
-    <h1>Add Address</h1>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">LIGHT CART</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i> My Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/userprofile"><i class="fas fa-user-circle"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+<!-- <div style="margin-top: 100px;"><h1>Add Address</h1></div> -->
+<div style="margin-top: 20px;">
+    <div class="container">
     <form action="/addaddress" method="post">
         <label for="name">HouseName:</label>
-        <input type="text" id="houseName" name="houseName" required><br><br>
+        <input type="text" id="houseName" name="houseName" required pattern="[^\s\.]*">
 
         <label for="street">Street:</label>
         <input type="text" id="street" name="street" required><br><br>
@@ -82,48 +111,77 @@ input[type="submit"]:hover {
 
         <input type="submit" value="Submit">
     </form>
+   
+</div>
+</div>
+   <!-- ... your existing HTML code ... -->
 
-    <script>
-        function validateForm() {
-   // Get input values
-   var houseName = document.getElementById("houseName").value;
-   var street = document.getElementById("street").value;
-   var city = document.getElementById("city").value;
-   var state = document.getElementById("state").value;
-   var pincode = document.getElementById("zip").value;
+<!-- ... your existing HTML code ... -->
 
-   // Validate house name
-   if (houseName.trim() == "") {
-       alert("House name must be filled out");
-       return false;
-   }
+<script>
+    function validateForm() {
+        // Get input values
+        var houseName = document.getElementById("houseName").value.trim();
+        var street = document.getElementById("street").value.trim();
+        var city = document.getElementById("city").value.trim();
+        var state = document.getElementById("state").value.trim();
+        var pincode = document.getElementById("zip").value;
+ 
+        // Validate house name
+        if (houseName === "" || /^[.\s]/.test(houseName)) {
+            alert("House name must be filled out and must not start with a dot or space");
+            return false;
+        }
+ 
+        // Validate street
+        if (street === "" || /^[.\s]/.test(street)) {
+            alert("Street must be filled out and must not start with a dot or space");
+            return false;
+        }
+ 
+        // Validate city
+        if (city === "" || /^[.\s]/.test(city)) {
+            alert("City must be filled out and must not start with a dot or space");
+            return false;
+        }
+ 
+        // Validate state
+        if (state === "" || /^[.\s]/.test(state)) {
+            alert("State must be filled out and must not start with a dot or space");
+            return false;
+        }
+ 
+        // Validate pincode
+        if (pincode.length !== 6) {
+            alert("Pincode must be exactly 6 digits");
+            return false;
+        }
+ 
+        return true; // If all fields are valid, the form will be submitted
+    }
+ </script>
+ 
 
-   // Validate street
-   if (street.trim() == "") {
-       alert("Street must be filled out");
-       return false;
-   }
+<!-- ... your existing HTML code ... -->
 
-   // Validate city
-   if (city.trim() == "") {
-       alert("City must be filled out");
-       return false;
-   }
 
-   // Validate state
-   if (state.trim() == "") {
-       alert("State must be filled out");
-       return false;
-   }
+<!-- ... your existing HTML code ... -->
 
-   // Validate pincode
-   if (pincode.length != 6) {
-       alert("Pincode must be exactly 6 digits");
-       return false;
-   }
+    <!-- <script>
+        document.getElementById("houseName").addEventListener("input", function (event) {
+ if (!event.target.validity.valid) {
+   event.target.setCustomValidity("House name must not contain spaces or dots");
+ } else {
+   event.target.setCustomValidity("");
+ }
+});
 
-   return true; // If all fields are valid, form will be submitted
-}
-    </script>
+    </script> -->
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
