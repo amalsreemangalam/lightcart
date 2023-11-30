@@ -63,8 +63,8 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-grey" style="background-color: gray;">
-        <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light  bg-grey" style="background-color: gray;position: fixed;top: 0;width : 100vw ;z-index: 5;">
+        <div class="container" >
             <a class="navbar-brand" href="#">LIGHT CART</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,7 +85,7 @@
             </div>
         </div>
     </nav>
-    <nav class="sidebar">
+    <nav class="sidebar" style="position: fixed;top: 50px;">
         <a href="/dashboard">Dashboard</a>
 
         <a href="/usermanagement">User Management</a>
@@ -132,11 +132,15 @@
                         </td>
                         <td><%= order.orderId %></td>
                         <td>
-                            <% order.products.forEach(product => { %>
+                            <% order.products.forEach(product => { console.log(product); %>
+                                
                                 <%= product.productName %><br>
+                                <td>    <%= product.individualquantity %><br></td>
                             <% }) %>
+                            
                         </td>
-                        <td><%= order.quantity %></td>
+                       
+                        
 
                         <td><%= order.orderDate.toLocaleDateString() %></td>
                         <td><%= order.status %></td>

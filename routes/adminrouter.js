@@ -2,17 +2,11 @@ const express=require('express')
 const router=express.Router()
  const admincontroller=require('../controllers/admincontroller')
  const multer=require('multer');
+ const adminAuth=require("../middleware/adminAuth")
 
  const session = require('express-session')
 
- function authenticate(req, res, next) {
-     if (req.session.admin) {
-         next();
-     } else {
-         res.redirect('/adminlogin')
-     }
- }
- 
+
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -42,26 +36,27 @@ const upload = multer({ storage: storage });
 
 router.get("/adminlogin",admincontroller.adminlogin)
 router.post("/adminlogin",admincontroller.adminloginpost)
-router.get('/adminside',admincontroller.dashboard)
-router.get('/usermanagement',authenticate,admincontroller.usermanagement)
-router.get('/block/:id',admincontroller.userToBlock);
+router.get('/adminside',adminAuth.adminlogin,admincontroller.dashboard)
+router.post('/adminsideData',adminAuth.adminlogin,admincontroller.dashboardData)
+router.get('/usermanagement',adminAuth.adminlogin,admincontroller.usermanagement)
+router.get('/block/:id',adminAuth.adminlogin,admincontroller.userToBlock);
 
-router.get('/unblock/:id',admincontroller.userToUnblock);
-router.get('/productmanagement',authenticate,admincontroller.showProductManagementPage)
-router.get('/editproduct/:id', admincontroller.editproductget);
+router.get('/unblock/:id',adminAuth.adminlogin,admincontroller.userToUnblock);
+router.get('/productmanagement',adminAuth.adminlogin,admincontroller.showProductManagementPage)
+router.get('/editproduct/:id',adminAuth.adminlogin,admincontroller.editproductget);
 router.post('/editproduct/:id',upload.array('filename'), admincontroller.editproductpost);
-router.get('/addproduct',admincontroller.addproductget)
+router.get('/addproduct',adminAuth.adminlogin,admincontroller.addproductget)
 router.post('/addproduct',upload.array('image'),admincontroller.addProductPost)
-router.get('/deleteproduct/:id',admincontroller.deleteproduct)
-router.get('/admin/logout',authenticate,admincontroller.logout)
-router.get('/categorymanagement',authenticate,admincontroller.showcategoryManagementPage)
-router.get('/addcategory',admincontroller.addcategoryget)
-router.post('/addcategory',admincontroller.addcategory)
-router.get('/deletecategory/:id',admincontroller.deletecategory)
+router.get('/deleteproduct/:id',adminAuth.adminlogin,admincontroller.deleteproduct)
+router.get('/admin/logout',admincontroller.logout)
+router.get('/categorymanagement',adminAuth.adminlogin,admincontroller.showcategoryManagementPage)
+router.get('/addcategory',adminAuth.adminlogin,admincontroller.addcategoryget)
+router.post('/addcategory',adminAuth.adminlogin,admincontroller.addcategory)
+router.get('/deletecategory/:id',adminAuth.adminlogin,admincontroller.deletecategory)
 router.get('/editcategory/:id',admincontroller.editcategoryget)
 router.post('/editcategory/:id',admincontroller.editcategorypost)
-router.get("/ordermanagement",admincontroller.loadordermanagement)
-router.get('/updateOrderStatus/:userId/:orderId/:newStatus',admincontroller.updateOrderStatus)
+router.get("/ordermanagement",adminAuth.adminlogin,admincontroller.loadordermanagement)
+router.get('/updateOrderStatus/:userId/:orderId/:newStatus',adminAuth.adminlogin,admincontroller.updateOrderStatus)
 router.get('/dashboard',admincontroller.admindashboard)
 router.get("/deleteimage", admincontroller.deleteimage)
 

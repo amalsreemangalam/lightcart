@@ -118,7 +118,7 @@
                     <tr>
                         <th scope="col">Id</th>
                         <th scope="col">Username</th>
-                        <th scope="col">password</th>
+                        <th scope="col">account created </th>
                         <th scope="col">edit</th>
                         <th scope="col">block</th>
                     </tr>
@@ -132,9 +132,7 @@
                             <td>
                                 <%= user.email %>
                             </td>
-                            <td>
-                                <%= user.password %>
-                            </td>
+                            <td style="color: black;"><%= user.created.toLocaleDateString() %></td>
                             <td>
                                 <a href="/edituser/<%=user._id %>" class="btn btn-primary">edit</a>
                             </td>

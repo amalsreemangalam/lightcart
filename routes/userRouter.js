@@ -4,14 +4,16 @@ const collection1 = require("../models/userloginmongodb")
 const userController = require('../controllers/usercontroller'); // Adjust the path based on your project structure
 
 const session = require('express-session')
+const userAuth=require("../middleware/userAuth")
 
-function authenticate(req, res, next) {
-    if (req.session.user) {
-        next();
-    } else {
-        res.redirect('/userlogin')
-    }
-}
+
+// function authenticate(req, res, next) {
+//     if (req.session.user) {
+//         next();
+//     } else {
+//         res.redirect('/userlogin')
+//     }
+// }
 
 const userBlock = async (req, res, next) => {
     const session = req.session.user
@@ -34,41 +36,44 @@ router.get("/usersignup", userController.signup);
 router.get("/userlogin", userController.login);
 router.post("/usersignup", userController.usersignup)
 router.post("/userlogin", userController.userlogin);
-router.post('/verifyotp', authenticate, userBlock, userController.otpvalidate)
-router.get("/home", userController.home);
-router.get('/otp', userController.verifyotp)
-router.get('/logout', authenticate, userController.logout)
-router.get('/product/:productId', userController.productdetails)
-router.get('/userprofile', userController.userprofileget)
-router.get('/cart/:productId', authenticate, userController.productaddtocart);
-router.get('/cart', authenticate, userBlock, userController.cart)
-router.get('/removeProduct/:id', authenticate, userController.removeProduct)
-router.post('/updateCart', authenticate, userController.updateCart)
-router.get('/addadress', userController.addadress)
-router.post('/addaddress', userController.addadresspost)
-router.get('/checkout', userController.checkout)
-router.get('/editprofile', userController.editprofile)
-router.post('/editprofile', userController.editprofilepost)
+router.post('/verifyotp',userBlock, userController.otpvalidate)
+router.get("/home",userController.home);
+router.get('/otp',userAuth.login, userController.verifyotp)
+router.get('/logout',userController.logout)
+router.get('/product/:productId',userController.productdetails)
+router.get('/userprofile', userAuth.login,userController.userprofileget)
+router.get('/cart/:productId',userController.productaddtocart);
+router.get('/cart',userBlock,userAuth.login,userController.cart)
+router.get('/removeProduct/:id',userAuth.login,userController.removeProduct)
+router.post('/updateCart',userController.updateCart)
+router.get('/addadress',userAuth.login, userController.addadress)
+router.post('/addaddress',userAuth.login, userController.addadresspost)
+router.get('/checkout',userAuth.login, userController.checkout)
+router.get('/editprofile', userAuth.login,userController.editprofile)
+router.post('/editprofile',userAuth.login,userController.editprofilepost)
 // router.get('/checkoutaddress',userController.checkoutaddadress)
 // router.post('/checkoutaddress',userController.checkoutaddaddresspost)
-router.post('/orderplaced/:id', authenticate, userController.orderplaced)
-router.get('/checkoutaddaddress', userController.checkoutaddaddress)
-router.post('/checkoutaddaddress', userController.checkoutaddaddresspost)
-router.get('/checkoutaddaddressedit/edit', userController.checkoutaddaddressedit)
-router.post('/checkoutaddaddressedit/edit', userController.checkoutaddaddresseditpost)
-router.get('/resentotp', userController.newotp)
-router.post('/resentotp', userController.newotpvalidate)
-router.get('/usercategory/:id', userController.usercategory)
-router.get('/myorders', userBlock, userController.myorders)
- router.get('/cancelOrder/:id',userController.cancelOrder)
-router.get('/blocked', userController.userblockedlogin)
-router.get('/list-product/:categoryid',userController.list)
-router.get('/unlist-product/:categoryid',userController.unlist)
+router.post('/orderplaced/:id',userAuth.login,userController.orderplaced)
+router.get('/checkoutaddaddress',userAuth.login, userController.checkoutaddaddress)
+router.post('/checkoutaddaddress',userAuth.login, userController.checkoutaddaddresspost)
+router.get('/checkoutaddaddressedit/edit',userAuth.login, userController.checkoutaddaddressedit)
+router.post('/checkoutaddaddressedit/edit',userAuth.login, userController.checkoutaddaddresseditpost)
+router.get('/resentotp',userAuth.login, userController.newotp)
+router.post('/resentotp',userAuth.login, userController.newotpvalidate)
+router.get('/usercategory/:id',userController.usercategory)
+router.get('/myorders', userBlock,userAuth.login, userController.myorders)
+ router.get('/cancelOrder/:id',userAuth.login,userController.cancelOrder)
+router.get('/blocked',userAuth.login, userController.userblockedlogin)
+router.get('/list-product/:categoryid',userAuth.login,userController.list)
+router.get('/unlist-product/:categoryid',userAuth.login,userController.unlist)
 
 // payment online 
-router.post('/paymentonline',userController.paymentonline);
+router.post('/paymentonline',userAuth.login,userController.paymentonline);
 
-router.get('/sucessorder',userController.orderplacedGet);
+router.get('/sucessorder',userAuth.login,userController.orderplacedGet);
+router.post('/search',userAuth.login,userController.search)
+router.get('/searchget',userAuth.login,userController.searchget)
+
 
 
 module.exports = router;

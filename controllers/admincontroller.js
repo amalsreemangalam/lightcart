@@ -6,6 +6,9 @@ const newcollection = require("../models/userloginmongodb");
 const categorycollection = require('../models/category.mongo');
 const ordercollection = require("../models/order")
 const mongoose = require('mongoose');
+const dotenv = require('dotenv').config();
+const moment = require('moment');
+
 
 
 
@@ -13,11 +16,11 @@ const adminlogin = (req, res) => {
     res.render('adminlogin', { msg: '' })
 }
 const adminloginpost = (req, res) => {
-    const thisname = "amal"
-    const thispassword = 1234
+    // const thisname = "amal"
+    // const thispassword = 1234
     req.session.admin = true
     console.log(req.body);
-    if (thisname === req.body.username && thispassword == req.body.password) {
+    if (process.env.EMAIL === req.body.username && process.env.PASSWORD == req.body.password) {
 
         res.redirect('/adminside')
     } else {
@@ -26,10 +29,202 @@ const adminloginpost = (req, res) => {
 }
 
 const dashboard = async (req, res) => {
-    console.log(req.session);
-    const data = await newcollection.find();
-    res.render('adminside', { msg: "", find: "", user: data });
+    try {
+        const data = await newcollection.find();
+
+        // Create an array of the past 7 days
+        // const endDate = new Date();
+        // const startDate = new Date();
+        // const Enddate = startDate.setDate(endDate.getDate() - 6);
+
+
+        const startOfWeek = new Date();
+        startOfWeek.setHours(0, 0, 0, 0);
+        startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+
+        const endOfWeek = new Date();
+        endOfWeek.setHours(23, 59, 59, 999);
+        endOfWeek.setDate(endOfWeek.getDate() + (6 - endOfWeek.getDay()));
+
+        const dateRange = [];
+        for (let date = startOfWeek; date <= endOfWeek; date.setDate(date.getDate() + 1)) {
+            dateRange.push(new Date(date));
+        }
+        // const endDate = new Date();
+        // const startDate = new Date();
+        // startDate.setDate(endDate.getDate() - 6);
+
+        // const dateRange = [];
+        // for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+        //     dateRange.push(new Date(date));
+        // }
+
+
+        // Aggregate data based on orderDate
+        // let dayCounts = await ordercollection.aggregate([
+        //     {
+        //         $match: {
+        //             orderDate: {
+        //                 $gte: startOfWeek,
+        //                 $lte: endOfWeek,
+        //             },
+        //         },
+        //     },
+        //     {
+        //         $group: {
+        //             _id: { $dateToString: { format: "%Y-%m-%d", date: "$orderDate" } },
+        //             totalQuantity: { $sum: "$quantity" },
+        //         },
+        //     },
+        //     {
+        //         $sort: { _id: 1 },
+        //     },
+        // ]);
+        let dayCounts = await ordercollection.aggregate([
+            {
+                $match: {
+                    orderDate: {
+                        $gte: startOfWeek,
+                        $lte: endOfWeek,
+                    },
+                },
+            },
+            {
+                $group: {
+                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$orderDate" } },
+                    count: { $sum: 1 },
+                },
+            },
+            {
+                $sort: { _id: 1 },
+            },
+        ]);
+
+        const xValues = dayCounts.map((day) => `Day ${day._id}`);
+        const yValues = dayCounts.map((day) => day.count);
+        console.log("startOfWeek", startOfWeek);
+        console.log("endOfWeek", endOfWeek);
+
+        const dailyChartData = dateRange.map((date) => {
+            const dateString = date.toISOString().split("T")[0];
+            const matchingData = dayCounts.find((data) => data._id === dateString);
+            return { _id: dateString, totalQuantity: matchingData ? matchingData.totalQuantity : 0 };
+        });
+
+        // const xValues = dailyChartData.map((data) => data._id);
+        // const yValues = dailyChartData.map((data) => data.totalQuantity);
+        const formattedXValues = xValues.map((dateString) => moment(dateString).format("MMM D"));
+
+
+        res.render('adminside', { msg: "", find: "", user: data, dayCounts, xValues: formattedXValues, yValues });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Internal server error' });
+    }
 };
+
+const dashboardData = async (req, res) => {
+    const filter = req.body.filter
+    let saleData
+    let categoryData
+    let profitData
+    const targetYear = new Date().getFullYear(); //sets the result for one year 
+    if (filter == 'MONTHLY') {
+        // montly sales daty
+        saleData = await ordercollection.aggregate([
+            {
+                $match: {
+                    $expr: { $eq: [{ $year: "$createdAt" }, targetYear] },// Filter orders for the target year
+                    // status: { $ne: 'cancelled' } //check the staus of the order
+                }
+            },
+            {
+                $project: {
+                    month: { $month: "$createdAt" },//projects the month from the time stamp
+                }
+            },
+            {
+                $group: { //grouping the order based on the month and finding the sum
+                    _id: "$month",
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,//set the id to 0 for avoding id in the result
+                    month: {
+                        $switch: { //change the month to currsonding string 
+                            branches: [
+                                { case: { $eq: ["$_id", 1] }, then: "Jan" },
+                                { case: { $eq: ["$_id", 2] }, then: "Feb" },
+                                { case: { $eq: ["$_id", 3] }, then: "Mar" },
+                                { case: { $eq: ["$_id", 4] }, then: "Apr" },
+                                { case: { $eq: ["$_id", 5] }, then: "May" },
+                                { case: { $eq: ["$_id", 6] }, then: "Jun" },
+                                { case: { $eq: ["$_id", 7] }, then: "Jul" },
+                                { case: { $eq: ["$_id", 8] }, then: "Aug" },
+                                { case: { $eq: ["$_id", 9] }, then: "Sep" },
+                                { case: { $eq: ["$_id", 10] }, then: "Oct" },
+                                { case: { $eq: ["$_id", 11] }, then: "Nov" },
+                                { case: { $eq: ["$_id", 12] }, then: "Dec" }
+                            ],
+                            default: "Unknown"
+                        }
+                    },
+                    count: 1 //for showing the count
+                }
+            },
+            {
+                $sort: {
+                    month: 1
+                }
+            }
+        ]);
+
+       
+    }
+    else if (filter == "YERALY") {
+        // total sale data
+        saleData = await ordercollection.aggregate([
+            {
+                $match: {
+                    status: { $ne: 'cancelled' } //check the staus of the order
+                }
+            },
+            {
+                $project: {
+                    year: { $year: "$createdAt" },//projects the month from the time stamp
+                }
+            },
+            {
+                $group: { //grouping the order based on the month and finding the sum
+                    _id: "$year",
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,//set the id to 0 for avoding id in the result
+                    year: '$_id',
+                    count: 1 //for showing the count
+                }
+            },
+            {
+                $sort: {
+                    year: 1
+                }
+            }
+        ]);
+
+
+    }
+
+    return res.status(200).json({ saleData: saleData, filter: filter, categoryData: categoryData, profitData })
+}
+
+
+
+
 const usermanagement = async (req, res) => {
     try {
         console.log("worked");
@@ -306,19 +501,25 @@ const loadordermanagement = async (req, res) => {
     try {
         const orders = await ordercollection.find({})
             .populate('user', 'name') // Populate the 'user' field and include only the 'name' property
-            .populate('products.productId', 'productname'); // Populate the 'products' array and include only the 'productname' property of the referenced product
-
+            .populate('products.productId', 'productname') // Populate the 'products' array and include only the 'productname' property of the referenced product
+        // .populate({
+        //     path: 'products.productId',
+        //     select: 'productname quantity', // Include the 'quantity' field in the selection
+        // });
         // Extract the desired details from the orders
         const formattedOrders = orders.map(order => ({
             orderId: order._id,
-            username: order.user.name,
+            username: order.customerName,
             orderDate: order.orderDate,
+            quantity: order.individualquantity,
             status: order.status,
+            address: order.address,
             products: order.products.map(product => ({
                 productName: product.productId.productname,
-                quantity: product.quantity,
+                individualquantity: product.individualquantity,
             })),
         }));
+        console.log("formattedOrders", formattedOrders);
 
         res.render('ordermanagement', { orders: formattedOrders });
     } catch (error) {
@@ -352,9 +553,18 @@ const updateOrderStatus = async (req, res) => {
     }
 
 }
-const admindashboard = (req, res) => {
-    res.render('adminside')
-}
+const admindashboard = async (req, res) => {
+    try {
+
+
+        res.redirect('/adminside');
+    } catch (error) {
+        console.error('Error in admindashboard controller:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+
 
 
 const deleteimage = async (req, res) => {
@@ -398,6 +608,7 @@ module.exports = {
     adminlogin,
     adminloginpost,
     dashboard,
+    dashboardData,
     usermanagement,
     userToBlock,
     userToUnblock,

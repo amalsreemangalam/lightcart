@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const bcrypt=require('bcrypt')
 const collection1 = require("../models/userloginmongodb")
 const { Collection1 } = require('mongoose')
 const nodemailer = require('nodemailer')
@@ -38,6 +39,7 @@ const crypto = require('crypto');
 const productcollection = require('../models/productmongo')
 const newcollection = require('../models/userloginmongodb')
 const { use } = require('../routes/userRouter')
+const { log } = require('util')
 
 function generateRandomString(length) {
     return crypto.randomBytes(length).toString('hex');
@@ -93,11 +95,11 @@ const usersignup = async (req, res) => {
     try {
         const expirationMinutes = 1;
 
-
+        const hashedpassword=await bcrypt.hash(req.body.password,10)
         const data = {
             name: req.body.name,
             email: req.body.email,
-            password: req.body.password,
+            password: hashedpassword,
             phone: req.body.phone,
             otp: {
                 code: OTP.generate(6, { upperCase: false, specialChars: false }),
@@ -233,9 +235,12 @@ const userlogin = async (req, res) => {
             if (check.isBlocked) {
                 return res.render('userlogin', { msg: "account was blocked by admin" });
             }
-            if (check.password === req.body.password) {
+            const passwordcheck =await bcrypt.compare(req.body.password,check.password)
+            console.log("password",passwordcheck);
+            if (passwordcheck) {
                 req.session.user = check._id;
                 console.log('loginsession', req.session.user);
+                
                 res.redirect('/home');
             } else {
                 return res.render('userlogin', { msg: "Invalid username or password" });
@@ -280,25 +285,85 @@ const otpvalidate = async (req, res) => {
 const verifyotp = (req, res) => {
     console.log("workedfdf");
     if (req.session.user) {
-        return res.render('otp')
+        const error=''
+        return res.render('otp',{error})
     }
 }
 
 
+
+
+
+
 const home = async (req, res) => {
+    let products = null
+    const searchTerm = req.query.searchTerm
+    console.log('searchTerm',searchTerm);
+    
+    const productsPerPage = 8;
+    const currentPage = parseInt(req.query.page) || 1;
+    
+    const totalProducts = await productcollection.countDocuments();
+    const totalPages = Math.ceil(totalProducts / productsPerPage);
+    
+    const skip = (currentPage - 1) * productsPerPage;
+    
+    if(searchTerm){
+    
+        products = await Productcollection.find({ productname: { $regex: searchTerm, $options: 'i' } });
+    }else {
+    
+         products = await productcollection.find().skip(skip).limit(productsPerPage);
+    }
+    console.log("pages",products);
+  
     let userstatus = false;
     if (req.session.user) {
         userstatus = true;
     }
-
+  
     const category = await categorycollection.find();
+  
+    // const product = await Productcollection.find()
+  
+    res.render('home', { product: products, userstatus, category ,products: products,
+        currentPage: currentPage,
+        totalPages: totalPages,});
+  };
+  
 
-    console.log(category);
-    const product = await Productcollection.find()
-    console.log("hvghgfh", product[0]);
-    res.render('home', { product: product, userstatus, category });
 
-};
+// const home = async (req, res) => {
+//     const productsPerPage = 2;
+//     const currentPage = parseInt(req.query.page) || 1;
+
+
+//   const products = await productcollection.find();
+
+//   const totalProducts = await productcollection.countDocuments();
+//   const totalPages = Math.ceil(totalProducts / productsPerPage);
+
+
+//   const start = (currentPage - 1) * productsPerPage;
+//   const end = start + productsPerPage;
+
+//   const paginatedProducts = products.slice(start, end);
+
+//     let userstatus = false;
+//     if (req.session.user) {
+//         userstatus = true;
+//     }
+
+//     const category = await categorycollection.find();
+
+//     console.log(category);
+//     const product = await Productcollection.find()
+//     console.log("hvghgfh", product[0]);
+//     res.render('home', { product: product, userstatus, category ,products: paginatedProducts,
+//         currentPage: currentPage,
+//         totalPages: totalPages,});
+
+// };
 
 const logout = (req, res) => {
     req.session.destroy((err) => {
@@ -718,9 +783,10 @@ const orderplaced = async (req, res) => {
                 productsInOrder.push({
                     productId: cartItem.product._id,
                     productName: product.productname,
-                    productPrice: product.productprice,
-                    individualquantity: cartItem.quantity // Set the individual quantity or a default value
 
+                    productPrice: product.productprice,
+                    individualquantity: cartItem.quantity, // Set the individual quantity or a default value
+                    // orderDate:product.orderDate
                 });
                 // totalQuantity += cartItem.individualquantity;
             }
@@ -951,7 +1017,7 @@ const usercategory = async (req, res) => {
     const category = req.params.id;
     let data
     const categorys = await categorycollection.findOne({ categoryname: category });
-    console.log('usercategory', categorys.list);
+    // console.log('usercategory', categorys.list);
     if (!categorys) {
         console.log('catergory not found');
         return res.redirect('back')
@@ -1057,8 +1123,16 @@ const cancelOrder = async (req, res) => {
     }
 }
 
+const search=async(req, res) => {
+    
+    res.json(products);
+   };
 
-
+   const searchget=async(req,res)=>{
+    const searchTerm = req.body.searchTerm;
+    const products = await Productcollection.find({ productname: { $regex: searchTerm, $options: 'i' } });
+    res.render('search',{products})
+   }
 
 
 
@@ -1101,7 +1175,8 @@ module.exports = {
     cancelOrder,
     paymentonline,
     orderplacedGet,
-
+    search,
+    searchget
 
 }
 

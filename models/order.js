@@ -21,6 +21,10 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    individualquantity: {
+        type: Number,
+        // required: true,
+    },
     orderDate: {
         type: Date,
         default: Date.now,
@@ -48,7 +52,7 @@ const orderSchema = new mongoose.Schema({
         type:String,
         default:'Pending'
     },
-    address: [{
+    address:[{
         houseName: {
             type: String,
           
@@ -75,6 +79,8 @@ const orderSchema = new mongoose.Schema({
         //   }
     }],
     // You can add more fields specific to orders here
+}, {
+    timestamps: true
 });
 const ordercollection=mongoose.model('ordercollection',orderSchema)
 

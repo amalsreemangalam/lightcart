@@ -1,5 +1,9 @@
 const mongoose = require("mongoose")
-mongoose.connect("mongodb://0.0.0.0/Logindetails")
+// mongoose.connect("mongodb://0.0.0.0/Logindetails")
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
     .then(() => {
         console.log("mongodb connected");
     }).catch(() => {
@@ -36,6 +40,11 @@ const LogInSchema = new mongoose.Schema({
     phone: {
         type: Number,
         required: true
+    },
+    created : {
+        type : Date,
+        required : true,
+        default : Date.now,
     },
     address: [{
         houseName: {

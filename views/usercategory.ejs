@@ -20,6 +20,11 @@
     .icon-hover:hover i {
       color: #3b71ca !important;
     }
+
+    .col-lg-4.col-md-6.col-sm-6.d-flex {
+  display: flex;
+}
+
   </style>
 </head>
 
@@ -283,6 +288,11 @@
             </div> -->
             
           </header>
+          <!-- <div class="form-outline">
+            <input type="search" id="form1" class="form-control" oninput="searchProducts()" />
+            <label class="form-label" for="form1">Search</label>
+          </div> -->
+          
 
           <div class="row">
             <% if(data===null){ %>
@@ -498,6 +508,30 @@
       </div>
     </footer>
   </div>
+<!-- 
+  <script>
+   function searchProducts() {
+  const searchBar = document.getElementById('form1');
+  const searchString = searchBar.value.trim().toLowerCase();
+  const products = document.getElementsByClassName('col-lg-4 col-md-6 col-sm-6 d-flex');
+
+  for (const product of products) {
+    const productName = product.querySelector('.card-text').innerText.trim().toLowerCase();
+
+    if (productName.includes(searchString)) {
+      product.style.display = '';
+    } else {
+      product.style.display = 'none';
+    }
+  }
+}
+
+
+  </script>
+  
+  
+  <script src="search.js"></script> -->
+
 </body>
 
 </html>
