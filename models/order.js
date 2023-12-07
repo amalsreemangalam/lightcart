@@ -9,6 +9,10 @@ const orderProducts= new mongoose.Schema({
         type: Number,
         // required: true,
     },
+    isCancelled: {
+        type: Boolean,
+        default: false,
+    },
   });
 
 const orderSchema = new mongoose.Schema({

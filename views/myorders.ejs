@@ -28,6 +28,22 @@
       /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
       background: linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 255, 1))
     }
+    .btn-outline-primary {
+   font-size: 10px;
+   padding: 5px;
+   height: 20px;
+   width: 70px;
+}
+.custom-download-btn {
+   font-size: 10px;
+   padding: 5px;
+   height: 30px;
+   width: 100px;
+}
+
+  
+
+
   </style>
 </head>
 
@@ -80,9 +96,13 @@
                 <% item.products.forEach((prod)=>{ console.log(prod)%>
                   
                 <div class="card shadow-0 border mb-4">
+                 
+
+                  
                   <div class="card-body">
                     <div class="row"> 
                       <div class="col-md-2">
+                        
                         <% if (prod.productId.productimage[0]) { %>
                           <img src="<%= prod.productId.productimage[0] %>" class="border rounded me-3" style="width: 96px; height: 96px;" />
                         <% } else { %>
@@ -102,8 +122,10 @@
                       </div>
                       
                       <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                        <p class="text-muted mb-0 small">₹<%= prod.individualquantity * prod.productId.productprice %></p>
-                        
+                        <p class="text-muted mb-0 small">
+                          ₹<%= prod.individualquantity * (prod.productId.OfferPrice > 0 ? prod.productId.OfferPrice : prod.productId.productprice) %>
+                        </p>
+                                                
                       </div>
                       <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                         <% if (item.status !=='Cancelled' ) { %>
@@ -113,18 +135,30 @@
                             <% } else { %>
                               <!-- If status is not Cancelled or Delivered, display Cancel Order button -->
                               <a href="/cancelOrder/<%= item._id %>" class="btn btn-outline-primary">Cancel Order</a>
+
                               <% } %>
                                 <% } else { %>
                                   <!-- If status is Cancelled, display Cancelled message -->
                                   <p class="text-muted mb-0 small">Cancelled</p>
                                   <% } %>
+
+
+
                       </div>
-                    
+                      <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                        <a href="/invoiceDownload?orderId=<%= item._id %>&productId=<%= prod.productId._id %>" class="btn btn-outline-primary custom-download-btn">Download Invoice</a>
+
+                      </div>
+                      
+
+
                     </div>
 
+
+                   
                     <% }) %>
 
-
+                    
                     <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
                     <div class="row d-flex align-items-center">
                       <div class="col-md-2">
@@ -344,6 +378,9 @@
       </div>
     </footer>
   </div>
+
+
+  
 </body>
 
 </html>

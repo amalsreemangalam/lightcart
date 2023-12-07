@@ -64,15 +64,17 @@ router.get('/usercategory/:id',userController.usercategory)
 router.get('/myorders', userBlock,userAuth.login, userController.myorders)
  router.get('/cancelOrder/:id',userAuth.login,userController.cancelOrder)
 router.get('/blocked',userAuth.login, userController.userblockedlogin)
-router.get('/list-product/:categoryid',userAuth.login,userController.list)
-router.get('/unlist-product/:categoryid',userAuth.login,userController.unlist)
+router.get('/list-product/:categoryid',userController.list)
+router.get('/unlist-product/:categoryid',userController.unlist)
 
 // payment online 
 router.post('/paymentonline',userAuth.login,userController.paymentonline);
 
 router.get('/sucessorder',userAuth.login,userController.orderplacedGet);
 router.post('/search',userAuth.login,userController.search)
-router.get('/searchget',userAuth.login,userController.searchget)
+router.get('/searchget',userAuth.login,userController.searchget);
+
+router.get('/invoiceDownload',userController.invoiceDownload)
 
 
 

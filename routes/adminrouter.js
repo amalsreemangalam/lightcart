@@ -53,11 +53,12 @@ router.get('/categorymanagement',adminAuth.adminlogin,admincontroller.showcatego
 router.get('/addcategory',adminAuth.adminlogin,admincontroller.addcategoryget)
 router.post('/addcategory',adminAuth.adminlogin,admincontroller.addcategory)
 router.get('/deletecategory/:id',adminAuth.adminlogin,admincontroller.deletecategory)
-router.get('/editcategory/:id',admincontroller.editcategoryget)
-router.post('/editcategory/:id',admincontroller.editcategorypost)
+router.get('/editcategory/:id',adminAuth.adminlogin,admincontroller.editcategoryget)
+router.post('/editcategory/:id',adminAuth.adminlogin,admincontroller.editcategorypost)
 router.get("/ordermanagement",adminAuth.adminlogin,admincontroller.loadordermanagement)
-router.get('/updateOrderStatus/:userId/:orderId/:newStatus',adminAuth.adminlogin,admincontroller.updateOrderStatus)
+router.get('/updateOrderStatus/:orderId/:newStatus',adminAuth.adminlogin,admincontroller.updateOrderStatus)
 router.get('/dashboard',admincontroller.admindashboard)
 router.get("/deleteimage", admincontroller.deleteimage)
+router.get('/download-excel',admincontroller.salesReport)
 
 module.exports = router;

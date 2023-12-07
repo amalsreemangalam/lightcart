@@ -67,12 +67,13 @@
 </head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 
+
 <body>
 
 
 
-  <nav class="navbar navbar-expand-lg navbar-light bg-grey">
-    <div class="container">
+  <nav class="navbar navbar-expand-lg navbar-light bg-grey w-100 " style="position: fixed; top: 0;">
+    <div class="container ">
       <a class="navbar-brand" href="#">LIGHT CART</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -112,137 +113,179 @@
     </a>
   </nav>
 
-  <div class="container">
-    <div class="row">
-      <div class="col-12 ms-5 px-5">
-        <div style="margin-left: 200px; margin-top: 60px">
-          <div style="width: 400px;"><canvas id="sales"></canvas></div>
+  <div class="main-content mt-5">
+    <div class="container">
+      <!-- Add monthly and yearly sales buttons -->
+      <div class="row mt-3">
+        <div class="col-12">
+          <button id="monthlySalesBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#monthlyModal"
+            onclick="updateChart('MONTHLY')">
+            Monthly Sales
+          </button>
+          <button id="yearlySalesBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#yearlyModal"
+            onclick=" updateChart('YERALY')">
+            Yearly Sales
+          </button>
         </div>
       </div>
-      <div class="col-12 ms-5 px-5">
-        <div style="margin-left: 200px; margin-top: 60px">
-          <div style="width: 400px;"><canvas id="year"></canvas></div>
+
+
+
+      <div class="container">
+        <div class="row">
+          <div class="col-12 ms-5 px-5">
+            <div style="margin-left: 200px; margin-top: 60px">
+              <div style="width: 400px;"><canvas id="sales"></canvas></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- Monthly Sales Modal -->
+      <div class="modal fade" id="monthlyModal" tabindex="-1" aria-labelledby="monthlyModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="monthlyModalLabel">Select Month for Monthly Sales</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <!-- Add your month selection input here -->
+              <label for="monthlyMonth">Select Month:</label>
+              <select id="monthlyMonth" class="form-select">
+                <!-- Add options for months -->
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">march</option>
+                <option value="4">april</option>
+                <option value="5">may</option>
+                <option value="6">june</option>
+                <option value="7">july</option>
+                <option value="8">august</option>
+                <option value="9">september</option>
+                <option value="10">october</option>
+                <option value="11">november</option>
+
+                <option value="12">december</option>
+
+
+                <!-- Add other months as needed -->
+              </select>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="applyMonthlyFilter()">Apply</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div style="position: absolute; top: 80px; right: 10px;">
+        <form method="get" action="/download-excel">
+          <div class="d-flex">
+            <input type="date" id="start" name="startDate" class="form-control">
+            <input type="date" id="end" name="endDate" class="form-control ms-2">
+            <input type="submit" class="btn btn-primary ms-2" value="Download Excel">
+          </div>
+        </form>
+      </div>
+      
+
+
+
+    <div class="container">
+      <div class="row">
+        <div class="col-12 ms-5 px-5">
+          <div style="margin-left: 200px; margin-top: 60px">
+            <canvas id="barchart" style="width: 100%; max-width: 420px"></canvas>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
 
-<!-- 
-  <div class="container">
-    <div class="row">
-      <div class="col-12 ms-5 px-5">
-        <div style="margin-left: 200px; margin-top: 60px">
-          <canvas id="barchart" style="width: 100%; max-width: 420px"></canvas>
-        </div>
-      </div>
-    </div>
-  </div> -->
-  
-  
-  <script src="
+    < <script src="
   https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js
-  "></script>
-  <script>
-    let myChart;
-    let myChart1
-  let categoryChart
+  ">
+      </script>
+      <script>
+        let myChart;
+        let myChart1
+        let categoryChart
 
-  function updateChart(filter) {
-    // Fetch new data based on the selected FILTER
-    fetch('/adminsideData', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          filter: filter
-        })
-      })
-      .then((response) => {
-        return response.json()
-      })
-      .then((data) => {
-        console.log(data);
-        salesChart(data, data.filter);
-      })
-  }
-
-  async function salesChart(data, filter) { //function for generating the chart
-    if (myChart) {
-      myChart.destroy();
-    }
-    myChart = new Chart(
-      document.getElementById('sales'), {
-        type: 'bar',
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        },
-        data: {
-          labels: data.saleData.map(row => row.month ?? row.year),
-          datasets: [{
-            barPercentage: 1,
-            barThickness: 90,
-            label: `${filter} SALES`,
-            data: data.saleData.map(row => row.count),
-            backgroundColor: 0xfffff // Function to generate random colors
-          }]
+        function updateChart(filter) {
+          // Fetch new data based on the selected FILTER
+          fetch('/adminsideData', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              filter: filter
+            })
+          })
+            .then((response) => {
+              return response.json()
+            })
+            .then((data) => {
+              console.log(data);
+              salesChart(data, data.filter);
+            })
         }
-      }
-    );
-  }
 
-
-  
-  function updateChart1(filter) {
-    // Fetch new data based on the selected FILTER
-    fetch('/adminsideData', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          filter: filter
-        })
-      })
-      .then((response) => {
-        return response.json()
-      })
-      .then((data) => {
-        console.log(data);
-        salesChart1(data, data.filter);
-      })
-  }
-  async function salesChart1(data, filter) { //function for generating the chart
-    if (myChart1) {
-      myChart1.destroy();
-    }
-    myChart1 = new Chart(
-      document.getElementById('year'), {
-        type: 'bar',
-        scales: {
-          y: {
-            beginAtZero: true
+        async function salesChart(data, filter) { //function for generating the chart
+          if (myChart) {
+            myChart.destroy();
           }
-        },
-        data: {
-          labels: data.saleData.map(row => row.month ?? row.year),
-          datasets: [{
-            barPercentage: 1,
-            barThickness: 90,
-            label: `${filter} SALES`,
-            data: data.saleData.map(row => row.count),
-            backgroundColor: 0xfffff 
-          }]
+          myChart = new Chart(
+            document.getElementById('sales'), {
+            type: 'bar',
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            },
+            data: {
+              labels: data.saleData.map(row => row.month ?? row.year),
+              datasets: [{
+                barPercentage: 1,
+                barThickness: 90,
+                label: `${filter} SALES`,
+                data: data.saleData.map(row => row.count),
+                backgroundColor: 0xfffff // Function to generate random colors
+              }]
+            }
+          }
+          );
         }
-      }
-    );
+        window.onload = updateChart('MONTHLY')
+      </script>
+
+<!-- <script>
+
+  async function downloadExcel(orderId) {
+    const response = await fetch(`/download-excel/${orderId}`);
+    
+    if (response.ok) {
+      // Trigger the download
+      const blob = await response.blob();
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'order_details.xlsx';
+      link.click();
+    } else {
+      console.error('Failed to download Excel');
+    }
   }
-  window.onload = updateChart('MONTHLY')
-  window.onload = updateChart1('YERALY')
-</script>
+
+</script> -->
+
 </body>
+
+
 
 </html>

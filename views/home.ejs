@@ -224,13 +224,19 @@
                 <h5 class="card-title">
                   <%= prod.productname %>
                 </h5>
-                <p class="card-text">Rs <%= prod.productprice %></p>
+                <!-- <p class="card-text">Rs <%= prod.productprice %></p> -->
+                <%if(prod.OfferPrice){%>
+                  <h4><span class="item_price">&#8377;<s><%= prod.productprice %></s></span><span>  &#8377;<%= prod.OfferPrice %></span></h4>
+                  <!-- <h4><span class="item_price">&#8377;</span></h4> -->
+                <% }else{ %>
+                  <h4><span class="item_price">&#8377;<%= prod.productprice %></span></h4>
+                  <% } %>	
                 <!-- Card footer -->
                 <div class="card-footer d-flex justify-content-between"
                   style="position: absolute ; bottom: 0;width: -webkit-fill-available">
                   <a href="/cart/<%= prod._id %> " class="btn btn-primary shadow-0">Add to cart</a>
-                  <a href="wishlist.html">
-                    <i class="fas fa-heart"></i>
+                  <!-- <a href="wishlist.html"> -->
+                    <!-- <i class="fas fa-heart"></i> -->
                   </a>
                 </div>
               </div>

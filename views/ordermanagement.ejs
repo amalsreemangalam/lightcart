@@ -144,16 +144,17 @@
 
                         <td><%= order.orderDate.toLocaleDateString() %></td>
                         <td><%= order.status %></td>
+                     
                         <td>
                             <div class="dropdown">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="statusDropdown" data-bs-toggle="dropdown" aria-expanded="true">
                                     Change Status
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="statusDropdown">
-                                    <li><a class="dropdown-item" href="/updateOrderStatus/<%= order._id %>/<%= order._id %>/Order Confirmed" onclick="updateOrderStatus('<%= order._id %>', 'Order Confirmed')">Order Confirmed</a></li>
-                                    <li><a class="dropdown-item" href="/updateOrderStatus/<%= order._id %>/<%= order._id %>/Shipped" onclick="updateOrderStatus('<%= order._id %>', 'Shipped')">Shipped</a></li>
-                                    <li><a class="dropdown-item" href="/updateOrderStatus/<%= order._id %>/<%= order._id %>/Out For Delivery" onclick="updateOrderStatus('<%= order._id %>', 'Out For Delivery')">Out For Delivery</a></li>
-                                    <li><a class="dropdown-item" href="/updateOrderStatus/<%= order._id %>/<%= order._id %>/Delivered" onclick="updateOrderStatus('<%= order._id %>', 'Delivered')">Delivered</a></li>
+                                    <li><a class="dropdown-item" href="/updateOrderStatus/<%= order.orderId %>/Order Confirmed" onclick="updateOrderStatus('<%= order._id %>', 'Order Confirmed')">Order Confirmed</a></li>
+                                    <li><a class="dropdown-item" href="/updateOrderStatus/<%= order.orderId %>/Shipped" onclick="updateOrderStatus('<%= order._id %>', 'Shipped')">Shipped</a></li>
+                                    <li><a class="dropdown-item" href="/updateOrderStatus/<%= order.orderId %>/Out For Delivery" onclick="updateOrderStatus('<%= order._id %>', 'Out For Delivery')">Out For Delivery</a></li>
+                                    <li><a class="dropdown-item" href="/updateOrderStatus/<%= order.orderId %>/Delivered" onclick="updateOrderStatus('<%= order._id %>', 'Delivered')">Delivered</a></li>
                                 </ul>                                
                             </div>
                         </td>

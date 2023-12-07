@@ -106,8 +106,12 @@
                                                 style="width: 100px; height: 100px;" />
                                 </td>
                                 <td>
-                                    <% singleprice=item.single_product_total_price / item.quantity %>
-                                        <%= singleprice %>
+                                    
+                                  <%if(product.OfferPrice){%>
+                                    <text class="h5">Price:₹<s><%= product.productprice%></s>  &#8377;<%= product.OfferPrice %></text> <br />
+                          <% }else{ %>%>
+                            <text class="h5">Price:₹<%= product.productprice%></text>
+                            <% } %>	
                                 </td>
                                 <td class="">
                                     <div class="d-flex">
@@ -143,7 +147,8 @@
                                 <td>₹<%= item.single_product_total_price %>
                                 </td>
                                 <td>
-                                    <a href="/removeProduct/<%=item.product%>"><button class="btn btn-danger">Remove</button></a>
+                                    <a href="#" onclick="removeProduct('<%=item.product%>')" class="btn btn-danger">Remove</a>
+
                                 </td>
                             </tr>
                             <% total+=item.single_product_total_price %>
@@ -472,6 +477,11 @@
       }
     });
   }
+
+
+
+
+
 </script>
           
 
@@ -483,6 +493,17 @@
             integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
             crossorigin="anonymous"></script>
           </script>
+
+        
+            <script>
+ function removeProduct(productId) {
+   if (confirm('Are you sure you want to remove this product?')) {
+     window.location.href = `/removeProduct/${productId}`;
+   }
+ }
+</script>
+
+        
 </body>
 
 </html>

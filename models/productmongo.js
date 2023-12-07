@@ -26,6 +26,16 @@ const productSchema = new mongoose.Schema({
         type: Number,
         // required: true,
     },
+    OfferPrice: {
+        type:Number,
+        default:0
+    },
+    Discount: Number,
+    offerExpiration: {
+        type: Date,
+        required: false,
+    },
+
 
     productimage:[{
         type: String ,
