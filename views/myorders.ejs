@@ -134,7 +134,7 @@
                             <a href="/returnOrder/<%= item._id %>" class="btn btn-outline-primary">Return</a>
                             <% } else { %>
                               <!-- If status is not Cancelled or Delivered, display Cancel Order button -->
-                              <a href="/cancelOrder/<%= item._id %>" class="btn btn-outline-primary">Cancel Order</a>
+                              <a href="/cancelOrder/<%= item._id %>/<%= prod.productId._id %>" class="btn btn-outline-primary">Cancel Order</a>
 
                               <% } %>
                                 <% } else { %>

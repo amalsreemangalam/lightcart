@@ -113,7 +113,7 @@
                     <th scope="col">Address</th>
                     <th scope="col">Order Id</th>
                     <th scope="col">Products</th>
-                    <th scope="col">Quantity</th>
+                    <!-- <th scope="col">Quantity</th> -->
                     <th scope="col">Date</th>
                     <th scope="col">Status</th>
                     <th scope="col">Edit Status</th>
@@ -131,12 +131,13 @@
                             <% } %>
                         </td>
                         <td><%= order.orderId %></td>
-                        <td>
+                       <td>
                             <% order.products.forEach(product => { console.log(product); %>
-                                
-                                <%= product.productName %><br>
-                                <td>    <%= product.individualquantity %><br></td>
+                                <%= product.productName %>
+                              
+                                     x<%= product.individualquantity %> <br>
                             <% }) %>
+                        </td>
                             
                         </td>
                        

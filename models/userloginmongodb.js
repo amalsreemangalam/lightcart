@@ -41,6 +41,9 @@ const LogInSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    referralCode:{
+        type:String,
+    },
     created : {
         type : Date,
         required : true,

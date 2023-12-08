@@ -69,6 +69,9 @@
 
 
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/2.3.4/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js"></script>
+  
 </head>
 
 <body>
@@ -119,18 +122,18 @@
              
             </select> 
 
-            
+<!--             
             <label for="image">Productimage</label>
             <input type="file" id="image" name="image" multiple>
             <div class="image-preview-container" id="outer-image-preview-container">
              
-             </div>
+             </div> -->
 
               <div>
               <label for="imgfile" class="mb-3">
                   <span>Select Images:</span>
-                  <input type="file" id="imageInput" name="imgfile" multiple accept="image/jpeg , image/png" required>
-                  <div id="imagePreview"></div>
+                  <input type="file" id="image" name="image" multiple accept="image/jpeg , image/png" required>
+                  <div id="croppedImageContainer" style="height: 500px;overflow: auto;" ></div>
                   <button id="cropButton" type="button">Crop</button>
               </label>
           </div> 
@@ -216,80 +219,82 @@ fileInput.addEventListener('change', function(e) {
 };
 
 
-</script> -->
+</script> --><!-- cropper js -->
 <script>
-  let fileInput = document.getElementById('imageInput');
-  let selectedFiles = [];
-  let cropper;
+  // Get references to elements
+  const fileInput = document.getElementById('image');
+  const croppedImageContainer = document.getElementById('croppedImageContainer');
 
-  document.getElementById('imageInput').addEventListener('change', function () {
-    const imagePreview = document.getElementById('imagePreview');
+  // Initialize Cropper.js for multiple images
+  let croppers = [];
+  const selectedFiles = [];
+  fileInput.addEventListener('change', (e) => {
+    const files = e.target.files;
 
-    Array.from(this.files).forEach((file) => {
-      const image = new Image();
-      const reader = new FileReader();
+    // Loop through selected files
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
 
-      reader.onload = (e) => {
-        image.src = e.target.result;
-        image.style.maxWidth = '100%';
-        image.style.height = 'auto';
+      // Ensure the file is an image
+      if (file.type.startsWith('image/')) {
+        // Create a new FileReader to read the selected image
+        const reader = new FileReader();
 
-        // Append the image to the preview container
-        imagePreview.appendChild(image);
+        reader.onload = (e) => {
+          // Create an image element and set its source to the selected file
+          const img = new Image();
+          img.src = e.target.result;
 
-        // Initialize Cropper.js on the image
-        cropper = new Cropper(image, {
-          aspectRatio: 1, // Adjust as needed
-          crop: function (event) {
-            // No need to store cropped data here
-          },
-        });
-      };
+          // Append the image to the container
+          croppedImageContainer.appendChild(img);
 
-      reader.readAsDataURL(file);
-    });
+          // Initialize Cropper.js on the image
+          const cropper = new Cropper(img, {
+
+            aspectRatio: 20 / 9, // Set the aspect ratio as needed
+            viewMode: 1, // Set the view mode as needed
+
+          });
+
+          // Store the cropper instance in the croppers array
+          croppers.push(cropper);
+        };
+
+        reader.readAsDataURL(file);
+      }
+    }
   });
 
-  // Add a click event listener to the "Save" button
+  // Add a save button for the cropped images
   let saveButton = document.getElementById('cropButton');
-  saveButton.textContent = 'Save';
-  saveButton.onclick = function () {
-    if (cropper) {
-      // Get the cropped canvas
+  saveButton.textContent = 'Crop';
+  saveButton.onclick = function() {
+    // Loop through the croppers and save each cropped image
+    croppers.forEach((cropper, index) => {
       let canvas = cropper.getCroppedCanvas();
-
-      // Convert the canvas to a Blob
-      canvas.toBlob(function (blob) {
+      canvas.toBlob(function(blob) {
         // Create a new blob URL for the cropped image
         let croppedImageUrl = URL.createObjectURL(blob);
+        let fileName = `cropped_${index}.jpeg`;
 
-        // Use the original file name or generate a dynamic name
-        let fileName = fileInput.files[0].name;
-
-        // Create a new File object with the cropped blob
-        let croppedFile = new File([blob], fileName, {
-          type: 'image/jpeg',
+        const file = new File([blob], fileName, {
+          type: 'image/jpeg'
         });
-
-        // Add the cropped file to the selected files array
-        selectedFiles.push(croppedFile);
-
+        selectedFiles.push(file)
         // Create a new FormData object and append the Blob
         let formData = new FormData();
-        formData.append('croppedImage_1', croppedFile);
+        formData.append(`croppedImage_${index}`, file);
 
-        // You can now use the formData for further processing (e.g., send it to the server)
-
-        // Optionally, clear the file input
-        fileInput.value = '';
-
-        // Optionally, do something with the selectedFiles array
-        console.log(selectedFiles);
       }, 'image/jpeg');
-    }
+    });
+    const dataTransfer = new DataTransfer();
+    selectedFiles.forEach(file => {
+      dataTransfer.items.add(file);
+
+    });
+    fileInput.files = dataTransfer.files;
   };
 </script>
-
 
 </body>
 

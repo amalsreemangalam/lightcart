@@ -62,7 +62,7 @@ router.get('/resentotp',userAuth.login, userController.newotp)
 router.post('/resentotp',userAuth.login, userController.newotpvalidate)
 router.get('/usercategory/:id',userController.usercategory)
 router.get('/myorders', userBlock,userAuth.login, userController.myorders)
- router.get('/cancelOrder/:id',userAuth.login,userController.cancelOrder)
+ router.get('/cancelOrder/:id/:productId',userAuth.login,userController.cancelOrder)
 router.get('/blocked',userAuth.login, userController.userblockedlogin)
 router.get('/list-product/:categoryid',userController.list)
 router.get('/unlist-product/:categoryid',userController.unlist)
@@ -75,7 +75,7 @@ router.post('/search',userAuth.login,userController.search)
 router.get('/searchget',userAuth.login,userController.searchget);
 
 router.get('/invoiceDownload',userController.invoiceDownload)
-
+router.get('/wallet',userController)
 
 
 module.exports = router;
