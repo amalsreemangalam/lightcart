@@ -214,9 +214,7 @@
               <h6 id="Discount">0</h6>
               <hr>
             <h4>Total Amount:</h4>
-            <h4 id="totalPrice">
-               <%=total %>
-            </h4>
+            <h4 id="totalPrice"><%=total %></h4>
             
             
     </div>
@@ -489,7 +487,7 @@
           console.log('Selected Address ID:', id);
           
           // Use the selectedMethod in your fetch request
-          const total = document.getElementById('totalPrice').innerText;
+          const total = document.getElementById('totalPrice').innerText.trim();
           fetch(`/paymentonline`, {
             method: 'post',
             headers: {
