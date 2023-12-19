@@ -123,7 +123,7 @@ const usersignup = async (req, res) => {
         console.log(result);
         // Assuming you have a valid email field in your signup form
         const recipientEmail = req.body.email;
-
+        console.log(recipientEmail);
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -134,7 +134,7 @@ const usersignup = async (req, res) => {
 
         const mailOptions = {
             from: 'amalnair334@gmail.com',
-            to: 'amalnair334@gmail.com',
+            to: recipientEmail,
             subject: 'One-Time Password (OTP) for Authentication',
             text: `Your OTP is: ${otp}`
         };
