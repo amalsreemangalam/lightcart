@@ -13,6 +13,9 @@ const dotenv = require("dotenv").config()
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const path=require('path')
+const bannerCollection=require("../models/bannerMongo")
+
+
 
 
 
@@ -43,6 +46,8 @@ const productcollection = require('../models/productmongo')
 const newcollection = require('../models/userloginmongodb')
 const { use } = require('../routes/userRouter')
 const { log } = require('util')
+const couponCollection = require('../models/coupenmongo')
+const walletcollection = require('../models/walletmongo')
 
 function generateRandomString(length) {
     return crypto.randomBytes(length).toString('hex');
@@ -299,6 +304,7 @@ const verifyotp = (req, res) => {
 
 
 const home = async (req, res) => {
+    const banner=await bannerCollection.find();
     let products = null
     const searchTerm = req.query.searchTerm
     console.log('searchTerm',searchTerm);
@@ -319,6 +325,18 @@ const home = async (req, res) => {
          products = await productcollection.find().skip(skip).limit(productsPerPage);
     }
     console.log("pages",products);
+    const users = await collection1.findById(req.session.user);
+    const wallet = await walletcollection.findOne({ customerid: req.session.user});
+    
+if (!wallet) {
+    const newwallet = new walletcollection({
+        customerid: req.session.user,
+        
+    });
+   
+    await newwallet.save();
+}
+
   
     let userstatus = false;
     if (req.session.user) {
@@ -329,7 +347,7 @@ const home = async (req, res) => {
   
     // const product = await Productcollection.find()
   
-    res.render('home', { product: products, userstatus, category ,products: products,
+    res.render('home', { product: products, userstatus, category ,products: products,banner,
         currentPage: currentPage,
         totalPages: totalPages,});
   };
@@ -541,10 +559,13 @@ const updateCart = async (req, res) => {
 const userprofileget = async (req, res) => {
 
     const user = await collection1.findOne({ _id: req.session.user })
+    console.log("user",user);
+    const wallet=await walletcollection.findOne({customerid:req.session.user})
+    console.log('wa',wallet);
     console.log(user);
 
     if (req.session.user) {
-        res.render('userprofile', { user })
+        res.render('userprofile', { user,walletAmount:wallet.Amount })
 
     } else {
         res.render('home');
@@ -639,13 +660,16 @@ const editprofilepost = async (req, res) => {
 
 const checkout = async (req, res) => {
     const id = req.session.user
+    const coupen=await couponCollection.find({isDeleted:false})
     const user = await collection1.findById(id)
     const cartData = await cartcollection.findOne({ userId: req.session.user }); // Replace this with your actual function to fetch cart data
     const productData = await productcollection.find({});
     if (req.session.user) {
-        res.render('checkout', { user, cart: cartData, products: productData })
+        res.render('checkout', { user, cart: cartData, products: productData,coupen:coupen })
     }
 }
+
+
 const checkoutaddadress = async (req, res) => {
     const user = await collection1.findOne({ _id: req.session.user })
     console.log(user);
@@ -657,6 +681,9 @@ const checkoutaddadress = async (req, res) => {
         res.send("error")
     }
 }
+
+
+
 
 // const checkoutaddaddresspost = async (req, res) => {
 //     const id = req.session.user;
@@ -741,6 +768,9 @@ const checkoutaddadress = async (req, res) => {
 //         res.status(500).send('Internal Server Error');
 //     }
 //  }
+
+
+
 
 const orderplaced = async (req, res) => {
     try {
@@ -852,18 +882,18 @@ const orderplacedGet = (req, res) => {
 const paymentonline = async (req, res) => {
     try {
         // Fetch the user's cart and calculate the total price as shown in the previous response
-
+        const total=req.body.totalPrices;
         const userId = req.session.user;
         const cart = await cartcollection.findOne({ userId }).populate('items.product');
 
-        let totalPrice = 0;
-        for (const cartItem of cart.items) {
-            totalPrice += cartItem.single_product_total_price;
-        }
+        // let totalPrice = 0;
+        // for (const cartItem of cart.items) {
+        //     totalPrice += cartItem.single_product_total_price;
+        // }
 
         // Create a Razorpay order
         const orderOptions = {
-            amount: totalPrice * 100, // amount in paise
+            amount: total * 100, // amount in paise
             currency: 'INR', // change it to your currency code
             receipt: 'order_receipt_' + Date.now(),
         };
@@ -1036,6 +1066,8 @@ const usercategory = async (req, res) => {
 
     res.render('usercategory', { data })
 }
+
+
 const myorders = async (req, res) => {
     try {
         const userId = req.session.user;
@@ -1163,6 +1195,60 @@ const cancelOrder = async (req, res) => {
     }
 };
 
+const returnOrder = async (req, res) => {
+    try {
+        const user=req.session.user
+        const orderId = req.params.id;
+        console.log('Order ID:', orderId);
+
+        const order = await ordercollection.findById(orderId);
+        if (!order) {
+            console.log('Order not found');
+            return res.redirect('back');
+        }
+
+        if ((order.paymentMethod === 'Online Payment' || order.paymentMethod === 'Cash On Delivery'|| order.paymentMethod==='wallet') && order.status === 'Delivered') {
+                const wallet = await walletcollection.findOneAndUpdate(
+                    { customerid: user._id },
+                    { $inc: {Amount: (order.totalPrice) },
+                    $push:{
+                        transactions:{
+                            type:'Refund',
+                            amount:(order.totalPrice),
+                        },
+                    },
+                
+                },
+                    { new: true }
+                ) 
+            }
+
+
+
+
+
+
+
+
+        if (order.status === 'Returned') {
+            console.log('Order is already Returned');
+            return res.redirect('back');
+        }
+
+        const updatedOrder = await ordercollection.findByIdAndUpdate(
+            orderId,
+            { $set: { status: 'Returned' } },
+            { new: true }
+        );
+
+        console.log('Updated Order:', updatedOrder);
+        res.redirect('back');
+    } catch (error) {
+        console.error('Error cancelling order:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
 
 
 const search=async(req, res) => {
@@ -1252,7 +1338,27 @@ const search=async(req, res) => {
     },1000)
   };
   
+  const walletLoad=async(req,res)=>{
+    try {
+        const userId = req.session.user;
+       const user=await collection1.findOne({_id:userId}) 
+        const wallet = await walletcollection.findOne({customerid: user._id });
 
+        if (wallet) {
+            const walletBalance = wallet.Amount;
+
+            const transactions = wallet.transactions;
+
+            res.render('wallet', { walletBalance, transactions });
+        } else {
+            res.render('wallet', { walletBalance: 0, transactions: [] }); 
+        }
+    } catch (error) {
+        console.error('Error while fetching wallet balance and transactions:', error);
+        res.status(500).send('Internal server error');
+    }
+
+}
 
 
 module.exports = {
@@ -1292,11 +1398,12 @@ module.exports = {
     list,
     unlist,
     cancelOrder,
+    returnOrder,
     paymentonline,
     orderplacedGet,
     search,
     searchget, 
-    invoiceDownload
+    invoiceDownload,walletLoad
 
 }
 

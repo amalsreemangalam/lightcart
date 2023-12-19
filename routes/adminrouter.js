@@ -3,6 +3,8 @@ const router=express.Router()
  const admincontroller=require('../controllers/admincontroller')
  const multer=require('multer');
  const adminAuth=require("../middleware/adminAuth")
+ const bannerController=require("../controllers/bannerController")
+ const coupenController=require('../controllers/coupenController')
 
  const session = require('express-session')
 
@@ -57,8 +59,21 @@ router.get('/editcategory/:id',adminAuth.adminlogin,admincontroller.editcategory
 router.post('/editcategory/:id',adminAuth.adminlogin,admincontroller.editcategorypost)
 router.get("/ordermanagement",adminAuth.adminlogin,admincontroller.loadordermanagement)
 router.get('/updateOrderStatus/:orderId/:newStatus',adminAuth.adminlogin,admincontroller.updateOrderStatus)
-router.get('/dashboard',admincontroller.admindashboard)
+router.get('/dashboard',adminAuth.adminlogin,admincontroller.admindashboard)
 router.get("/deleteimage", admincontroller.deleteimage)
-router.get('/download-excel',admincontroller.salesReport)
+router.get('/download-excel',adminAuth.adminlogin,admincontroller.salesReport)
+
+router.get("/addbanner",bannerController.addBanner)
+router.post("/addbanner",upload.array('image'),bannerController.addBannerPost)
+router.get("/bannerManagement",bannerController.bannerManagement)
+router.get("/deletebanner/:id",bannerController.deletebanner)
+router.get('/coupenManagement',coupenController.coupenmanagement)
+router.get('/addCoupen',coupenController.addcoupen)
+router.post('/addCoupen',coupenController.insertCoupon)
+router.get('/editcoupen/:id',coupenController.editcoupen)
+router.post('/editcoupen/:id',coupenController.couponUpdate)
+router.get('/List/:id',coupenController.couponUndelete)
+router.get('/unList/:id',coupenController.couponDelete)
+
 
 module.exports = router;

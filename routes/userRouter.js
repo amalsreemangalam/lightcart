@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const collection1 = require("../models/userloginmongodb")
 const userController = require('../controllers/usercontroller'); // Adjust the path based on your project structure
+const coupenController=require('../controllers/coupenController')
+
 
 const session = require('express-session')
 const userAuth=require("../middleware/userAuth")
@@ -63,6 +65,7 @@ router.post('/resentotp',userAuth.login, userController.newotpvalidate)
 router.get('/usercategory/:id',userController.usercategory)
 router.get('/myorders', userBlock,userAuth.login, userController.myorders)
  router.get('/cancelOrder/:id/:productId',userAuth.login,userController.cancelOrder)
+ router.get('/returnOrder/:id',userController.returnOrder)
 router.get('/blocked',userAuth.login, userController.userblockedlogin)
 router.get('/list-product/:categoryid',userController.list)
 router.get('/unlist-product/:categoryid',userController.unlist)
@@ -75,7 +78,11 @@ router.post('/search',userAuth.login,userController.search)
 router.get('/searchget',userAuth.login,userController.searchget);
 
 router.get('/invoiceDownload',userController.invoiceDownload)
-router.get('/wallet',userController)
+
+router.post('/redeemCoupon',coupenController.redeemCoupon)
+ router.get('/wallet',userController.walletLoad)
+// router.get("/apply-coupon",coupenController.)
+
 
 
 module.exports = router;

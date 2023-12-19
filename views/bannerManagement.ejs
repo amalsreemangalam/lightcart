@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        .bg-grey {
+            background-color: grey;
+        }
+
+        body {
+    height: 100%;
+    margin: 0;
+    background-image: url('https://th.bing.com/th/id/OIP.JfSoCom_PMG2HWUDFwb28gHaEo?rs=1&pid=ImgDetMain'); /* Replace with the actual path to your image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: 'Arial', sans-serif; /* Use Arial as a web-safe font, and fallback to sans-serif if not available */}
+
+        .sidebar {
+            background-color: #333;
+            width: 250px;
+            height: 100%;
+            overflow: auto;
+            position:absolute;
+            padding-top: 20px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 16px;
+            text-decoration: none;
+        }
+
+        .sidebar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            margin-left: 250px;
+        }
+
+        /* Responsive layout - when the screen is less than 700px wide, make the sidebar and main content stack on top of each other */
+        @media screen and (max-width: 700px) {
+
+            .sidebar,
+            .main-content {
+                width: 100%;
+                height: auto;
+                position: relative;
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-grey ">
+        <div class="container">
+            <a class="navbar-brand" href="#">LIGHT CART</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i> My Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/home"><i class="fas fa-user-circle"></i> Home</a>
+                    </li> -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+
+
+
+
+    <nav class="sidebar">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/usermanagement">User Management</a>
+        <a href="/productmanagement">Product Management</a>
+        <a href="/couponmanagement">Coupon Management</a>
+        <a href="/categorymanagement">Category Management</a>
+        <a href="/ordermanagement">Order management</a>
+        <div class="dropdown">
+            <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown">Add product</a> -->
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="/addproduct">Add product</a>
+            </div>
+        </div>
+        <a href="/admin/logout" class="border rounded py-1 px-3 nav-link d-flex align-items-center">
+            <i class="fas fa-sign-out-alt m-1 me-md-2"></i>
+            <p class="d-none d-md-block mb-0">Logout</p>
+        </a>
+    </nav>
+
+
+
+    
+    <div class="main-content">
+        <table class="table">
+            <thead class="thead-light">
+
+                <a href="/addbanner"><button style="background-color: gray;">Add new Banner</button></a>
+
+
+
+                <tr>
+                    <th scope="col">Image</th>
+                    <th scope="col">banner description</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% banner.forEach(product => { %>
+                <tr>
+                    <td><img src="<%= product.image[0] %>" alt="this is image" width="110px" height="150px"></td>
+                    <td><%= product.description %></td>
+                    <td>
+                        <!-- Add the delete button here with the appropriate data attributes -->
+                        <a href="/deletebanner/<%= product._id %>" class="delete-category btn btn-danger" data-category-id="<%= product._id %>">Delete</a>
+                    </td>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+    
+</body>
+
+
+
+
+</html>

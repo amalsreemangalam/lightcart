@@ -7,6 +7,7 @@
   <title>Order Confirmation</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
   <style>
     .custom-navbar {
       background-color: #123456;
@@ -16,13 +17,17 @@
     .footer {
 
       body {
-        background-image: url('https://img.freepik.com/free-photo/abstract-grunge-decorative-relief-navy-blue-stucco-wall-texture-wide-angle-rough-colored-background_1258-28311.jpg?w=1380&t=st=1698471629~exp=1698472229~hmac=e43e107a9ea8ac10f00a26e5f7e0439871bb7200f1746ff6f873b47d07daf06b'); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
+        background-image: url('https://img.freepik.com/free-photo/abstract-grunge-decorative-relief-navy-blue-stucco-wall-texture-wide-angle-rough-colored-background_1258-28311.jpg?w=1380&t=st=1698471629~exp=1698472229~hmac=e43e107a9ea8ac10f00a26e5f7e0439871bb7200f1746ff6f873b47d07daf06b');
+        /* Replace 'path/to/your/image.jpg' with the actual path to your image */
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        background-attachment: fixed; /* This keeps the background fixed while scrolling */
-        background-color: #f8f9fa; /* Fallback color in case the image is not available */
-    }
+        background-attachment: fixed;
+        /* This keeps the background fixed while scrolling */
+        background-color: #f8f9fa;
+        /* Fallback color in case the image is not available */
+      }
+
       .header {
         background-color: #007bff;
         color: #fff;
@@ -62,31 +67,31 @@
       }
     }
 
-      .footer {
-        background-color: #007bff;
-        color: #fff;
-        padding: 10px;
-        text-align: center;
-      }
+    .footer {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+    }
 
-      /* Custom styles */
-      .payment-card {
-        display: flex;
-        justify-content: flex-start;
-        gap: 10px;
-        max-width: 400px;
-        margin: 0 auto;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      }
+    /* Custom styles */
+    .payment-card {
+      display: flex;
+      justify-content: flex-start;
+      gap: 10px;
+      max-width: 400px;
+      margin: 0 auto;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-      .payment-options {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 20px;
-      }
+    .payment-options {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
   </style>
 </head>
 
@@ -116,7 +121,7 @@
 
   <div class="container">
     <div class="row">
-      
+
       <div class="col-md-8" style="margin-top: 50px;">
         <div class="address-section">
           <h3>Delivery Address</h3>
@@ -125,22 +130,23 @@
             <form action="/checkoutaddaddressedit/edit" method="GET">
               <% user.address.forEach((address, index)=> { %>
                 <label>
-        
 
-                  <input class="form-check-input" type="radio" name="flexRadioDefault" data-address-id="<%= address._id %>" id="flexRadioDefault1" checked />
+
+                  <input class="form-check-input" type="radio" name="flexRadioDefault"
+                    data-address-id="<%= address._id %>" id="flexRadioDefault1" checked />
                   <label class="form-check-label" for="flexRadioDefault1">
-                        Street:<%= address.street %> <br>
-                          City: <%= address.city %><br>
-                          State: <%= address.state %> <br>
+                    Street:<%= address.street %> <br>
+                      City: <%= address.city %><br>
+                        State: <%= address.state %> <br>
                           Country: <%= address.country %> <br>
-                          Pincode:<%= address.pincode  %> <br>
+                            Pincode:<%= address.pincode %> <br>
                   </label>
-                <br>
-                <hr>
-                <% }) %>
+                  <br>
+                  <hr>
+                  <% }) %>
 
-                  <button type="submit" class="btn btn-primary btn-block mt-4">Edit Selected
-                    Address</button>
+                    <button type="submit" class="btn btn-primary btn-block mt-4">Edit Selected
+                      Address</button>
             </form>
             <% } %>
 
@@ -149,62 +155,127 @@
               </a>
         </div>
 
-        <form >
-        <div class="container mt-5">
-          <div class="card payment-card">
-            <h3 class="card-title text-center mb-4">Choose a Payment Option</h3>
-            <div class="card-body">
-              <p>Select your preferred payment method:</p>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="method" id="codRadio" value="cashondelivery">
-                <label class="form-check-label" for="codRadio">
+        <form>
+          <div class="container mt-5">
+            <div class="card payment-card">
+              <h3 class="card-title text-center mb-4">Choose a Payment Option</h3>
+              <div class="card-body">
+                <p>Select your preferred payment method:</p>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="method" id="codRadio" value="cashondelivery">
+                  <label class="form-check-label" for="codRadio">
                     Cash on Delivery (COD)
-                </label>
-            </div>
-            
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="method" id="onlineRadio" value="onlinepayment">
-                <label class="form-check-label" for="onlineRadio">
+                  </label>
+                </div>
+
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="method" id="onlineRadio" value="onlinepayment">
+                  <label class="form-check-label" for="onlineRadio">
                     Online Payment
-                </label>
-            </div>
+                  </label>
+                </div>
 
-              
+
                 <button class="btn btn-primary btn-block mt-4" id="confirmbutton">conform order</button>
-              
-            </form>
-            </div>
-          </div>
-        </div>
 
-
+        </form>
       </div>
-
-      <div class="col-md-4" style="margin-top: 50px;">
-        <div class="summary-section">
-          <h3>Order Summary</h3>
-          <% let total=0 %>
-            <% for (const item of cart.items) { %>
-              <div class="product-card">
-                <% let image=products.find((ele)=>ele._id.equals(item.product))%>
-                  <img src="<%=image.productimage[0]%>" alt="Product Image" style="width: 100px; height: 100px;" />
-                  <% let product=products.find((ele)=>ele._id.equals(item.product)) %> <%= product.productname%>
-                      <p>Quantity: <%= item.quantity %>
-                      </p>
-                      <td>₹<%= item.single_product_total_price %>
-                      </td>
-              </div>
-
-              <hr>
-              <% total+=item.single_product_total_price %>
-                <h4>Total Price: ₹<%=total.toFixed(2) %>
-                </h4>
-                <% } %>
-        </div>
-      </div>
-
     </div>
   </div>
+
+
+  </div>
+
+
+  <div class="col-md-4" style="margin-top: 50px;">
+    <div class="summary-section">
+      <h3>Order Summary</h3>
+      <% let total=0 %>
+        <% for (const item of cart.items) { %>
+          <div class="product-card">
+            <% let image=products.find((ele)=>ele._id.equals(item.product))%>
+              <img src="<%=image.productimage[0]%>" alt="Product Image" style="width: 100px; height: 100px;" />
+              <% let product=products.find((ele)=>ele._id.equals(item.product)) %> <%= product.productname%>
+                  <p>Quantity: <%= item.quantity %>
+                  </p>
+                  <td>₹<%= item.single_product_total_price %>
+                  </td>
+          </div>
+
+          <hr>
+          <% total+=item.single_product_total_price %>
+          <% } %>
+          <h4>Total Price:</h4>
+            <h4 id="realTotal">
+              <%=total %>
+            </h4>
+
+          <h6>Discount:₹</h6>
+              <h6 id="Discount">0</h6>
+              <hr>
+            <h4>Total Amount:</h4>
+            <h4 id="totalPrice">
+               <%=total %>
+            </h4>
+            
+            
+    </div>
+  </div>
+
+  </div>
+  </div>
+
+
+
+  <!-- <button class="btn btn-light text-primary border">Apply</button> -->
+
+
+
+  <div class="input-group mt-3 mb-4">
+    <!-- <input type="text" class="form-control border" name="" placeholder="Promo code" /> -->
+    <% coupen.forEach(element=> { %>
+
+      <div class="card" style="margin-bottom: 30px;">
+        <div class="card-body">
+          <h5 class="card-title">
+
+          </h5>
+          <p class="card-text">Get <span class="discount-amount">
+              <%=element.discountAmount%>₹ off
+            </span> on your purchase!</p>
+          <p class="card-text">Use code:<%=element.couponCode %> <span class="coupon-code" id="coupen">
+
+              </span></p>
+        </div>
+
+      </div>
+
+      <% }) %>
+
+
+        <!-- <button class="btn btn-light text-primary border">Apply</button> -->
+        <ul>
+          <div class="input-group mt-3 mb-4">
+            <input type="text" id="couponCode" class="form-control border" name="couponCode" placeholder="Promo code" >
+            <button type="submit" id="coupon" class="btn btn-light text-primary border">Apply</button>
+          </div>
+          <section style="color: red;" id="cpn"></section>
+
+          <li style="list-style-type: none;" id="coupenadded"><span> <i></i></span></li>
+          <div id="clear"></div>
+          <section hidden id="discount1"></section>
+          <section hidden id="coupenid"></section>
+
+          <i id="clear"></i>
+
+        </ul>
+  </div>
+
+   
+
+  </div>
+
+
 
   <div style="background-color:gray;">
     <!-- Footer -->
@@ -351,136 +422,219 @@
     </footer>
   </div>
 
- <!-- Include the Razorpay JS SDK -->
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <!-- Include the Razorpay JS SDK -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-  
+
   <script>
     const methodRadios = document.getElementsByName('method');
-
+    
+    
     // Add change event listener to each radio button
     methodRadios.forEach(radio => {
-        radio.addEventListener('change', () => {
-            // Get the selected value
-            const selectedMethod = document.querySelector('input[name="method"]:checked').value;
-
-            // Log or use the selected value
-            console.log('Selected Method:', selectedMethod);
-        });
+      radio.addEventListener('change', () => {
+        // Get the selected value
+        const selectedMethod = document.querySelector('input[name="method"]:checked').value;
+        
+        // Log or use the selected value
+        console.log('Selected Method:', selectedMethod);
+      });
     });
 
     // Add click event listener to the confirmbutton
     document.getElementById('confirmbutton').addEventListener('click', (event) => {
-        event.preventDefault();
+      event.preventDefault();
 
-        // Check the selected payment method
-        const selectedMethod = document.querySelector('input[name="method"]:checked').value;
-        console.log('Selected Method:', selectedMethod);
+      // Check the selected payment method
+      const selectedMethod = document.querySelector('input[name="method"]:checked').value;
+      console.log('Selected Method:', selectedMethod);
+      
+      // Perform actions based on the selected payment method
+      if (selectedMethod === "cashondelivery") {
+        const radioButtons = document.querySelectorAll('input[name="flexRadioDefault"]:checked');
 
-        // Perform actions based on the selected payment method
-        if (selectedMethod === "cashondelivery") {
-            const radioButtons = document.querySelectorAll('input[name="flexRadioDefault"]:checked');
+        radioButtons.forEach(button => {
+          const id = button.getAttribute('data-address-id');
+          console.log('Selected Address ID:', id);
 
-            radioButtons.forEach(button => {
-                const id = button.getAttribute('data-address-id');
-                console.log('Selected Address ID:', id);
+          // Use the selectedMethod in your fetch request
+          fetch(`/orderplaced/${id}`, {
+            method: 'post',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              method: selectedMethod,
+              // other order details...
+            }),
+          }).then((res) => {
+            console.log("Order placed successfully");
+            // Redirect or perform other actions
+            return window.location.href = '/sucessorder';
+          }).catch((error) => {
+            console.error("Error placing order:", error);
+          });
+        });
+      } else if (selectedMethod === "onlinepayment") {
 
-                // Use the selectedMethod in your fetch request
-                fetch(`/orderplaced/${id}`, {
+        // fetch('/paymentonline',)
+        const radioButtons = document.querySelectorAll('input[name="flexRadioDefault"]:checked');
+        
+        
+        
+      console.log('Total Price:', totalPrice);
+
+        radioButtons.forEach(button => {
+          const id = button.getAttribute('data-address-id');
+          console.log('Selected Address ID:', id);
+          
+          // Use the selectedMethod in your fetch request
+          const total = document.getElementById('totalPrice').innerText;
+          fetch(`/paymentonline`, {
+            method: 'post',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              method: selectedMethod,
+              totalPrices:total,
+              // other order details...
+            }),
+          }).then((res) => {
+            console.log("Order placed successfully");
+            return res.json()
+
+          }).then((paymentdetail) => {
+
+            const options = {
+              key: "rzp_test_Kl5ZqI2MmvKrtM",
+              amount: paymentdetail.amount,
+              currency: paymentdetail.currency,
+              name: 'Your Company Name',
+              description: 'Payment for your order',
+              order_id: paymentdetail.orderId,
+              handler: function (response) {
+                // Handle the successful payment response, e.g., update order status on the server
+                console.log('Payment successful:', response);
+                const radioButtons = document.querySelectorAll('input[name="flexRadioDefault"]:checked');
+
+                radioButtons.forEach(button => {
+                  const id = button.getAttribute('data-address-id');
+                  console.log('Selected Address ID:', id);
+
+                  // Use the selectedMethod in your fetch request
+                  fetch(`/orderplaced/${id}`, {
                     method: 'post',
                     headers: {
-                        'Content-Type': 'application/json',
+                      'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        method: selectedMethod,
-                        // other order details...
+                      method: selectedMethod,
+                      // other order details...
                     }),
-                }).then((res) => {
+                  }).then((res) => {
                     console.log("Order placed successfully");
                     // Redirect or perform other actions
                     return window.location.href = '/sucessorder';
-                }).catch((error) => {
+                  }).catch((error) => {
                     console.error("Error placing order:", error);
+                  });
                 });
-            });
-        }else if(selectedMethod==="onlinepayment"){
 
-          // fetch('/paymentonline',)
-          const radioButtons = document.querySelectorAll('input[name="flexRadioDefault"]:checked');
 
-radioButtons.forEach(button => {
-    const id = button.getAttribute('data-address-id');
-    console.log('Selected Address ID:', id);
+              },
+            };
 
-    // Use the selectedMethod in your fetch request
-    fetch(`/paymentonline`, {
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            method: selectedMethod,
-            // other order details...
-        }),
-    }).then((res) => {
-        console.log("Order placed successfully");
-       return res.json()
-       
-    }).then((paymentdetail)=>{
+            const rzp = new Razorpay(options);
+            rzp.open();
 
-      const options = {
-    key:"rzp_test_Kl5ZqI2MmvKrtM",
-    amount: paymentdetail.amount,
-    currency: paymentdetail.currency,
-    name: 'Your Company Name',
-    description: 'Payment for your order',
-    order_id: paymentdetail.orderId,
-    handler: function (response) {
-        // Handle the successful payment response, e.g., update order status on the server
-        console.log('Payment successful:', response);
-        const radioButtons = document.querySelectorAll('input[name="flexRadioDefault"]:checked');
+          }).catch((error) => {
+            console.error("Error placing order:", error);
+          });
+        });
 
-radioButtons.forEach(button => {
-    const id = button.getAttribute('data-address-id');
-    console.log('Selected Address ID:', id);
-
-    // Use the selectedMethod in your fetch request
-    fetch(`/orderplaced/${id}`, {
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            method: selectedMethod,
-            // other order details...
-        }),
-    }).then((res) => {
-        console.log("Order placed successfully");
-        // Redirect or perform other actions
-        return window.location.href = '/sucessorder';
-    }).catch((error) => {
-        console.error("Error placing order:", error);
+      }
     });
-});
+  </script>
 
 
-    },
-};
+  <script>
+    document.getElementById('coupon').addEventListener('click', async (event) => {
+      // event.currentTarget.disabled = true;
+      event.preventDefault()
+      const couponCode = document.getElementById('couponCode').value;
 
-const rzp = new Razorpay(options);
-rzp.open();
+      const couponValue = {
+        couponCode: couponCode
+      };
+      console.log("adfg", couponCode);
 
-    }).catch((error) => {
-        console.error("Error placing order:", error);
-    });
-});
+      try {
+        const response = await fetch('/redeemCoupon', {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(couponValue)
+        });
+        
+        if (response.ok) {
+          const { discountAmount, minimumpurchase, expirationDate, message } = await response.json();
+          if (message) {
+            return alert(message)
+          }
+          console.log("sucess");
+          const Discount = document.getElementById('Discount');
+          const totalPrice = document.getElementById('totalPrice');
+          const min = parseInt(totalPrice.textContent);
+          console.log(totalPrice.textContent, parseInt(min), parseInt(minimumpurchase))
 
+
+          if (parseInt(min) >= parseInt(minimumpurchase)) {
+            // Get the current date
+            const currentDate = new Date();
+            // Convert the expiration date string to a Date object
+            const formattedDate = new Date(expirationDate);
+            console.log("date", currentDate, formattedDate, expirationDate);
+            if (currentDate < formattedDate) {
+              // Replace with the actual expiration date
+              Discount.textContent = parseInt(discountAmount);
+              totalPrice.textContent = parseInt(totalPrice.textContent) - parseInt(discountAmount);
+              // coupon apply button change to remove
+              if (document.getElementById('coupon').textContent === "Remove Coupon") {
+                const totalPriceAfterRemove = document.getElementById('totalPrice').textContent
+                document.getElementById('totalPrice').textContent = document.getElementById('realTotal').innerText
+                document.getElementById('Discount').innerHTML = 0
+                document.getElementById('coupon').textContent = "Apply"
+                return alert('coupon removed Sucessfully');
+
+              }
+              document.getElementById('coupon').textContent = "Remove Coupon"
+
+              return alert('Coupon applied sucessfully');
+            } else {
+              return alert('Coupon expired');
+            }
+          } else {
+            return alert(`You want to purchase ${minimumpurchase}`);
+          }
+
+        } else {
+          console.error('Failed to redeem the coupon');
         }
+      } catch (error) {
+        console.error('Error during coupon redemption:', error);
+      }
     });
-</script>
+  </script>
 
 
-  
+
+
+
+
+
+
 
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
     integrity="sha384-3Nlkv3DLWJr0HYp2kXjC1a90oSzv8leDi4VRKtukF7bq3TIstHqh/lSWwIqbCt9PL"

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Signup</title>
+    <style>
+        /* Reset default styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        /* Container for the signup form */
+        .container1 {
+            background: linear-gradient(to right, #1898cf, #0d7f93);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        /* Form styling */
+        h2 {
+            text-align: center;
+            color: #fff;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            color: #fff;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"] {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            background-color: #fff;
+            color: #333;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Media queries for responsiveness */
+        @media (max-width: 600px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+
+
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding-top: 20px;
+            background-color: #333;
+            overflow: auto;
+        }
+        .bg-grey {
+    background-color: grey;
+}
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 16px;
+            text-decoration: none;
+        }
+
+        .sidebar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            margin-left: 250px;
+        }
+
+        /* Responsive layout - when the screen is less than 700px wide, make the sidebar and main content stack on top of each other */
+        @media screen and (max-width: 700px) {
+            .sidebar, .main-content {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+        }
+    </style>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-grey">
+        <div class="container">
+            <a class="navbar-brand" href="#">LIGHT CART</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <!-- <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i> My Cart</a> -->
+                    </li>
+                    <li class="nav-item">
+                        <!-- <a class="nav-link" href="/home"><i class="fas fa-user-circle"></i> Home</a> -->
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <nav class="sidebar" style="margin-top: 55px;">
+        <a href="/dashboard">dashboard</a>
+        <a href="/usermanagement">User Management</a>
+        <a href="/productmanagement">Product Management</a>
+        <a href="/couponmanagement">Coupon Management</a>
+        <a href="/categorymanagement">Category Management</a>
+        <a href="/admin/logout" class="border rounded py-1 px-3 nav-link d-flex align-items-center">
+            <i class="fas fa-sign-out-alt m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Logout</p>
+        </a>
+    </nav>
+
+
+
+    <div class="container1">
+        <h2>Add Banner</h2>
+     
+        <form action="/addbanner" method="POST"  enctype="multipart/form-data"  >
+            <div>
+                <label for="imgfile" class="mb-3">
+                    <span>Select Images:</span>
+                    <input type="file" id="image" name="image" multiple accept="image/jpeg , image/png" required>
+                    <div id="croppedImageContainer" style="height: 500px;overflow: auto;" ></div>
+                    <button id="cropButton" type="button">Crop</button>
+                </label>
+            </div> 
+            <label for="password">description</label>
+            <input type="text" id="description" name="description" required>
+
+            <button type="submit">SAVE</button>
+        </form>
+    </div>
+
+
+
+ 
+    <!-- <script>
+        fetch('/addcategory', {
+   method: 'POST',
+   body: JSON.stringify(categorydata),
+   headers: {
+       'Content-Type': 'application/json'
+   }
+})
+.then(response => {
+   if (response.status === 409) {
+       alert('This category already exists');
+   } else {
+       // handle other responses
+   }
+
+})
+.catch(error => console.error('Error:', error));
+    </script> -->
+</body>
+</html>

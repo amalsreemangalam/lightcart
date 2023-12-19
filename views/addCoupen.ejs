@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .container {
+            background: linear-gradient(to right, #ff9966, #ff5e62);
+            padding: 20px;
+        }
+
+        .container form {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+            background-color: #f0f0f0;
+            /* Add this line */
+        }
+
+        .container form label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .container form input,
+        .container form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .container form input:focus,
+        .container form select:focus {
+            border-color: #007BFF;
+            box-shadow: 0 0 5px #007BFF;
+        }
+
+        .container form button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .container form button:hover {
+            background-color: #0056b3;
+        }
+        .image-preview {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+
+}
+#outer-image-preview-container img {
+  width: 400px;
+  height: 400px;
+  object-fit: cover;
+}
+#outer-image-preview-container img {
+  width: 50%;
+  height: 50%;
+  object-fit: cover;
+}
+
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/2.3.4/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js"></script>
+  
+</head>
+
+<body>
+    <div class="container">
+        <h2 style="text-align: center ;background-color: wheat;">Add Coupen</h2>
+        <form action="/addCoupen" method="POST" >
+            <label for="username">Coupen name</label>
+            <input type="text" id="username" name="couponName" required>
+
+            <label for="price">Coupen code</label>
+            <input type="number" id="price" name="couponCode" min="1" required>
+
+            <label for="description">Discount Amount</label>
+            <input type="text" id="description" name="discountAmount" required>
+
+            <label for="stocks">Expiry date</label>
+            <input type="date" name="expirationDate" class="form-control" id="expirationDate" placeholder="Enter Expiration Date">
+            <span id="error" style="color: red;"></span>
+
+
+
+            <label for="stocks">coupen description</label>
+            <input type="text" id="stocks" name="description" required>
+            <span id="error" style="color: red;"></span>
+
+
+            <label for="stocks">coupen minimumpurchase</label>
+            <input type="number" id="minimumpurchase" name="minimumpurchase" required>
+            <span id="error" style="color: red;"></span>
+
+
+
+        
+
+<!-- <label for="discount"><i class="fas fa-cubes"></i> Discount</label>
+<input type="text" name="Discount" class="form-control" id="productStock" placeholder="Enter product Discount">
+<div id="errorStock" class="error-message"></div>
+             -->
+             <button type="submit">SAVE</button>
+            </form>
+</body>
+
+</html>

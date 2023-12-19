@@ -15,6 +15,8 @@ const ExcelJS = require('exceljs');
 
 
 
+
+
 const adminlogin = (req, res) => {
     res.render('adminlogin', { msg: '' })
 }
@@ -184,7 +186,7 @@ const dashboardData = async (req, res) => {
             }
         ]);
 
-       
+
     }
     else if (filter == "YERALY") {
         // total sale data
@@ -351,7 +353,7 @@ const addProductPost = async (req, res) => {
 
     try {
         console.log('addproducts');
-        const { productname, productprice, productdescription, productstocks, productcategory, Productimage,OfferPrice,Discount } = req.body;
+        const { productname, productprice, productdescription, productstocks, productcategory, Productimage, OfferPrice, Discount } = req.body;
         // console.log(offerprice,discount);
 
         let imagePath = req.files.map(file => { return file.path.substring(6) });
@@ -368,7 +370,6 @@ const addProductPost = async (req, res) => {
             OfferPrice,
             Discount,
 
-
         });
         console.log('newproducts', newProduct);
 
@@ -379,6 +380,8 @@ const addProductPost = async (req, res) => {
         // Handle the error and send a response to the client
     }
 };
+
+
 const deleteproduct = async (req, res) => {
     const productId = req.params.id;
 
@@ -412,7 +415,7 @@ const showcategoryManagementPage = async (req, res) => {
     try {
         const category = await categorycollection.find();
         console.log(category);
-        res.render('categorymanagement', { category }); // Pass the products to the EJS template
+        res.render('categorymanagement', { category }); 
     } catch (error) {
         console.error(error);
         // Handle the error and send a response to the client
@@ -480,6 +483,7 @@ const editcategoryget = async (req, res) => {
 
 // const editcategorypost = async (req, res) => {
 //     const productId = req.params.id;
+
 //     const updatedcategoryData = {
 //         categoryname: req.body.categoryname,
 //         categorydescription: req.body.categorydescription
@@ -534,6 +538,8 @@ const editcategorypost = async (req, res) => {
 //     }
 // }
 // };
+
+
 
 // const loadordermanagement = async (req, res) => {
 //     try {
@@ -711,121 +717,124 @@ const deleteimage = async (req, res) => {
     }
 };
 
+
+
+
 const salesReport = async (req, res) => {
     try {
-      const startDate = new Date(req.query.startDate);
-      const endDate = new Date(req.query.endDate);
-      endDate.setDate(endDate.getDate() + 1);
-      console.log("start date", startDate, endDate);
-      const orders = await ordercollection.aggregate([
-        {
-          $match: {
-            orderDate: { $gte: startDate, $lte: endDate },
-          },
-        },
-        {
-          $unwind: "$address", // Unwind the array of addresses
-        },
-        {
-          $lookup: {
-            from: "productcollections",
-            localField: "products.productId",
-            foreignField: "_id",
-            as: "productData",
-          },
-        },
-        {
-          $lookup: {
-            from: "collection1",
-            localField: "user",
-            foreignField: "_id",
-            as: "userData",
-          },
-        },
-        {
-          $unwind: "$productData",
-        },
-        {
-          $project: {
-            orderId: "$_id",
-            shippingAddress: {
-              city: "$address.city",
-              street: "$address.street",
-              state: "$address.state",
-              country: "$address.country",
+        const startDate = new Date(req.query.startDate);
+        const endDate = new Date(req.query.endDate);
+        endDate.setDate(endDate.getDate() + 1);
+        console.log("start date", startDate, endDate);
+        const orders = await ordercollection.aggregate([
+            {
+                $match: {
+                    orderDate: { $gte: startDate, $lte: endDate },
+                },
             },
-            productDetail: {
-              productName: "$productData.productname",
-              price: "$productData.productprice",
+            {
+                $unwind: "$address", // Unwind the array of addresses
             },
-            totalPrice: 1,
-            customerName: 1,
-            orderDate: 1,
-            status: 1,
-            individualquantity: {
-              $map: {
-                input: "$products",
-                as: "product",
-                in: "$$product.productId.individualquantity",
-              },
+            {
+                $lookup: {
+                    from: "productcollections",
+                    localField: "products.productId",
+                    foreignField: "_id",
+                    as: "productData",
+                },
             },
-          },
-        },
-      ]);
-      
+            {
+                $lookup: {
+                    from: "collection1",
+                    localField: "user",
+                    foreignField: "_id",
+                    as: "userData",
+                },
+            },
+            {
+                $unwind: "$productData",
+            },
+            {
+                $project: {
+                    orderId: "$_id",
+                    shippingAddress: {
+                        city: "$address.city",
+                        street: "$address.street",
+                        state: "$address.state",
+                        country: "$address.country",
+                    },
+                    productDetail: {
+                        productName: "$productData.productname",
+                        price: "$productData.productprice",
+                    },
+                    totalPrice: 1,
+                    customerName: 1,
+                    orderDate: 1,
+                    status: 1,
+                    individualquantity: {
+                        $map: {
+                            input: "$products",
+                            as: "product",
+                            in: "$$product.productId.individualquantity",
+                        },
+                    },
+                },
+            },
+        ]);
 
-  
-      if (orders.length === 0) {
-        // const errorMessage = "Please provide a valid date";
-        // req.flash('error', errorMessage);
-        return res.redirect('/admindashboard');
-      }
-      console.log("orders ",orders)
-  
-      const workbook = new ExcelJS.Workbook();
-      const worksheet = workbook.addWorksheet('Sheet 1');
-  
-      // Add data to the worksheet
-      worksheet.columns = [
-        { header: 'Product Name', key: 'productDetail.productName', width: 20 },
-        { header: 'Customer Name', key: 'customerName', width: 18 },
-        { header: 'Street', key: 'shippingAddress.street', width: 15 },
-        { header: 'City', key: 'shippingAddress.city', width: 15 },
-        { header: 'Country', key: 'shippingAddress.country', width: 15 },
-        { header: 'State', key: 'shippingAddress.state', width: 15 },
-        { header: 'Status', key: 'status', width: 15 },
-        { header: 'Total Price', key: 'totalPrice', width: 15 },
-        { header: 'Order Date', key: 'orderDate', width: 15 },
-        { header: 'individualquantity', key: 'individualquantity', width: 15 },
-      ];
-      
-      orders.forEach((orderItem) => {
-        worksheet.addRow({
-          'productDetail.productName': orderItem.productDetail.productName,
-          'customerName': orderItem.customerName,
-          'shippingAddress.street': orderItem.shippingAddress.street,
-          'shippingAddress.city': orderItem.shippingAddress.city,
-          'shippingAddress.country': orderItem.shippingAddress.country,
-          'shippingAddress.state': orderItem.shippingAddress.state,
-          'status': orderItem.status,
-          'totalPrice': orderItem.totalPrice,
-          'orderDate': orderItem.orderDate,
-          'individualquantity': orderItem.individualquantity,
+
+
+        if (orders.length === 0) {
+            // const errorMessage = "Please provide a valid date";
+            // req.flash('error', errorMessage);
+            return res.redirect('/admindashboard');
+        }
+        console.log("orders ", orders)
+
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Sheet 1');
+
+        // Add data to the worksheet
+        worksheet.columns = [
+            { header: 'Product Name', key: 'productDetail.productName', width: 20 },
+            { header: 'Customer Name', key: 'customerName', width: 18 },
+            { header: 'Street', key: 'shippingAddress.street', width: 15 },
+            { header: 'City', key: 'shippingAddress.city', width: 15 },
+            { header: 'Country', key: 'shippingAddress.country', width: 15 },
+            { header: 'State', key: 'shippingAddress.state', width: 15 },
+            { header: 'Status', key: 'status', width: 15 },
+            { header: 'Total Price', key: 'totalPrice', width: 15 },
+            { header: 'Order Date', key: 'orderDate', width: 15 },
+            { header: 'individualquantity', key: 'individualquantity', width: 15 },
+        ];
+
+        orders.forEach((orderItem) => {
+            worksheet.addRow({
+                'productDetail.productName': orderItem.productDetail.productName,
+                'customerName': orderItem.customerName,
+                'shippingAddress.street': orderItem.shippingAddress.street,
+                'shippingAddress.city': orderItem.shippingAddress.city,
+                'shippingAddress.country': orderItem.shippingAddress.country,
+                'shippingAddress.state': orderItem.shippingAddress.state,
+                'status': orderItem.status,
+                'totalPrice': orderItem.totalPrice,
+                'orderDate': orderItem.orderDate,
+                'individualquantity': orderItem.individualquantity,
+            });
         });
-      });
-      
-  
-      // Generate the Excel file and send it as a response
-      const excelBuffer = await workbook.xlsx.writeBuffer();
-      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-      res.setHeader('Content-Disposition', 'attachment; filename=excel.xlsx');
-      res.send(excelBuffer);
+
+
+        // Generate the Excel file and send it as a response
+        const excelBuffer = await workbook.xlsx.writeBuffer();
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', 'attachment; filename=excel.xlsx');
+        res.send(excelBuffer);
     } catch (error) {
-      console.error('Error creating or sending Excel file:', error);
-      res.status(500).send('Internal Server Error');
+        console.error('Error creating or sending Excel file:', error);
+        res.status(500).send('Internal Server Error');
     }
-  };
-  
+};
+
 
 
 
@@ -856,7 +865,8 @@ module.exports = {
     updateOrderStatus,
     admindashboard,
     deleteimage,
-    salesReport
+    salesReport,
+
 
 };
 
