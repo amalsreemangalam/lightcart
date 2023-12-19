@@ -39,7 +39,7 @@ router.get("/userlogin", userController.login);
 router.post("/usersignup", userController.usersignup)
 router.post("/userlogin", userController.userlogin);
 router.post('/verifyotp',userBlock, userController.otpvalidate)
-router.get("/home",userController.home);
+router.get("/",userController.home);
 router.get('/otp',userAuth.login, userController.verifyotp)
 router.get('/logout',userController.logout)
 router.get('/product/:productId',userController.productdetails)

@@ -65,7 +65,7 @@ console.log(randomString);
 
 const login = async (req, res) => {
     if (req.session.user) {
-        return res.redirect('/home')
+        return res.redirect('/')
         next();
     }
     console.log(req.session.user);
@@ -218,7 +218,7 @@ const newotpvalidate = async (req, res) => {
 
         // console.log(amal);
         if (otp == otpentered) {
-            res.redirect('/home'); // Redirect to the home page if OTP is valid
+            res.redirect('/'); // Redirect to the home page if OTP is valid
         } else {
             res.render('otp', { error: "WRONG OTP.please try again." })
         }
@@ -228,7 +228,6 @@ const newotpvalidate = async (req, res) => {
         res.status(500).send('Internal Server Error'); // Handle errors appropriately
     }
 };
-
 
 
 const userlogin = async (req, res) => {
@@ -249,7 +248,7 @@ const userlogin = async (req, res) => {
                 req.session.user = check._id;
                 console.log('loginsession', req.session.user);
                 
-                res.redirect('/home');
+                res.redirect('/');
             } else {
                 return res.render('userlogin', { msg: "Invalid username or password" });
             }
@@ -280,7 +279,7 @@ const otpvalidate = async (req, res) => {
 
         if (data.otp.code === otp && data.otp.expiresAt > currentTimestamp) {
             console.log('otp verified');
-            res.redirect('/home'); // Redirect to the home page if OTP is valid
+            res.redirect('/'); // Redirect to the home page if OTP is valid
         } else {
             res.render('otp', { error: "WRONG OTP.please try again." })
         }
@@ -307,7 +306,7 @@ const home = async (req, res) => {
     const banner=await bannerCollection.find();
     let products = null
     const searchTerm = req.query.searchTerm
-    console.log('searchTerm',searchTerm);
+    
     
     const productsPerPage = 8;
     const currentPage = parseInt(req.query.page) || 1;
@@ -324,7 +323,7 @@ const home = async (req, res) => {
     
          products = await productcollection.find().skip(skip).limit(productsPerPage);
     }
-    console.log("pages",products);
+   
     const users = await collection1.findById(req.session.user);
     const wallet = await walletcollection.findOne({ customerid: req.session.user});
     
@@ -392,7 +391,7 @@ const logout = (req, res) => {
             console.error(err);
             return res.send("error logging out")
         }
-        res.redirect('/home')
+        res.redirect('/')
     })
 }
 
@@ -685,15 +684,7 @@ const checkoutaddadress = async (req, res) => {
 
 
 
-// const checkoutaddaddresspost = async (req, res) => {
-//     const id = req.session.user;
-//     console.log(id);
-//     const newAddress = {
-//         houseName: req.body.houseName,
-//         street: req.body.street,
-//         city: req.body.city,
-//         state: req.body.state,
-//         pincode: req.body.pincode,
+
 
 
 //     };
@@ -1197,19 +1188,22 @@ const cancelOrder = async (req, res) => {
 
 const returnOrder = async (req, res) => {
     try {
+        
         const user=req.session.user
+        
         const orderId = req.params.id;
-        console.log('Order ID:', orderId);
-
+        
+        const users= await collection1.findById(user)
         const order = await ordercollection.findById(orderId);
+        console.log('orrrrrrrrrrr',order);
         if (!order) {
             console.log('Order not found');
             return res.redirect('back');
         }
 
-        if ((order.paymentMethod === 'Online Payment' || order.paymentMethod === 'Cash On Delivery'|| order.paymentMethod==='wallet') && order.status === 'Delivered') {
+        if ((order.paymentMethod === 'onlinepayment' || order.paymentMethod === 'cashondelivery'|| order.paymentMethod==='wallet') && order.status === 'Delivered') {
                 const wallet = await walletcollection.findOneAndUpdate(
-                    { customerid: user._id },
+                    { customerid: users._id },
                     { $inc: {Amount: (order.totalPrice) },
                     $push:{
                         transactions:{
@@ -1224,14 +1218,8 @@ const returnOrder = async (req, res) => {
             }
 
 
-
-
-
-
-
-
         if (order.status === 'Returned') {
-            console.log('Order is already Returned');
+            
             return res.redirect('back');
         }
 
@@ -1241,7 +1229,7 @@ const returnOrder = async (req, res) => {
             { new: true }
         );
 
-        console.log('Updated Order:', updatedOrder);
+        
         res.redirect('back');
     } catch (error) {
         console.error('Error cancelling order:', error);
@@ -1284,7 +1272,7 @@ const search=async(req, res) => {
     const tableLeft = 50;
     const cellPadding = 5;
     
-    let grandTotal = 0;  // Initialize a variable to calculate the grand total
+    let grandTotal = 0;  
     
     order.products.forEach(product => {
         const productName = product.productId.productname;

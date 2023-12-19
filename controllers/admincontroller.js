@@ -21,8 +21,7 @@ const adminlogin = (req, res) => {
     res.render('adminlogin', { msg: '' })
 }
 const adminloginpost = (req, res) => {
-    // const thisname = "amal"
-    // const thispassword = 1234
+   
     req.session.admin = true
     console.log(req.body);
     if (process.env.EMAIL === req.body.username && process.env.PASSWORD == req.body.password) {
@@ -37,10 +36,7 @@ const dashboard = async (req, res) => {
     try {
         const data = await newcollection.find();
 
-        // Create an array of the past 7 days
-        // const endDate = new Date();
-        // const startDate = new Date();
-        // const Enddate = startDate.setDate(endDate.getDate() - 6);
+       
 
 
         const startOfWeek = new Date();
@@ -55,36 +51,7 @@ const dashboard = async (req, res) => {
         for (let date = startOfWeek; date <= endOfWeek; date.setDate(date.getDate() + 1)) {
             dateRange.push(new Date(date));
         }
-        // const endDate = new Date();
-        // const startDate = new Date();
-        // startDate.setDate(endDate.getDate() - 6);
-
-        // const dateRange = [];
-        // for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
-        //     dateRange.push(new Date(date));
-        // }
-
-
-        // Aggregate data based on orderDate
-        // let dayCounts = await ordercollection.aggregate([
-        //     {
-        //         $match: {
-        //             orderDate: {
-        //                 $gte: startOfWeek,
-        //                 $lte: endOfWeek,
-        //             },
-        //         },
-        //     },
-        //     {
-        //         $group: {
-        //             _id: { $dateToString: { format: "%Y-%m-%d", date: "$orderDate" } },
-        //             totalQuantity: { $sum: "$quantity" },
-        //         },
-        //     },
-        //     {
-        //         $sort: { _id: 1 },
-        //     },
-        // ]);
+        
         let dayCounts = await ordercollection.aggregate([
             {
                 $match: {
@@ -116,8 +83,7 @@ const dashboard = async (req, res) => {
             return { _id: dateString, totalQuantity: matchingData ? matchingData.totalQuantity : 0 };
         });
 
-        // const xValues = dailyChartData.map((data) => data._id);
-        // const yValues = dailyChartData.map((data) => data.totalQuantity);
+       
         const formattedXValues = xValues.map((dateString) => moment(dateString).format("MMM D"));
 
 
@@ -145,7 +111,7 @@ const dashboardData = async (req, res) => {
             },
             {
                 $project: {
-                    month: { $month: "$createdAt" },//projects the month from the time stamp
+                    month: { $month: "$createdAt" },
                 }
             },
             {
@@ -202,7 +168,7 @@ const dashboardData = async (req, res) => {
                 }
             },
             {
-                $group: { //grouping the order based on the month and finding the sum
+                $group: { 
                     _id: "$year",
                     count: { $sum: 1 }
                 }
@@ -277,7 +243,7 @@ const userToUnblock = async (req, res) => {
 const showProductManagementPage = async (req, res) => {
     try {
         const allproduct = await productcollection.find();
-        res.render('productmanagement', { allproduct }); // Pass the products to the EJS template
+        res.render('productmanagement', { allproduct }); 
     } catch (error) {
         console.error(error);
         // Handle the error and send a response to the client
@@ -290,7 +256,7 @@ const editproductpost = async (req, res) => {
     try {
         const productId = req.params.id;
         console.log("workkkkk");
-        let imagePath = req.files.map(file => { return file.path.substring(6) }); // Assuming 'path' is the property where multer stores the file path
+        let imagePath = req.files.map(file => { return file.path.substring(6) }); 
         if (imagePath.includes('public\\')) {
             imagePath = imagePath.replace('public\\', '');
         } else if (imagePath.includes('public/')) {
@@ -334,12 +300,7 @@ const editproductget = async (req, res) => {
 
 
 const addproductget = async (req, res) => {
-    // try {
-    //     const product = await productcollection.findById(req.params.productId);
-    //     res.render('editproduct', { product });
-    // } catch (error) {
-    //     console.error(error);
-    // }\
+   
 
     const categorydata = await categorycollection.find()
     console.log(categorydata);
