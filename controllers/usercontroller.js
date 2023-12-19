@@ -873,7 +873,8 @@ const orderplacedGet = (req, res) => {
 const paymentonline = async (req, res) => {
     try {
         // Fetch the user's cart and calculate the total price as shown in the previous response
-        const total=req.body.totalPrices;
+        const total=Number(req.body.totalPrices);
+        console.log(total);
         const userId = req.session.user;
         const cart = await cartcollection.findOne({ userId }).populate('items.product');
 

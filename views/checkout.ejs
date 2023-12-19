@@ -487,7 +487,8 @@
           console.log('Selected Address ID:', id);
           
           // Use the selectedMethod in your fetch request
-          const total = document.getElementById('totalPrice').innerText.trim();
+          const total = document.getElementById('totalPrice').innerText;
+          console.log(total);
           fetch(`/paymentonline`, {
             method: 'post',
             headers: {
@@ -495,7 +496,7 @@
             },
             body: JSON.stringify({
               method: selectedMethod,
-              totalPrices:total,
+              totalPrices:Number(total),
               // other order details...
             }),
           }).then((res) => {
