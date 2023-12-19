@@ -42,8 +42,8 @@ const productSchema = new mongoose.Schema({
         
     }]
 });
-console.log("product connected");
+console.log("product connected"); 
 
-const productcollection = mongoose.model('Productcollection', productSchema);
+const productcollection = mongoose.model('Productscollection', productSchema);
 
 module.exports = productcollection;

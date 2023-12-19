@@ -153,7 +153,7 @@ const dashboardData = async (req, res) => {
         ]);
 
 
-    }
+    } 
     else if (filter == "YERALY") {
         // total sale data
         saleData = await ordercollection.aggregate([

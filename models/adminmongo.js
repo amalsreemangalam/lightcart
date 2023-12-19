@@ -1,5 +1,9 @@
 const mongoose= require("mongoose")
-mongoose.connect("mongodb://0.0.0.0/Logindetails")
+require('dotenv').config();
+mongoose.connect(process.env.MONGODB_URI,{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
 .then(()=>{
     console.log("mongodb connecteddddd");
 }).catch(()=>{
