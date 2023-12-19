@@ -96,7 +96,7 @@
         <div class="row gy-3">
           <div class="d-flex justify-content-between w-100">
             <div>
-              <a href="/home">
+              <a href="/">
                 <h4 style="color: #ffffff;">LIGHT CART</h4>
               </a>
             </div>
@@ -331,7 +331,7 @@
         event.preventDefault();
 
         const searchTerm = document.querySelector('input[name="searchTerm"]').value;
-        const url = `/home?searchTerm=${encodeURIComponent(searchTerm)}`;
+        const url = `/?searchTerm=${encodeURIComponent(searchTerm)}`;
 
         window.location.href = url;
       });
