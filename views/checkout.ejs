@@ -488,7 +488,7 @@
           
           // Use the selectedMethod in your fetch request
           const total = document.getElementById('totalPrice').innerText;
-          console.log(total);
+          console.log(total); 
           fetch(`/paymentonline`, {
             method: 'post',
             headers: {
@@ -507,8 +507,8 @@
 
             const options = {
               key: "rzp_test_Kl5ZqI2MmvKrtM",
-              amount: paymentdetail.amount,
-              currency: paymentdetail.currency,
+              amount: total,
+              currency:'INR',
               name: 'Your Company Name',
               description: 'Payment for your order',
               order_id: paymentdetail.orderId,
