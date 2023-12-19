@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const orderProducts= new mongoose.Schema({
     productId: {
       type: mongoose.Schema.Types.ObjectId, // Assuming each cart item is associated with a product
-      ref: 'Productcollection', // Reference to the Product model
+      ref: 'Productscollection', // Reference to the Product model
       
     },
     individualquantity: {
