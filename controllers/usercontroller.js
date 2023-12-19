@@ -895,8 +895,8 @@ const paymentonline = async (req, res) => {
         // Return the Razorpay order details to the client
         res.json({
             orderId: razorpayOrder.id,
-            amount: razorpayOrder.amount,
-            currency: razorpayOrder.currency,
+            amount: total * 100,
+            currency: 'INR',
         });
     } catch (error) {
         console.error(error);
