@@ -129,14 +129,16 @@
                       </div>
                       <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                         <% if (item.status !=='Cancelled' ) { %>
-                          <% if (item.status==='Delivered' ) { %>
+                          <% if (item.status === 'Delivered') { %>
                             <!-- If status is Delivered, display Return button -->
                             <a href="/returnOrder/<%= item._id %>" class="btn btn-outline-primary">Return</a>
-                            <% } else { %>
-                              <!-- If status is not Cancelled or Delivered, display Cancel Order button -->
-                              <a href="/cancelOrder/<%= item._id %>/<%= prod.productId._id %>" class="btn btn-outline-primary">Cancel Order</a>
-
-                              <% } %>
+                        <% } else if (item.status === 'Returned') { %>
+                            <!-- If status is Returned, display a message -->
+                            <p>Item Returned</p>
+                        <% } else { %>
+                            <!-- If status is not Cancelled, Delivered, or Returned, display Cancel Order button -->
+                            <a href="/cancelOrder/<%= item._id %>/<%= prod.productId._id %>" class="btn btn-outline-primary">Cancel Order</a>
+                        <% } %>
                                 <% } else { %>
                                   <!-- If status is Cancelled, display Cancelled message -->
                                   <p class="text-muted mb-0 small">Cancelled</p>
@@ -372,7 +374,7 @@
                 </li>
               </ul>
             </div>
-            <!--- language selector --->
+           
           </div>
         </div>
       </div>

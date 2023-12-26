@@ -21,7 +21,7 @@ const adminlogin = (req, res) => {
     res.render('adminlogin', { msg: '' })
 }
 const adminloginpost = (req, res) => {
-   
+
     req.session.admin = true
     console.log(req.body);
     if (process.env.EMAIL === req.body.username && process.env.PASSWORD == req.body.password) {
@@ -36,7 +36,7 @@ const dashboard = async (req, res) => {
     try {
         const data = await newcollection.find();
 
-       
+
 
 
         const startOfWeek = new Date();
@@ -51,7 +51,7 @@ const dashboard = async (req, res) => {
         for (let date = startOfWeek; date <= endOfWeek; date.setDate(date.getDate() + 1)) {
             dateRange.push(new Date(date));
         }
-        
+
         let dayCounts = await ordercollection.aggregate([
             {
                 $match: {
@@ -83,7 +83,7 @@ const dashboard = async (req, res) => {
             return { _id: dateString, totalQuantity: matchingData ? matchingData.totalQuantity : 0 };
         });
 
-       
+
         const formattedXValues = xValues.map((dateString) => moment(dateString).format("MMM D"));
 
 
@@ -153,7 +153,7 @@ const dashboardData = async (req, res) => {
         ]);
 
 
-    } 
+    }
     else if (filter == "YERALY") {
         // total sale data
         saleData = await ordercollection.aggregate([
@@ -168,7 +168,7 @@ const dashboardData = async (req, res) => {
                 }
             },
             {
-                $group: { 
+                $group: {
                     _id: "$year",
                     count: { $sum: 1 }
                 }
@@ -243,7 +243,7 @@ const userToUnblock = async (req, res) => {
 const showProductManagementPage = async (req, res) => {
     try {
         const allproduct = await productcollection.find();
-        res.render('productmanagement', { allproduct }); 
+        res.render('productmanagement', { allproduct });
     } catch (error) {
         console.error(error);
         // Handle the error and send a response to the client
@@ -253,10 +253,29 @@ const showProductManagementPage = async (req, res) => {
 
 
 const editproductpost = async (req, res) => {
-    try {
+    try {   
         const productId = req.params.id;
-        console.log("workkkkk");
-        let imagePath = req.files.map(file => { return file.path.substring(6) }); 
+        const allproduct = await productcollection.findById(productId);
+        const enteredProductName = req.body.productname.toLowerCase();
+        console.log("entered", enteredProductName);
+        // const existingProduct = await productcollection.findOne({
+
+        //     $and: [
+        //         { name: { $regex: new RegExp('^' + enteredProductName + '$', 'i') } },
+        //         { _id: { $ne: productId } }
+        //     ]
+        // });
+        const existingProduct = await productcollection.findOne({
+            productname: { $regex: new RegExp(`^${enteredProductName}$`, 'i') }
+        });
+        console.log("existssspro", existingProduct);
+
+        if (existingProduct) {
+           return res.render('editproduct', { allproduct: allproduct, errorMessage: "PRODUCT EXISTS" })       
+        }
+
+
+        let imagePath = req.files.map(file => { return file.path.substring(6) });   
         if (imagePath.includes('public\\')) {
             imagePath = imagePath.replace('public\\', '');
         } else if (imagePath.includes('public/')) {
@@ -277,7 +296,7 @@ const editproductpost = async (req, res) => {
             const result = await productcollection.updateOne({ _id: productId }, { $push: { productimage: imagePath } });
         }
         console.log(`detauks of tehe ${result}`);
-        res.redirect('/productmanagement');
+         res.redirect('/productmanagement');
     } catch (error) {
         console.error(error);
         res.status(500).send('Error editing product');
@@ -285,13 +304,67 @@ const editproductpost = async (req, res) => {
 };
 
 
+// const editproductpost = async (req, res) => {
+//     try {
+//         const productId = req.params.id;
+//         const allproduct = await productcollection.findById(productId);
+//         const enteredProductName = req.body.productname.toLowerCase();
+//         console.log("entered", enteredProductName);
+
+//         const existingProduct = await productcollection.findOne({
+//             name: { $eq: enteredProductName },
+//             _id: { $ne: productId }
+//         });
+//         console.log("existsss", existingProduct);
+
+//         if (existingProduct) {
+//             // Show error message if the product already exists
+//             return res.render('editproduct', { allproduct: allproduct, errorMessage: "PRODUCT ALREADY EXISTS" });
+//         }
+
+//         let imagePath = req.files.map(file => file.path.substring(6));
+//         if (imagePath.includes('public\\')) {
+//             imagePath = imagePath.replace('public\\', '');
+//         } else if (imagePath.includes('public/')) {
+//             imagePath = imagePath.replace('public/', '');
+//         }
+
+//         const updatedProductData = {
+//             productname: req.body.productname,
+//             productprice: req.body.productprice,
+//             productdescription: req.body.productdescription,
+//             productcategory: req.body.productcategory,
+//             productstocks: req.body.productstocks,
+//         };
+
+//         // Update the product
+//         const result = await productcollection.findByIdAndUpdate(productId, updatedProductData, { new: true });
+
+//         // Add the image path if available
+//         if (imagePath.length > 0) {
+//             result.productimage.push(imagePath);
+//             await result.save();
+//         }
+
+//         console.log(`details of the ${result}`);
+//         res.redirect('/productmanagement');
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send('Error editing product');
+//     }
+// };
+
+
 
 
 const editproductget = async (req, res) => {
     try {
         const productId = req.params.id;
+
+        const errorMessage = ""
+
         const allproduct = await productcollection.findById(productId);
-        res.render('editproduct', { allproduct: allproduct });
+        return res.render('editproduct', { allproduct: allproduct, errorMessage });
     } catch (error) {
         console.error(error);
         res.status(500).send('Error fetching product data');
@@ -300,7 +373,7 @@ const editproductget = async (req, res) => {
 
 
 const addproductget = async (req, res) => {
-   
+
 
     const categorydata = await categorycollection.find()
     console.log(categorydata);
@@ -376,7 +449,7 @@ const showcategoryManagementPage = async (req, res) => {
     try {
         const category = await categorycollection.find();
         console.log(category);
-        res.render('categorymanagement', { category }); 
+        res.render('categorymanagement', { category });
     } catch (error) {
         console.error(error);
         // Handle the error and send a response to the client
@@ -442,20 +515,7 @@ const editcategoryget = async (req, res) => {
     }
 };
 
-// const editcategorypost = async (req, res) => {
-//     const productId = req.params.id;
 
-//     const updatedcategoryData = {
-//         categoryname: req.body.categoryname,
-//         categorydescription: req.body.categorydescription
-//     };
-
-//     const result = await categorycollection.findByIdAndUpdate(productId, updatedcategoryData, { new: true })
-//     if (result) {
-
-//         res.redirect('/categorymanagement')
-//     }
-// }
 
 
 const editcategorypost = async (req, res) => {
@@ -485,36 +545,11 @@ const editcategorypost = async (req, res) => {
     }
 };
 
-// try {
-//     const result = await categorycollection.findByIdAndUpdate(productId, updatedcategoryData, { new: true });
-//     if (result) {
-//         res.redirect('/categorymanagement');
-//     }
-// } catch (error) {
-//     if (error.name === 'ValidationError') {
-//         res.status(400).send(error.message);
-//     } else {
-//         console.error(error);
-//         res.status(500).send('Error updating product data');
-//     }
-// }
-// };
 
 
 
-// const loadordermanagement = async (req, res) => {
-//     try {
-//         // const users = await newcollection.find({ orders: { $exists: true, $ne: [] } }).populate('orders.product');
-//         const orders= await ordercollection.find({})
 
-//         // res.render('ordermanagement', { users: users });
-//         res.render('ordermanagement',{orders:orders})
-//     } catch (error) {
-//         console.error('Error:', error);
-//         res.status(500).send('Internal Server Error');
-//     }
 
-// }
 const loadordermanagement = async (req, res) => {
     try {
         const orders = await ordercollection.find({})
@@ -548,28 +583,7 @@ const loadordermanagement = async (req, res) => {
 
 
 
-// const updateOrderStatus = async (req, res) => {
 
-//     const userId = req.params.userId;
-//     const orderId = req.params.orderId;
-//     const newStatus = req.params.newStatus;
-
-//     try {
-//         const order = await newcollection.findOneAndUpdate(
-//             { 'orders._id': orderId },
-//             { $set: { 'orders.$.status': newStatus } },
-//             { new: true }
-
-//         )
-//         console.log('oo', order)
-//         res.redirect('/ordermanagement')
-
-//     } catch (error) {
-//         console.error('Error loading :', error);
-//         res.status(500).send('Internal Server Error');
-//     }
-
-// }
 
 const updateOrderStatus = async (req, res) => {
     const orderId = req.params.orderId;
@@ -603,32 +617,7 @@ module.exports = {
 };
 
 
-// const updateOrderStatus = async (req, res) => {
-//     const orderId = req.params.orderId;
-//     const newStatus = req.params.newStatus;
 
-//     try {
-//         const order = await ordercollection.findById(orderId);
-
-//         if (order.status === 'Cancelled') {
-//             const errorMessage = 'The order was already cancelled. Admin cannot change the status.';
-//             return res.render('ordermanagement', { error: errorMessage });
-//         }
-
-//         const updatedOrder = await ordercollection.findByIdAndUpdate(
-//             orderId,
-//             { $set: { status: newStatus } },
-//             { new: true }
-//         );
-
-//         console.log('Updated Order:', updatedOrder);
-//         const successMessage = 'Order status updated successfully.';
-//         res.render('ordermanagement', { success: successMessage });
-//     } catch (error) {
-//         console.error('Error updating order status:', error);
-//         res.status(500).send('Internal Server Error');
-//     }
-// };
 
 
 
@@ -791,7 +780,6 @@ const salesReport = async (req, res) => {
         res.setHeader('Content-Disposition', 'attachment; filename=excel.xlsx');
         res.send(excelBuffer);
     } catch (error) {
-        console.error('Error creating or sending Excel file:', error);
         res.status(500).send('Internal Server Error');
     }
 };

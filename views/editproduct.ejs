@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Signup</title>
     <style>
+    
+    .error-message {
+        color: red; /* Set error messages to red color */
+        margin-top: 5px;
+    }
         /* Reset default styles */
         body {
             margin: 0;
@@ -81,10 +86,14 @@
 
 
             <% /* Check if productname exists, if not, use an empty string */ %>
+            <div>
                 <label for="productname">Product Name</label>
                 <input type="text" id="productname" name="productname" value="<%= allproduct.productname || '' %>"
                     required>
-
+                    <% if (errorMessage) { %>
+                        <p style="color: red;"><%= errorMessage %></p>
+                    <% } %>
+                </div>
                 <label for="productprice">Product Price</label>
                 <input type="number" id="productprice" name="productprice" value="<%= allproduct.productprice || '' %>"
                     required>

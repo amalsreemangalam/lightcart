@@ -82,7 +82,9 @@ router.get('/invoiceDownload',userController.invoiceDownload)
 router.post('/redeemCoupon',coupenController.redeemCoupon)
  router.get('/wallet',userController.walletLoad)
 // router.get("/apply-coupon",coupenController.)
-
-
+router.get('/user/wishlist',userAuth.login,userController.wishLoad)
+router.get('/addtowish/:id',userAuth.login,userController.addToWish)
+router.get('/wishlist/remove/:id',userAuth.login,userController.removeFromWishlist)
+router.get('/wishlist/cart/:id',userAuth.login,userController.wishlistAddCart)
 
 module.exports = router;

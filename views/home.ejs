@@ -117,6 +117,12 @@
                     <i class="fas fa-user-circle me-2"></i>
                     <span class="d-none d-md-block">Profile</span>
                   </a>
+                  <a href="/user/wishlist" class="nav-link">
+                    <!-- Add an appropriate icon here -->
+                    <i class="fas fa-heart me-2"></i>
+
+                    <span class="d-none d-md-block">wishlist</span>
+                  </a>
                   <a href="/myorders" class="nav-link">
                     <!-- Add an appropriate icon here -->
                     <i class="fas fa-list me-2"></i>
@@ -288,6 +294,7 @@
                       <div class="card-footer d-flex justify-content-between"
                         style="position: absolute ; bottom: 0;width: -webkit-fill-available">
                         <a href="/cart/<%= prod._id %> " class="btn btn-primary shadow-0">Add to cart</a>
+                        <a href="/addtowish/<%=prod._id%>" class="btn btn-outline-danger"><i class="fa fa-heart"></i></a>
                         <!-- <a href="wishlist.html"> -->
                         <!-- <i class="fas fa-heart"></i> -->
                         </a>
