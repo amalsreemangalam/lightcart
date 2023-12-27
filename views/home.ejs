@@ -223,7 +223,9 @@
         <% banner.forEach((element, index) => { %>
           <% element.image.forEach((image, imageIndex) => { %>
             <div class="carousel-item <%= index === 0 && imageIndex === 0 ? 'active' : '' %>">
+              <a href="<%= element.url %>">
               <img src="<%= image %>" class="d-block w-100 carousel-image" alt="..." style="object-fit: cover;">
+            </a>
             </div>
           <% }) %>
         <% }) %>
@@ -238,6 +240,8 @@
        <span class="carousel-control-next-icon" aria-hidden="true"></span>
        <span class="visually-hidden">Next</span>
       </button> -->
+
+      
      </div>
      
         

@@ -7,6 +7,7 @@ const categorycollection = require('../models/category.mongo');
 const ordercollection = require("../models/order")
 const mongoose = require('mongoose');
 const dotenv = require('dotenv').config();
+const collection1 = require("../models/userloginmongodb")
 const moment = require('moment');
 const ExcelJS = require('exceljs');
 // const ObjectId = mongoose.Types.ObjectId;
@@ -676,6 +677,8 @@ const salesReport = async (req, res) => {
         const endDate = new Date(req.query.endDate);
         endDate.setDate(endDate.getDate() + 1);
         console.log("start date", startDate, endDate);
+        const data = await ordercollection.find(); 
+        console.log(data);
         const orders = await ordercollection.aggregate([
             {
                 $match: {
@@ -687,7 +690,7 @@ const salesReport = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: "productcollections",
+                    from: "productcollection",
                     localField: "products.productId",
                     foreignField: "_id",
                     as: "productData",
@@ -730,17 +733,34 @@ const salesReport = async (req, res) => {
                     },
                 },
             },
+            {
+                $unwind: "$individualquantity", // Unwind the individualquantity array
+            },
+            {
+                $group: {
+                    _id: "$orderId",
+                    shippingAddress: { $first: "$shippingAddress" },
+                    productDetail: { $first: "$productDetail" },
+                    totalPrice: { $first: "$totalPrice" },
+                    customerName: { $first: "$customerName" },
+                    orderDate: { $first: "$orderDate" },
+                    status: { $first: "$status" },
+                    individualquantity: { $push: "$individualquantity" },
+                },
+            },
         ]);
 
-
+        // Now orders should be an array with the structure you are looking for
+        console.log(orders);
+        
 
         if (orders.length === 0) {
+            console.log("hello");
             // const errorMessage = "Please provide a valid date";
             // req.flash('error', errorMessage);
-            return res.redirect('/admindashboard');
+            return res.redirect('/dashboard');
         }
-        console.log("orders ", orders)
-
+    
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet('Sheet 1');
 
@@ -772,7 +792,7 @@ const salesReport = async (req, res) => {
                 'individualquantity': orderItem.individualquantity,
             });
         });
-
+            
 
         // Generate the Excel file and send it as a response
         const excelBuffer = await workbook.xlsx.writeBuffer();
@@ -780,6 +800,7 @@ const salesReport = async (req, res) => {
         res.setHeader('Content-Disposition', 'attachment; filename=excel.xlsx');
         res.send(excelBuffer);
     } catch (error) {
+        console.log(error);
         res.status(500).send('Internal Server Error');
     }
 };

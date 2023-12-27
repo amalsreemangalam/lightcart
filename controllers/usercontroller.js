@@ -103,18 +103,32 @@ const signup = (req, res) => {
 const usersignup = async (req, res) => {
     try {
         const expirationMinutes = 1;
+const referral=referalgenerator();
+const existingreferral=req.body.referralcode;
+
 
         const hashedpassword=await bcrypt.hash(req.body.password,10)
         const data = {
             name: req.body.name,
             email: req.body.email,
             password: hashedpassword,
+            referral:referral,
             phone: req.body.phone,
             otp: {
                 code: OTP.generate(6, { upperCase: false, specialChars: false }),
                 expiresAt: new Date(Date.now() + expirationMinutes * 60000),
             },
             isBlocked: false,
+        }
+        const Existingreferral=await collection1.find({referral:referral})
+
+        if(Existingreferral){
+            Existingreferral.forEach(async(referral)=>{
+                Existingreferral.wallet+=100
+                await Existingreferral.save()
+            })
+          
+        data.wallet=100
         }
         const otp = OTP.generate(6, { upperCase: false, specialChars: false });
         const otpExpiresAt = new Date();
@@ -159,6 +173,20 @@ const usersignup = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
+function referalgenerator() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const codeLength = 6;
+    let randomCode = '';
+
+    for (let i = 0; i < codeLength; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        randomCode += characters.charAt(randomIndex);
+    }
+
+    return randomCode;
+}
+
 
 const newotp = async (req, res) => {
 

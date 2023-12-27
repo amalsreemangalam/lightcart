@@ -27,7 +27,8 @@ const addBannerPost=async(req,res)=>{
     try{
         const banner={
             image:imagePath,
-            description:req.body.description
+            description:req.body.description,
+            url:req.body.url,
         }
    await bannerCollection.insertMany([banner])
    res.redirect("/bannerManagement")
