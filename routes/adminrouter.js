@@ -61,7 +61,7 @@ router.get("/ordermanagement",adminAuth.adminlogin,admincontroller.loadordermana
 router.get('/updateOrderStatus/:orderId/:newStatus',adminAuth.adminlogin,admincontroller.updateOrderStatus)
 router.get('/dashboard',adminAuth.adminlogin,admincontroller.admindashboard)
 router.get("/deleteimage", admincontroller.deleteimage)
-router.get('/download-excel',admincontroller.salesReport)
+router.post('/download-excel',admincontroller.salesReport)
 
 router.get("/addbanner",bannerController.addBanner)
 router.post("/addbanner",upload.array('image'),bannerController.addBannerPost)

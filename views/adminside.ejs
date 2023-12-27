@@ -187,13 +187,13 @@
 
 
       <div style="position: absolute; top: 80px; right: 10px;">
-        <form method="get" action="/download-excel">
-          <div class="d-flex">
+       
+          <div  class="d-flex">
             <input type="date" id="start" name="startDate" class="form-control">
             <input type="date" id="end" name="endDate" class="form-control ms-2">
-            <input type="submit" class="btn btn-primary ms-2" value="Download Excel">
+            <input onclick="salesreport()" type="submit" class="btn btn-primary ms-2" value="Download Excel">
           </div>
-        </form>
+       
       </div>
       
 
@@ -210,7 +210,7 @@
     </div>
 
 
-    < <script src="
+    <script src="
   https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js
   ">
       </script>
@@ -285,9 +285,39 @@
   }
 
 </script> -->
-
+<script>
+  function salesreport(){
+    console.log("vanu");
+    const startDate=document.getElementById('start').value
+    const enddate=document.getElementById('end').value
+    // console.log(startDate);
+    // console.log(enddate);
+    fetch('/download-excel', {
+  method: "post",
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ startDate, enddate })
+})
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.blob();
+  })
+  .then(blob => {
+    const url = window.URL.createObjectURL(new Blob([blob]));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'excel.xlsx';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  })
+  .catch(error => console.error('Error during fetch:', error));
+  }
+</script>
 </body>
 
 
 
-</html>
