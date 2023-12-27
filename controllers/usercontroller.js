@@ -1076,7 +1076,7 @@ const usercategory = async (req, res) => {
     const category = req.params.id;
     let data
     const categorys = await categorycollection.findOne({ categoryname: category });
-    // console.log('usercategory', categorys.list);
+    console.log('usercategory', categorys.list);
     if (!categorys) {
         console.log('catergory not found');
         return res.redirect('back')

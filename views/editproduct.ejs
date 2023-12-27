@@ -9,8 +9,8 @@
     
     .error-message {
         color: red; /* Set error messages to red color */
-        margin-top: 5px;
-    }
+        margin-top: 5px
+        }
         /* Reset default styles */
         body {
             margin: 0;
@@ -185,7 +185,23 @@
 });
 
      </script>
-     
+     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editProductForm = document.getElementById('editProductForm');
+            const productNameInput = document.getElementById('productname');
+            const originalProductNameInput = document.getElementById('originalProductName');
+
+            // Add an event listener for form submission
+            editProductForm.addEventListener('submit', function (event) {
+                // Check for duplicate product name
+                if (productNameInput.value.trim().toLowerCase() === originalProductNameInput.value.trim().toLowerCase()) {
+                    event.preventDefault();
+                    alert('Product name cannot be the same as the original product name. Please choose a different name.');
+                    // Optionally, you can provide user feedback or highlight the product name field.
+                }
+            });
+        });
+    </script>
 
 
 </body>
