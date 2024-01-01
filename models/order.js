@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const orderProducts= new mongoose.Schema({
     productId: {
-      type: mongoose.Schema.Types.ObjectId, // Assuming each cart item is associated with a product
-      ref: 'Productscollection', // Reference to the Product model
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'Productscollection', 
       
     },
     individualquantity: {
@@ -82,7 +82,7 @@ const orderSchema = new mongoose.Schema({
         //       required: true,
         //   }
     }],
-    // You can add more fields specific to orders here
+  
 }, {
     timestamps: true
 });

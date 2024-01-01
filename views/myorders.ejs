@@ -93,7 +93,7 @@
               <% console.log(orderItems) %>
               <%orderItems.forEach(item=>{%>
                 <% console.log('orderItems0000',item); %>
-                <% item.products.forEach((prod)=>{ console.log(prod)%>
+                <% item.products.slice().reverse().forEach((prod)=>{ console.log(prod)%>
                   
                 <div class="card shadow-0 border mb-4">
                  
@@ -120,6 +120,8 @@
                         <p class="text-muted mb-0 small">Qty: <%= prod.individualquantity %>
                         </p>
                       </div>
+
+      
                       
                       <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                         <p class="text-muted mb-0 small">

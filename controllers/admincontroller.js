@@ -106,8 +106,8 @@ const dashboardData = async (req, res) => {
         saleData = await ordercollection.aggregate([
             {
                 $match: {
-                    $expr: { $eq: [{ $year: "$createdAt" }, targetYear] },// Filter orders for the target year
-                    // status: { $ne: 'cancelled' } //check the staus of the order
+                    $expr: { $eq: [{ $year: "$createdAt" }, targetYear] },
+
                 }
             },
             {
@@ -116,16 +116,16 @@ const dashboardData = async (req, res) => {
                 }
             },
             {
-                $group: { //grouping the order based on the month and finding the sum
+                $group: {
                     _id: "$month",
                     count: { $sum: 1 }
                 }
             },
             {
                 $project: {
-                    _id: 0,//set the id to 0 for avoding id in the result
+                    _id: 0,
                     month: {
-                        $switch: { //change the month to currsonding string 
+                        $switch: {
                             branches: [
                                 { case: { $eq: ["$_id", 1] }, then: "Jan" },
                                 { case: { $eq: ["$_id", 2] }, then: "Feb" },
@@ -143,7 +143,7 @@ const dashboardData = async (req, res) => {
                             default: "Unknown"
                         }
                     },
-                    count: 1 //for showing the count
+                    count: 1
                 }
             },
             {
@@ -160,12 +160,12 @@ const dashboardData = async (req, res) => {
         saleData = await ordercollection.aggregate([
             {
                 $match: {
-                    status: { $ne: 'cancelled' } //check the staus of the order
+                    status: { $ne: 'cancelled' }
                 }
             },
             {
                 $project: {
-                    year: { $year: "$createdAt" },//projects the month from the time stamp
+                    year: { $year: "$createdAt" },
                 }
             },
             {
@@ -254,29 +254,23 @@ const showProductManagementPage = async (req, res) => {
 
 
 const editproductpost = async (req, res) => {
-    try {   
+    try {
         const productId = req.params.id;
         const allproduct = await productcollection.findById(productId);
         const enteredProductName = req.body.productname.toLowerCase();
         console.log("entered", enteredProductName);
-        // const existingProduct = await productcollection.findOne({
 
-        //     $and: [
-        //         { name: { $regex: new RegExp('^' + enteredProductName + '$', 'i') } },
-        //         { _id: { $ne: productId } }
-        //     ]
-        // });
         const existingProduct = await productcollection.findOne({
             productname: { $regex: new RegExp(`^${enteredProductName}$`, 'i') }
         });
         console.log("existssspro", existingProduct);
 
         if (existingProduct) {
-           return res.render('editproduct', { allproduct: allproduct, errorMessage: "PRODUCT EXISTS" })       
+            return res.render('editproduct', { allproduct: allproduct, errorMessage: "PRODUCT EXISTS" })
         }
 
 
-        let imagePath = req.files.map(file => { return file.path.substring(6) });   
+        let imagePath = req.files.map(file => { return file.path.substring(6) });
         if (imagePath.includes('public\\')) {
             imagePath = imagePath.replace('public\\', '');
         } else if (imagePath.includes('public/')) {
@@ -286,18 +280,18 @@ const editproductpost = async (req, res) => {
             productname: req.body.productname,
             productprice: req.body.productprice,
             productdescription: req.body.productdescription,
-            productcategory: req.body.productcategory, // Fixed a typo here (changed 'productcatagory' to 'productcategory')
+            productcategory: req.body.productcategory,
             productstocks: req.body.productstocks,
 
         };
-        // Assuming you have a function to update a product in your model
+
         const result = await productcollection.findByIdAndUpdate(productId, updatedProductData, { new: true });
         productimage: imagePath
         if (imagePath.length > 0) {
             const result = await productcollection.updateOne({ _id: productId }, { $push: { productimage: imagePath } });
         }
         console.log(`detauks of tehe ${result}`);
-         res.redirect('/productmanagement');
+        res.redirect('/productmanagement');
     } catch (error) {
         console.error(error);
         res.status(500).send('Error editing product');
@@ -305,55 +299,6 @@ const editproductpost = async (req, res) => {
 };
 
 
-// const editproductpost = async (req, res) => {
-//     try {
-//         const productId = req.params.id;
-//         const allproduct = await productcollection.findById(productId);
-//         const enteredProductName = req.body.productname.toLowerCase();
-//         console.log("entered", enteredProductName);
-
-//         const existingProduct = await productcollection.findOne({
-//             name: { $eq: enteredProductName },
-//             _id: { $ne: productId }
-//         });
-//         console.log("existsss", existingProduct);
-
-//         if (existingProduct) {
-//             // Show error message if the product already exists
-//             return res.render('editproduct', { allproduct: allproduct, errorMessage: "PRODUCT ALREADY EXISTS" });
-//         }
-
-//         let imagePath = req.files.map(file => file.path.substring(6));
-//         if (imagePath.includes('public\\')) {
-//             imagePath = imagePath.replace('public\\', '');
-//         } else if (imagePath.includes('public/')) {
-//             imagePath = imagePath.replace('public/', '');
-//         }
-
-//         const updatedProductData = {
-//             productname: req.body.productname,
-//             productprice: req.body.productprice,
-//             productdescription: req.body.productdescription,
-//             productcategory: req.body.productcategory,
-//             productstocks: req.body.productstocks,
-//         };
-
-//         // Update the product
-//         const result = await productcollection.findByIdAndUpdate(productId, updatedProductData, { new: true });
-
-//         // Add the image path if available
-//         if (imagePath.length > 0) {
-//             result.productimage.push(imagePath);
-//             await result.save();
-//         }
-
-//         console.log(`details of the ${result}`);
-//         res.redirect('/productmanagement');
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).send('Error editing product');
-//     }
-// };
 
 
 
@@ -389,7 +334,7 @@ const addProductPost = async (req, res) => {
     try {
         console.log('addproducts');
         const { productname, productprice, productdescription, productstocks, productcategory, Productimage, OfferPrice, Discount } = req.body;
-        // console.log(offerprice,discount);
+
 
         let imagePath = req.files.map(file => { return file.path.substring(6) });
 
@@ -409,10 +354,10 @@ const addProductPost = async (req, res) => {
         console.log('newproducts', newProduct);
 
         await newProduct.save();
-        res.redirect('/productmanagement'); // Redirect to a different page after adding the product
+        res.redirect('/productmanagement');
     } catch (error) {
         console.error(error);
-        // Handle the error and send a response to the client
+
     }
 };
 
@@ -427,7 +372,7 @@ const deleteproduct = async (req, res) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        // Redirect back to the product management page with a success message
+
         return res.redirect('/productmanagement?success=Product+deleted+successfully');
     } catch (error) {
         return res.status(500).json({ message: 'Internal Server Error', error: error.message });
@@ -453,7 +398,7 @@ const showcategoryManagementPage = async (req, res) => {
         res.render('categorymanagement', { category });
     } catch (error) {
         console.error(error);
-        // Handle the error and send a response to the client
+
     }
 };
 
@@ -465,10 +410,10 @@ const addcategoryget = (req, res) => {
 
 
 const addcategory = async (req, res) => {
-    const categoryname = req.body.categoryname.toLowerCase(); // Convert to lowercase
+    const categoryname = req.body.categoryname.toLowerCase();
     const categorydescription = req.body.categorydescription;
 
-    // Check if a category with the same name (case-insensitive) already exists
+
     const existingCategory = await categorycollection.findOne({
         categoryname: { $regex: new RegExp(`^${categoryname}$`, 'i') }
     });
@@ -482,7 +427,7 @@ const addcategory = async (req, res) => {
             categorydescription: categorydescription
         }
 
-        // Insert the new category
+
         await categorycollection.insertMany([categorydata]);
 
         res.redirect("/categorymanagement");
@@ -496,9 +441,8 @@ const deletecategory = async (req, res) => {
     try {
         const deletedcategory = await categorycollection.findByIdAndDelete(productId);
 
-        // if (!deletedProduct) {
-        //     return res.status(404).json({ message: 'Product not found' });
-        // }
+
+
 
         return res.status(200).json({ message: 'category deleted successfully' });
     } catch (error) {
@@ -518,7 +462,6 @@ const editcategoryget = async (req, res) => {
 
 
 
-
 const editcategorypost = async (req, res) => {
     try {
         const productId = req.params.id;
@@ -527,15 +470,15 @@ const editcategorypost = async (req, res) => {
             categorydescription: req.body.categorydescription
         };
 
-        // Check if the categoryname already exists
+
         const existingCategory = await categorycollection.findOne({ categoryname: updatedCategoryData.categoryname });
         if (existingCategory && existingCategory._id != productId) {
-            // If categoryname already exists for a different category, show an error
+
             req.flash('error', 'Category already exists');
             return res.redirect(`/editcategory/${productId}`);
         }
 
-        // Update the category
+
         const result = await categorycollection.findByIdAndUpdate(productId, updatedCategoryData, { new: true });
         if (result) {
             res.redirect('/categorymanagement');
@@ -554,13 +497,9 @@ const editcategorypost = async (req, res) => {
 const loadordermanagement = async (req, res) => {
     try {
         const orders = await ordercollection.find({})
-            .populate('user', 'name') // Populate the 'user' field and include only the 'name' property
-            .populate('products.productId', 'productname') // Populate the 'products' array and include only the 'productname' property of the referenced product
-        // .populate({
-        //     path: 'products.productId',
-        //     select: 'productname quantity', // Include the 'quantity' field in the selection
-        // });
-        // Extract the desired details from the orders
+            .populate('user', 'name')
+            .populate('products.productId', 'productname')
+
         const formattedOrders = orders.map(order => ({
             orderId: order._id,
             username: order.customerName,
@@ -614,7 +553,7 @@ const updateOrderStatus = async (req, res) => {
 
 module.exports = {
     updateOrderStatus,
-    // other functions...
+
 };
 
 
@@ -642,7 +581,7 @@ const deleteimage = async (req, res) => {
         const productId = req.query.productId;
         let imageUrl = req.query.imageUrl;
 
-        // Escape backslashes
+
         console.log('query ', imageUrl);
 
         const product = await productcollection.findById(productId);
@@ -673,76 +612,76 @@ const deleteimage = async (req, res) => {
 
 const salesReport = async (req, res) => {
     try {
-        console.log("controllervannu");
-      const excelstartingDate = req.body.startDate;
-      const excelendingDate = req.body.enddate;
-  
-      const orderCursor = await ordercollection.find({
-        createdAt: { $gte: new Date(excelstartingDate), $lte: new Date(excelendingDate) },
-      });
-  console.log(orderCursor);
-      const workbook = new ExcelJS.Workbook();
-      const worksheet = workbook.addWorksheet("Sheet 1");
-  
-      // Add data to the worksheet
-      worksheet.columns = [
-        { header: "Order ID", key: "orderId", width: 30 },
-        { header: "User ID", key: "userId", width: 30 },
-        { header: "Customer Name", key: "customerName", width: 20 },
-        { header: "Order Date", key: "orderDate", width: 20 },
-        { header: "Product ID", key: "productId", width: 30 },
-        { header: "Quantity", key: "quantity", width: 15 },
-        { header: "Total Price", key: "totalPrice", width: 15 },
-        { header: "Payment Method", key: "paymentMethod", width: 20 },
-        { header: "Status", key: "status", width: 15 },
-        { header: "House Name", key: "houseName", width: 20 },
-        { header: "Street", key: "street", width: 20 },
-        { header: "City", key: "city", width: 20 },
-        { header: "State", key: "state", width: 20 },
-        { header: "Pincode", key: "pincode", width: 15 },
-        { header: "Created At", key: "createdAt", width: 25 },
-        { header: "Updated At", key: "updatedAt", width: 25 },
-      ];
-  
-      for (const orderItem of orderCursor) {
-        for (const product of orderItem.products) {
-          worksheet.addRow({
-            orderId: orderItem._id,
-            userId: orderItem.user,
-            customerName: orderItem.customerName,
-            orderDate: orderItem.orderDate,
-            productId: product.productId,
-            quantity: product.individualquantity,
-            totalPrice: orderItem.totalPrice,
-            paymentMethod: orderItem.paymentMethod,
-            status: orderItem.status,
-            houseName: orderItem.address[0].houseName,
-            street: orderItem.address[0].street,
-            city: orderItem.address[0].city,
-            state: orderItem.address[0].state,
-            pincode: orderItem.address[0].pincode,
-            createdAt: orderItem.createdAt.toISOString(),
-            updatedAt: orderItem.updatedAt.toISOString(),
-          });
+        
+        const excelstartingDate = req.body.startDate;
+        const excelendingDate = req.body.enddate;
+
+        const orderCursor = await ordercollection.find({
+            createdAt: { $gte: new Date(excelstartingDate), $lte: new Date(excelendingDate) },
+        });
+        console.log(orderCursor);
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet("Sheet 1");
+
+
+        worksheet.columns = [
+            { header: "Order ID", key: "orderId", width: 30 },
+            { header: "User ID", key: "userId", width: 30 },
+            { header: "Customer Name", key: "customerName", width: 20 },
+            { header: "Order Date", key: "orderDate", width: 20 },
+            { header: "Product ID", key: "productId", width: 30 },
+            { header: "Quantity", key: "quantity", width: 15 },
+            { header: "Total Price", key: "totalPrice", width: 15 },
+            { header: "Payment Method", key: "paymentMethod", width: 20 },
+            { header: "Status", key: "status", width: 15 },
+            { header: "House Name", key: "houseName", width: 20 },
+            { header: "Street", key: "street", width: 20 },
+            { header: "City", key: "city", width: 20 },
+            { header: "State", key: "state", width: 20 },
+            { header: "Pincode", key: "pincode", width: 15 },
+            { header: "Created At", key: "createdAt", width: 25 },
+            { header: "Updated At", key: "updatedAt", width: 25 },
+        ];
+
+        for (const orderItem of orderCursor) {
+            for (const product of orderItem.products) {
+                worksheet.addRow({
+                    orderId: orderItem._id,
+                    userId: orderItem.user,
+                    customerName: orderItem.customerName,
+                    orderDate: orderItem.orderDate,
+                    productId: product.productId,
+                    quantity: product.individualquantity,
+                    totalPrice: orderItem.totalPrice,
+                    paymentMethod: orderItem.paymentMethod,
+                    status: orderItem.status,
+                    houseName: orderItem.address[0].houseName,
+                    street: orderItem.address[0].street,
+                    city: orderItem.address[0].city,
+                    state: orderItem.address[0].state,
+                    pincode: orderItem.address[0].pincode,
+                    createdAt: orderItem.createdAt.toISOString(),
+                    updatedAt: orderItem.updatedAt.toISOString(),
+                });
+            }
         }
-      }
-  
-      // Generate the Excel file and send it as a response
-      workbook.xlsx.writeBuffer().then((buffer) => {
-        const excelBuffer = Buffer.from(buffer);
-        res.setHeader(
-          "Content-Type",
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        );
-        res.setHeader("Content-Disposition", "attachment; filename=excel.xlsx");
-        res.send(excelBuffer);
-      });
+
+
+        workbook.xlsx.writeBuffer().then((buffer) => {
+            const excelBuffer = Buffer.from(buffer);
+            res.setHeader(
+                "Content-Type",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            );
+            res.setHeader("Content-Disposition", "attachment; filename=excel.xlsx");
+            res.send(excelBuffer);
+        });
     } catch (error) {
-      console.log(error);
-      res.status(500).send("Internal Server Error");
+        console.log(error);
+        res.status(500).send("Internal Server Error");
     }
-  };
-  
+};
+
 
 
 

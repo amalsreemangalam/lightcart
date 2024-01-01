@@ -82,6 +82,22 @@
 }
 
 
+ .custom-select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-color: #f8f9fa;
+      border: 1px solid #ced4da;
+      padding: 8px;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .custom-option {
+      font-size: 14px;
+    }
+
   </style>
 
 </head>
@@ -166,15 +182,16 @@
           </div>
         </form>
 
-        <!-- Sort Select -->
-        <!-- <select id="sort-select" class="form-select" onchange="sortProducts()">
+        <!-- Sort Select  -->
+         <select id="sort-select" class="form-select" onchange="sortProducts()">
           <option value="" selected disabled>Sort by price</option>
           <option value="asc">Price (Low to High)</option>
           <option value="desc">Price (High to Low)</option>
-        </select> -->
+        </select>
 
-        <!-- Category Dropdown -->
-        <div class="dropdown">
+     
+         <!-- Category Dropdown  -->
+        <div class="dropdown"> 
 
 
 
@@ -199,25 +216,10 @@
 
     </nav>
 
-    <!-- Navbar -->
-    <!-- Jumbotron -->
-    <!-- <div class="bg-primary text-white py-5">
-      <div class="container py-5">
-        <h1>
-          Best products & <br />
-          brands in our store
-        </h1>
-        <p>
-          Trendy Products, Factory Prices, Excellent Service
-        </p>
-        <button type="button" class="btn btn-outline-light">
-          Learn more
-        </button>
-        <button type="button" class="btn btn-light shadow-0 text-primary pt-2 border border-white">
-          <span class="pt-1">Purchase now</span>
-        </button>
-      </div>
-    </div> -->
+ 
+    
+
+    
     <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
       <div class="carousel-inner">
         <% banner.forEach((element, index) => { %>
@@ -232,14 +234,7 @@
       </div>
     </div>
     
-      <!-- <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-       <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-       <span class="carousel-control-next-icon" aria-hidden="true"></span>
-       <span class="visually-hidden">Next</span>
-      </button> -->
+    
 
       
      </div>
@@ -535,40 +530,33 @@
 
 </body>
 
+
+
+
+
+
 <script>
-  function sortProducts() {
-    var selectElement = document.getElementById("sort-select");
-    var selectedValue = selectElement.value;
-
-    var productContainer = document.getElementById("product-container");
-    var products = productContainer.getElementsByClassName("prod");
-
-    // Convert the HTMLCollection to an array for easier sorting
-    var productsArray = Array.from(products);
-
-    if (selectedValue === "asc") {
-      productsArray.sort(function (a, b) {
-        var priceA = parseFloat(a.querySelector(".card-text").innerText.split("Rs ")[1]);
-        var priceB = parseFloat(b.querySelector(".card-text").innerText.split("Rs ")[1]);
+  document.getElementById('sort-select').addEventListener('change', function (event) {
+const sortOrder = event.target.value;
+const productElements = Array.from(document.querySelectorAll('.prod'));
+productElements.sort(function (a, b) {
+  const priceA = parseFloat(a.querySelector('.item_price').textContent.replace('₹', ''));
+    const priceB = parseFloat(b.querySelector('.item_price').textContent.replace('₹', ''));
+    if (sortOrder === 'asc') {
         return priceA - priceB;
-      });
-    } else if (selectedValue === "desc") {
-      productsArray.sort(function (a, b) {
-        var priceA = parseFloat(a.querySelector(".card-text").innerText.split("Rs ")[1]);
-        var priceB = parseFloat(b.querySelector(".card-text").innerText.split("Rs ")[1]);
+    } else {
         return priceB - priceA;
-      });
     }
+});
+productElements.forEach(function (product) {
+    product.parentNode.insertAdjacentElement('beforeend', product);
+});
 
-    // Clear the container
-    productContainer.innerHTML = "";
-
-    // Append the sorted elements back to the container
-    productsArray.forEach(function (product) {
-      productContainer.appendChild(product);
-    });
-  }
+});
 </script>
+
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
   integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>

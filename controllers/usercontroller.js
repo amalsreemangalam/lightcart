@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const bcrypt=require('bcrypt')
+const bcrypt = require('bcrypt')
 const collection1 = require("../models/userloginmongodb")
 const { Collection1 } = require('mongoose')
 const nodemailer = require('nodemailer')
@@ -12,9 +12,9 @@ const ordercollection = require("../models/order")
 const dotenv = require("dotenv").config()
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
-const path=require('path')
-const bannerCollection=require("../models/bannerMongo")
-const wishlistcollection=require("../models/wishlist")
+const path = require('path')
+const bannerCollection = require("../models/bannerMongo")
+const wishlistcollection = require("../models/wishlist")
 
 
 
@@ -103,16 +103,16 @@ const signup = (req, res) => {
 const usersignup = async (req, res) => {
     try {
         const expirationMinutes = 1;
-const referral=referalgenerator();
-const existingreferral=req.body.referralcode;
+        const referral = referalgenerator();
+        const existingreferral = req.body.referralcode;
 
 
-        const hashedpassword=await bcrypt.hash(req.body.password,10)
+        const hashedpassword = await bcrypt.hash(req.body.password, 10)
         const data = {
             name: req.body.name,
             email: req.body.email,
             password: hashedpassword,
-            referral:referral,
+            referral: referral,
             phone: req.body.phone,
             otp: {
                 code: OTP.generate(6, { upperCase: false, specialChars: false }),
@@ -120,15 +120,15 @@ const existingreferral=req.body.referralcode;
             },
             isBlocked: false,
         }
-        const Existingreferral=await collection1.find({referral:referral})
+        const Existingreferral = await collection1.find({ referral: referral })
 
-        if(Existingreferral){
-            Existingreferral.forEach(async(referral)=>{
-                Existingreferral.wallet+=100
+        if (Existingreferral) {
+            Existingreferral.forEach(async (referral) => {
+                Existingreferral.wallet += 100
                 await Existingreferral.save()
             })
-          
-        data.wallet=100
+
+            data.wallet = 100
         }
         const otp = OTP.generate(6, { upperCase: false, specialChars: false });
         const otpExpiresAt = new Date();
@@ -184,7 +184,7 @@ function referalgenerator() {
         randomCode += characters.charAt(randomIndex);
     }
 
-    return randomCode;
+    return randomCode;
 }
 
 
@@ -271,12 +271,12 @@ const userlogin = async (req, res) => {
             if (check.isBlocked) {
                 return res.render('userlogin', { msg: "account was blocked by admin" });
             }
-            const passwordcheck =await bcrypt.compare(req.body.password,check.password)
-            console.log("password",passwordcheck);
+            const passwordcheck = await bcrypt.compare(req.body.password, check.password)
+            console.log("password", passwordcheck);
             if (passwordcheck) {
                 req.session.user = check._id;
                 console.log('loginsession', req.session.user);
-                
+
                 res.redirect('/');
             } else {
                 return res.render('userlogin', { msg: "Invalid username or password" });
@@ -321,8 +321,8 @@ const otpvalidate = async (req, res) => {
 const verifyotp = (req, res) => {
     console.log("workedfdf");
     if (req.session.user) {
-        const error=''
-        return res.render('otp',{error})
+        const error = ''
+        return res.render('otp', { error })
     }
 }
 
@@ -332,54 +332,56 @@ const verifyotp = (req, res) => {
 
 
 const home = async (req, res) => {
-    const banner=await bannerCollection.find();
+    const banner = await bannerCollection.find();
     let products = null
     const searchTerm = req.query.searchTerm
-    
-    
+
+
     const productsPerPage = 8;
     const currentPage = parseInt(req.query.page) || 1;
-    
+
     const totalProducts = await productcollection.countDocuments();
     const totalPages = Math.ceil(totalProducts / productsPerPage);
-    
-    const skip = (currentPage - 1) * productsPerPage;
-    
-    if(searchTerm){
-    
-        products = await Productcollection.find({ productname: { $regex: searchTerm, $options: 'i' } });
-    }else {
-    
-         products = await productcollection.find().skip(skip).limit(productsPerPage);
-    }
-   
-    const users = await collection1.findById(req.session.user);
-    const wallet = await walletcollection.findOne({ customerid: req.session.user});
-    
-if (!wallet) {
-    const newwallet = new walletcollection({
-        customerid: req.session.user,
-        
-    });
-   
-    await newwallet.save();
-}
 
-  
+    const skip = (currentPage - 1) * productsPerPage;
+
+    if (searchTerm) {
+
+        products = await Productcollection.find({ productname: { $regex: searchTerm, $options: 'i' } });
+    } else {
+
+        products = await productcollection.find().skip(skip).limit(productsPerPage);
+    }
+
+    const users = await collection1.findById(req.session.user);
+    const wallet = await walletcollection.findOne({ customerid: req.session.user });
+
+    if (!wallet) {
+        const newwallet = new walletcollection({
+            customerid: req.session.user,
+
+        });
+
+        await newwallet.save();
+    }
+
+
     let userstatus = false;
     if (req.session.user) {
         userstatus = true;
     }
-  
+
     const category = await categorycollection.find();
-  
+
     // const product = await Productcollection.find()
-  
-    res.render('home', { product: products, userstatus, category ,products: products,banner,
+
+    res.render('home', {
+        product: products, userstatus, category, products: products, banner,
         currentPage: currentPage,
-        totalPages: totalPages,});
-  };
-  
+        totalPages: totalPages,
+    });
+};
+
 
 
 
@@ -552,82 +554,58 @@ const updateCart = async (req, res) => {
 }
 
 
-//     const wishLoad=async(req,res)=>{
-//         try{
-           
-//             const users=req.session.user
-//             console.log("userrrr",users);
-//             const user=await collection1.findOne({_id:users})
-//             const wishData = await wishlistcollection.findOne({UserId:req.body.user}); 
-//             console.log("wish",wishData);
-//             const data= wishData.Product
-        
-//             const productData = await productcollection.find({_id:data});
-//         console.log("pr dataaaa",productData);
-//             if(user){
-//             res.render('wishlist',{wish: wishData, products: productData}) 
-//             }else{
-//                 throw "User not found"
-//             }
-            
-//         }
-//     catch(err){
-//         console.log("Error in Wishlist load",err)
 
-//     }
-// }
+const wishLoad = async (req, res) => {
+    try {
+        const users = req.session.user
+        console.log("userrr", users);
 
-const wishLoad=async(req,res)=>{
-    try{
-        const users=req.session.user
-        console.log("userrr",users);
-      
-        const product=await wishlistcollection.find({UserId:users}).populate("Product")
-        console.log("productttt",product);
-        const user=await collection1.findOne({_id:users})
-        
-        if(user){
-           res.render('wishlist',{product}) 
-        }else{
+        const product = await wishlistcollection.find({ UserId: users }).populate("Product")
+        console.log("productttt", product);
+        const user = await collection1.findOne({ _id: users })
+
+        if (user) {
+            res.render('wishlist', { product })
+        } else {
             throw "User not found"
         }
-        
-    }
-    catch(err){
-        console.log("Error in Wishlist load",err)
 
-    }
+    }
+    catch (err) {
+        console.log("Error in Wishlist load", err)
+
+    }
 }
 
-const addToWish=async(req,res)=>{
-    const productId=req.params.id;
-    try{
-        const product=await productcollection.findOne({_id:productId})
-        const user = await collection1.findOne({ _id:req.session.user});
-        if(user&&product){
-            const isExist=await wishlistcollection.findOne({UserId:user._id,Product:product._id})
-           
-            if(!isExist){
-                const data={
-                    UserId:user._id,
-                    Product:productId,
-                    
-                    }
-                    const result=await wishlistcollection.insertMany([data])
-                    console.log("Add to wish list successfull")
-            }else{
+const addToWish = async (req, res) => {
+    const productId = req.params.id;
+    try {
+        const product = await productcollection.findOne({ _id: productId })
+        const user = await collection1.findOne({ _id: req.session.user });
+        if (user && product) {
+            const isExist = await wishlistcollection.findOne({ UserId: user._id, Product: product._id })
+
+            if (!isExist) {
+                const data = {
+                    UserId: user._id,
+                    Product: productId,
+
+                }
+                const result = await wishlistcollection.insertMany([data])
+                console.log("Add to wish list successfull")
+            } else {
                 console.log("Product already exist in your wishlist");
             }
 
-        }else{
+        } else {
             throw "Product or User Not Found"
         }
 
         res.redirect('/')
-        
 
-    }catch(error){
-        console.log("Error adding to wishlist",error)
+
+    } catch (error) {
+        console.log("Error adding to wishlist", error)
 
     }
 }
@@ -635,16 +613,16 @@ const addToWish=async(req,res)=>{
 const removeFromWishlist = async (req, res) => {
     const userId = req.session.user;
     const productId = req.params.id;
-    console.log("iddd",productId);
+    console.log("iddd", productId);
 
     try {
-    
-        const user = await collection1.findOne({_id: userId });
-        console.log("uuuuu",user);
+
+        const user = await collection1.findOne({ _id: userId });
+        console.log("uuuuu", user);
 
         if (user) {
-            const wish=await wishlistcollection.findOne({UserId: user._id})
-            console.log("listttt",wish);
+            const wish = await wishlistcollection.findOne({ UserId: user._id })
+            console.log("listttt", wish);
             const wishlistItem = await wishlistcollection.findOneAndRemove({
                 UserId: user._id,
                 'Product': productId
@@ -652,9 +630,9 @@ const removeFromWishlist = async (req, res) => {
             res.redirect('/user/wishlist');
 
         } else {
-           
+
             console.log('No such user found');
-            res.redirect('/'); 
+            res.redirect('/');
         }
     } catch (error) {
         console.log('Error removing from wishlist', error);
@@ -662,42 +640,42 @@ const removeFromWishlist = async (req, res) => {
     }
 };
 
-const wishlistAddCart=async(req,res)=>{
+const wishlistAddCart = async (req, res) => {
     const userId = req.session.user;
     const productId = req.params.id;
 
-    try{
+    try {
         const product = await productcollection.findOne({ _id: productId });
-        const user = await collection1.findOne({_id: userId });
+        const user = await collection1.findOne({ _id: userId });
         const existingProductIndex = user.cart.findIndex(item => item.product.toString() === productId);
-            if (existingProductIndex !== -1) {
-            
-            user.cart[existingProductIndex].quantity += 1;
-                
-            }else{
+        if (existingProductIndex !== -1) {
 
-                productPrice=product.price
-                offerPrices=product.OfferPrice
-              
+            user.cart[existingProductIndex].quantity += 1;
+
+        } else {
+
+            productPrice = product.price
+            offerPrices = product.OfferPrice
+
             const newCart = {
-                product:productId,  
+                product: productId,
                 quantity: 1,
-                totalPrice:offerPrices > 0 ? offerPrices : productPrice,
+                totalPrice: offerPrices > 0 ? offerPrices : productPrice,
             };
             user.cart.push(newCart)
-            }
-            await user.save();
+        }
+        await user.save();
 
-            const wishlistItem = await wishlistcollection.findOneAndRemove({
-                UserId: user._id,
-                'Product': productId
-            });
-            res.redirect('/user/wishlist');
+        const wishlistItem = await wishlistcollection.findOneAndRemove({
+            UserId: user._id,
+            'Product': productId
+        });
+        res.redirect('/user/wishlist');
 
-    }catch(error){
-        console.log("Error Adding Product To Cart From Wishlist",error)
+    } catch (error) {
+        console.log("Error Adding Product To Cart From Wishlist", error)
 
-    }
+    }
 
 }
 
@@ -707,13 +685,13 @@ const wishlistAddCart=async(req,res)=>{
 const userprofileget = async (req, res) => {
 
     const user = await collection1.findOne({ _id: req.session.user })
-    console.log("user",user);
-    const wallet=await walletcollection.findOne({customerid:req.session.user})
-    console.log('wa',wallet);
+    console.log("user", user);
+    const wallet = await walletcollection.findOne({ customerid: req.session.user })
+    console.log('wa', wallet);
     console.log(user);
 
     if (req.session.user) {
-        res.render('userprofile', { user,walletAmount:wallet.Amount })
+        res.render('userprofile', { user, walletAmount: wallet.Amount })
 
     } else {
         res.render('home');
@@ -808,12 +786,12 @@ const editprofilepost = async (req, res) => {
 
 const checkout = async (req, res) => {
     const id = req.session.user
-    const coupen=await couponCollection.find({isDeleted:false})
+    const coupen = await couponCollection.find({ isDeleted: false })
     const user = await collection1.findById(id)
     const cartData = await cartcollection.findOne({ userId: req.session.user }); // Replace this with your actual function to fetch cart data
     const productData = await productcollection.find({});
     if (req.session.user) {
-        res.render('checkout', { user, cart: cartData, products: productData,coupen:coupen })
+        res.render('checkout', { user, cart: cartData, products: productData, coupen: coupen })
     }
 }
 
@@ -895,7 +873,7 @@ const orderplaced = async (req, res) => {
             customerName: user.name,
             orderDate: new Date(),
             products: productsInOrder,
-             quantity: cart.totalQuantity,
+            quantity: cart.totalQuantity,
             totalPrice: cart.total,
             paymentMethod: req.body.method,
             status: 'Pending',
@@ -942,7 +920,7 @@ const orderplacedGet = (req, res) => {
 const paymentonline = async (req, res) => {
     try {
         // Fetch the user's cart and calculate the total price as shown in the previous response
-        const total=Number(req.body.totalPrices);
+        const total = Number(req.body.totalPrices);
         console.log(total);
         const userId = req.session.user;
         const cart = await cartcollection.findOne({ userId }).populate('items.product');
@@ -964,7 +942,7 @@ const paymentonline = async (req, res) => {
         // Return the Razorpay order details to the client
         res.json({
             orderId: razorpayOrder.id,
-            amount: total * 100, 
+            amount: total * 100,
             currency: 'INR',
         });
     } catch (error) {
@@ -1104,6 +1082,8 @@ const myorders = async (req, res) => {
         console.log("user232", user);
         const orders = await ordercollection.find({ user: userId }).populate('products.productId');
 
+
+        
         console.log('user.orders:', orders);
         res.render('myorders', { orderItems: orders, user });
     } catch (error) {
@@ -1188,38 +1168,39 @@ const cancelOrder = async (req, res) => {
 
 const returnOrder = async (req, res) => {
     try {
-        
-        const user=req.session.user
-        
+
+        const user = req.session.user
+
         const orderId = req.params.id;
-        
-        const users= await collection1.findById(user)
+
+        const users = await collection1.findById(user)
         const order = await ordercollection.findById(orderId);
-        console.log('orrrrrrrrrrr',order);
+        console.log('orrrrrrrrrrr', order);
         if (!order) {
             console.log('Order not found');
             return res.redirect('back');
         }
 
-        if ((order.paymentMethod === 'onlinepayment' || order.paymentMethod === 'cashondelivery'|| order.paymentMethod==='wallet') && order.status === 'Delivered') {
-                const wallet = await walletcollection.findOneAndUpdate(
-                    { customerid: users._id },
-                    { $inc: {Amount: (order.totalPrice) },
-                    $push:{
-                        transactions:{
-                            type:'Refund',
-                            amount:(order.totalPrice),
+        if ((order.paymentMethod === 'onlinepayment' || order.paymentMethod === 'cashondelivery' || order.paymentMethod === 'wallet') && order.status === 'Delivered') {
+            const wallet = await walletcollection.findOneAndUpdate(
+                { customerid: users._id },
+                {
+                    $inc: { Amount: (order.totalPrice) },
+                    $push: {
+                        transactions: {
+                            type: 'Refund',
+                            amount: (order.totalPrice),
                         },
                     },
-                
+
                 },
-                    { new: true }
-                ) 
-            }
+                { new: true }
+            )
+        }
 
 
         if (order.status === 'Returned') {
-            
+
             return res.redirect('back');
         }
 
@@ -1229,7 +1210,7 @@ const returnOrder = async (req, res) => {
             { new: true }
         );
 
-        
+
         res.redirect('back');
     } catch (error) {
         console.error('Error cancelling order:', error);
@@ -1239,41 +1220,41 @@ const returnOrder = async (req, res) => {
 
 
 
-const search=async(req, res) => {
-    
-    res.json(products);
-   };
+const search = async (req, res) => {
 
-   const searchget=async(req,res)=>{
+    res.json(products);
+};
+
+const searchget = async (req, res) => {
     const searchTerm = req.body.searchTerm;
     const products = await Productcollection.find({ productname: { $regex: searchTerm, $options: 'i' } });
-    res.render('search',{products})
-   } 
+    res.render('search', { products })
+}
 
-  
 
-   const invoiceDownload = async(req, res) => {
+
+const invoiceDownload = async (req, res) => {
     const orderId = req.query.orderId;
     // const productId = req.query.productId;
-    console.log('orderId', orderId, );
+    console.log('orderId', orderId,);
 
     let doc = new PDFDocument({ size: "A4", margin: 50 });
-  
+
     // Add content to the PDF
 
 
-    const order=await ordercollection.findById(orderId).populate('products.productId')
-    console.log("order",order)
+    const order = await ordercollection.findById(orderId).populate('products.productId')
+    console.log("order", order)
 
     const tableHeaders = ['Product name', 'Quantity', 'Total Price'];
     const tableRows = [];
-    
+
     const tableTop = doc.y + 20;
     const tableLeft = 50;
     const cellPadding = 5;
-    
-    let grandTotal = 0;  
-    
+
+    let grandTotal = 0;
+
     order.products.forEach(product => {
         const productName = product.productId.productname;
         const quantity = product.individualquantity;
@@ -1281,54 +1262,52 @@ const search=async(req, res) => {
         grandTotal += totalPrice;  // Add to the grand total
         tableRows.push([productName, quantity, totalPrice]);
     });
-    
+
     // Draw table headers
     tableHeaders.forEach((header, i) => {
         doc.text(header, tableLeft + i * 150, tableTop);
     });
-    
+
     // Draw table rows
     tableRows.forEach((row, rowIndex) => {
         row.forEach((cell, colIndex) => {
             doc.text(cell.toString(), tableLeft + colIndex * 150, tableTop + (rowIndex + 1) * 20);
         });
     });
-    
+
     // Draw grand total
     doc.text(`Grand Total: ${grandTotal}`, tableLeft, tableTop + (tableRows.length + 1) * 20);
-    
+
     console.log(tableRows)
     // Create the directories if they don't exist
-   
- 
-  
+
+
+
     // Save the PDF to a file
     const pdfDir = 'public/invoice/';
     // fs.mkdirSync(pdfDir, { recursive: true }); // Ensure the directory exists
     const pdfPath = path.join(pdfDir, 'sample.pdf');
     console.log(pdfPath);
-    
+
     doc.end();
     doc.pipe(fs.createWriteStream(pdfPath));
-  
-  
-  
 
-  
-    // Send the generated PDF to the client
-    // const pdfStream = fs.createReadStream(pdfPath);
-    // pdfStream.pipe(res);
-    setTimeout(()=>{
+
+
+
+
+    
+    setTimeout(() => {
         return res.redirect('/invoice/sample.pdf')
 
-    },1000)
-  };
-  
-  const walletLoad=async(req,res)=>{
+    }, 1000)
+};
+
+const walletLoad = async (req, res) => {
     try {
         const userId = req.session.user;
-       const user=await collection1.findOne({_id:userId}) 
-        const wallet = await walletcollection.findOne({customerid: user._id });
+        const user = await collection1.findOne({ _id: userId })
+        const wallet = await walletcollection.findOne({ customerid: user._id });
 
         if (wallet) {
             const walletBalance = wallet.Amount;
@@ -1337,7 +1316,7 @@ const search=async(req, res) => {
 
             res.render('wallet', { walletBalance, transactions });
         } else {
-            res.render('wallet', { walletBalance: 0, transactions: [] }); 
+            res.render('wallet', { walletBalance: 0, transactions: [] });
         }
     } catch (error) {
         console.error('Error while fetching wallet balance and transactions:', error);
@@ -1388,8 +1367,8 @@ module.exports = {
     paymentonline,
     orderplacedGet,
     search,
-    searchget, 
-    invoiceDownload,walletLoad,wishLoad,addToWish,removeFromWishlist, wishlistAddCart
+    searchget,
+    invoiceDownload, walletLoad, wishLoad, addToWish, removeFromWishlist, wishlistAddCart
 
 }
 

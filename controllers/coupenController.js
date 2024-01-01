@@ -72,6 +72,7 @@ const couponUpdate = async (req, res) => {
 }
 
 
+
 const couponDelete = async (req, res) => {
     try {
         const id = req.params.id;
@@ -87,6 +88,8 @@ const couponDelete = async (req, res) => {
         res.status(500).send("Error due to Delete Coupon");
     }
 }
+
+
 
 
 const couponUndelete = async (req, res) => {
@@ -105,6 +108,8 @@ const couponUndelete = async (req, res) => {
 }
 
 
+
+
 const redeemCoupon = async (req, res) => {
     const couponCode = req.body.couponCode
     console.log('coup',req.body.couponCode);
@@ -118,7 +123,7 @@ const redeemCoupon = async (req, res) => {
         if (redeemCode.isDeleted) {
             res.json({ message: "coupon is temporaray blocked" })
         }
-        const minimumpurchase = redeemCode.minimumpurchase //minimumpurchase
+        const minimumpurchase = redeemCode.minimumpurchase 
         const expirationDate = redeemCode.expirationDate
         const discountAmount = redeemCode.discountAmount
         console.log("hereee");
@@ -126,6 +131,8 @@ const redeemCoupon = async (req, res) => {
         res.json({ minimumpurchase, expirationDate, discountAmount })
     }
 }
+
+
 
 
 module.exports = {

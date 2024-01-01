@@ -6,7 +6,7 @@ const storage = multer.diskStorage({
       cb(null, 'public/uploads/'); // Specify the destination folder
     },
     filename: (req, file, cb) => {
-      // Generate a unique file name (you can use Date.now() or any other method)
+      
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
       cb(null, uniqueSuffix + '-' + file.originalname);
     },
@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
   
   const upload = multer({ storage: storage });
     
-
+      
 
 const addBanner=async(req,res)=>{
     res.render("addBanner")
@@ -38,6 +38,8 @@ const addBannerPost=async(req,res)=>{
     }
 }
 
+
+
 const bannerManagement=async(req,res)=>{
     try{
         const banner= await bannerCollection.find();
@@ -48,6 +50,8 @@ const bannerManagement=async(req,res)=>{
     }
 
 }
+
+
 
 
 const deletebanner=async(req,res)=>{
@@ -67,9 +71,6 @@ const deletebanner=async(req,res)=>{
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
-
-
-
 
 
 
