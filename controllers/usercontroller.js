@@ -1138,8 +1138,12 @@ const unlist = async (req, res) => {
 
 const cancelOrder = async (req, res) => {
     try {
+
+        const user = req.session.user
         const orderId = req.params.id;
         console.log('Order ID:', orderId);
+        const users = await collection1.findById(user)
+
 
         const order = await ordercollection.findById(orderId);
         if (!order) {
@@ -1150,6 +1154,25 @@ const cancelOrder = async (req, res) => {
         if (order.status === 'Cancelled') {
             console.log('Order is already cancelled');
             return res.redirect('back');
+        }
+
+
+
+        if (order.paymentMethod === 'onlinepayment' || order.paymentMethod === 'wallet') {
+            const wallet = await walletcollection.findOneAndUpdate(
+                { customerid: users._id },
+                {
+                    $inc: { Amount: (order.totalPrice) },
+                    $push: {
+                        transactions: {
+                            type: 'Refund',
+                            amount: (order.totalPrice),
+                        },
+                    },
+
+                },
+                { new: true }
+            )
         }
 
         const updatedOrder = await ordercollection.findByIdAndUpdate(

@@ -261,7 +261,10 @@ const editproductpost = async (req, res) => {
         console.log("entered", enteredProductName);
 
         const existingProduct = await productcollection.findOne({
-            productname: { $regex: new RegExp(`^${enteredProductName}$`, 'i') }
+            $and: [
+          { productname: { $regex: new RegExp('^' + enteredProductName + '$', 'i') } },
+            { _id: { $ne: productId  } }
+        ]
         });
         console.log("existssspro", existingProduct);
 
@@ -285,7 +288,7 @@ const editproductpost = async (req, res) => {
 
         };
 
-        const result = await productcollection.findByIdAndUpdate(productId, updatedProductData, { new: true });
+        const result = await productcollection.findByIdAndUpdate(productId, updatedProductData);
         productimage: imagePath
         if (imagePath.length > 0) {
             const result = await productcollection.updateOne({ _id: productId }, { $push: { productimage: imagePath } });
