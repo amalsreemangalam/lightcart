@@ -643,47 +643,79 @@ const salesReport = async (req, res) => {
             { header: "Updated At", key: "updatedAt", width: 25 },
         ];
 
-        for (const orderItem of orderCursor) {
-            for (const product of orderItem.products) {
-                worksheet.addRow({
-                    orderId: orderItem._id,
-                    userId: orderItem.user,
-                    customerName: orderItem.customerName,
-                    orderDate: orderItem.orderDate,
-                    productId: product.productId,
-                    quantity: product.individualquantity,
-                    totalPrice: orderItem.totalPrice,
-                    paymentMethod: orderItem.paymentMethod,
-                    status: orderItem.status,
-                    houseName: orderItem.address[0].houseName,
-                    street: orderItem.address[0].street,
-                    city: orderItem.address[0].city,
-                    state: orderItem.address[0].state,
-                    pincode: orderItem.address[0].pincode,
-                    createdAt: orderItem.createdAt.toISOString(),
-                    updatedAt: orderItem.updatedAt.toISOString(),
-                });
-            }
-        }
+//         for (const orderItem of orderCursor) {
+//             for (const product of orderItem.products) {
+//                 worksheet.addRow({
+//                     orderId: orderItem._id,
+//                     userId: orderItem.user,
+//                     customerName: orderItem.customerName,
+//                     orderDate: orderItem.orderDate,
+//                     productId: product.productId,
+//                     quantity: product.individualquantity,
+//                     totalPrice: orderItem.totalPrice,
+//                     paymentMethod: orderItem.paymentMethod,
+//                     status: orderItem.status,
+//                     houseName: orderItem.address[0].houseName,
+//                     street: orderItem.address[0].street,
+//                     city: orderItem.address[0].city,
+//                     state: orderItem.address[0].state,
+//                     pincode: orderItem.address[0].pincode,
+//                     createdAt: orderItem.createdAt.toISOString(),
+//                     updatedAt: orderItem.updatedAt.toISOString(),
+//                 });
+//             }
+//         }
 
 
-        workbook.xlsx.writeBuffer().then((buffer) => {
-            const excelBuffer = Buffer.from(buffer);
-            res.setHeader(
-                "Content-Type",
-                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            );
-            res.setHeader("Content-Disposition", "attachment; filename=excel.xlsx");
-            res.send(excelBuffer);
-        });
-    } catch (error) {
-        console.log(error);
-        res.status(500).send("Internal Server Error");
+//         workbook.xlsx.writeBuffer().then((buffer) => {
+//             const excelBuffer = Buffer.from(buffer);
+//             res.setHeader(
+//                 "Content-Type",
+//                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+//             );
+//             res.setHeader("Content-Disposition", "attachment; filename=excel.xlsx");
+//             res.send(excelBuffer);
+//         });
+//     } catch (error) {
+//         console.log(error);
+//         res.status(500).send("Internal Server Error");
+//     }
+// };
+
+
+for (const orderItem of orderCursor) {
+    for (const product of orderItem.products) {
+        const row = {
+            orderId: orderItem._id,
+            userId: orderItem.user,
+            customerName: orderItem.customerName,
+            orderDate: orderItem.orderDate,
+            productId: product.productId,
+            quantity: product.individualquantity,
+            totalPrice: orderItem.totalPrice,
+            paymentMethod: orderItem.paymentMethod,
+            status: orderItem.status,
+            houseName: orderItem.address[0]?.houseName || '',
+            street: orderItem.address[0]?.street || '',
+            city: orderItem.address[0]?.city || '',
+            state: orderItem.address[0]?.state || '',
+            pincode: orderItem.address[0]?.pincode || '',
+            createdAt: orderItem.createdAt.toISOString(),
+            updatedAt: orderItem.updatedAt.toISOString(),
+        };
+        worksheet.addRow(row);
     }
+}
+
+const buffer = await workbook.xlsx.writeBuffer();
+res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+res.setHeader("Content-Disposition", "attachment; filename=excel.xlsx");
+res.send(buffer);
+} catch (error) {
+console.error(error);
+res.status(500).send("Internal Server Error");
+}
 };
-
-
-
 
 
 

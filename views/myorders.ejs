@@ -41,7 +41,42 @@
    width: 100px;
 }
 
-  
+.custom-navbar {
+   background-color: #3498db; /* Updated color */
+}
+
+.gradient-custom {
+   background: linear-gradient(to top left, #3498db, #8e44ad);
+}
+
+.btn-outline-primary {
+   font-size: 14px;
+   padding: 10px;
+   height: 40px;
+   width: 120px;
+   border-radius: 5px;
+   transition: background-color 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+   background-color: #3498db;
+   color: #fff;
+}
+
+.custom-download-btn {
+   font-size: 14px;
+   padding: 10px;
+   height: 40px;
+   width: 150px;
+   border-radius: 5px;
+   background-color: #27ae60; /* Updated color */
+   color: #fff;
+   transition: background-color 0.3s ease;
+}
+
+.custom-download-btn:hover {
+   background-color: #219d54; /* Darker shade for hover */
+}
 
 
   </style>
@@ -95,11 +130,11 @@
                 <% console.log('orderItems0000',item); %>
                 <% item.products.slice().reverse().forEach((prod)=>{ console.log(prod)%>
                   
-                <div class="card shadow-0 border mb-4">
+                <div class="card shadow-0  mb-4">
                  
 
                   
-                  <div class="card-body">
+                  <div class="">
                     <div class="row"> 
                       <div class="col-md-2">
                         
@@ -110,6 +145,15 @@
                         <% } %>
                       </div>
                       
+
+                      <div class="card shadow-0 mb-4">
+                        <div class="card-body">
+                          <h6 class="card-title">Order Date</h6>
+                          <p><strong>Date:</strong> <%= item.orderDate.toLocaleDateString() %></p>
+                        </div>
+                      </div>
+                     
+
                     
                       <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                         <p class="text-muted mb-0 small">
@@ -122,6 +166,25 @@
                       </div>
 
       
+
+
+
+                      <div class="card shadow-0 mb-4">
+                        <div class="card-body">
+                          <h6 class="card-title">Shipping Address</h6>
+                          <p><strong>House Name:</strong> <%= item.address[0].houseName %></p>
+                          <p><strong>Street:</strong> <%= item.address[0].street %></p>
+                          <p><strong>City:</strong> <%= item.address[0].city %></p>
+                          <p><strong>State:</strong> <%= item.address[0].state %></p>
+                          <p><strong>Postal Code:</strong> <%= item.address[0].pincode %></p>
+                          <p><strong>Country:</strong> <%= item.address[0].country %></p>
+                        </div>
+                      </div>
+
+
+
+
+
                       
                       <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                         <p class="text-muted mb-0 small">
@@ -148,6 +211,10 @@
 
 
 
+
+
+
+
                       </div>
                       <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                         <a href="/invoiceDownload?orderId=<%= item._id %>&productId=<%= prod.productId._id %>" class="btn btn-outline-primary custom-download-btn">Download Invoice</a>
@@ -157,8 +224,7 @@
 
 
                     </div>
-
-
+              
                    
                     <% }) %>
 
