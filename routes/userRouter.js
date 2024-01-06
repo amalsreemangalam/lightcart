@@ -87,4 +87,7 @@ router.get('/addtowish/:id',userAuth.login,userController.addToWish)
 router.get('/wishlist/remove/:id',userAuth.login,userController.removeFromWishlist)
 router.get('/wishlist/cart/:id',userAuth.login,userController.wishlistAddCart)
 
+
+
+
 module.exports = router;

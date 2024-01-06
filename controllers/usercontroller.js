@@ -100,6 +100,8 @@ const signup = (req, res) => {
 }
 
 
+
+
 const usersignup = async (req, res) => {
     try {
         const expirationMinutes = 1;
@@ -479,13 +481,14 @@ const productaddtocart = async (req, res) => {
     }
 }
 
+
+
 const cart = async (req, res) => {
     if (req.session.user) {
-        const cartData = await cartcollection.findOne({ userId: req.session.user }); // Replace this with your actual function to fetch cart data
+        const cartData = await cartcollection.findOne({ userId: req.session.user });
         const productData = await productcollection.find({});
         console.log('cartData', cartData);
-        // Fetch product data
-        // console.log(`helloo thuis usi caretjk ${productData}`);
+
         res.render('cart', { cart: cartData, products: productData });
 
     } else {
@@ -499,7 +502,7 @@ const removeProduct = async (req, res) => {
     try {
         const cart = await cartcollection.findOne({ userId });
 
-        // const itemToUpdate = cart.items.find(item => item.product.toString() === itemId);
+
         cart.items = cart.items.filter((item) => !(item.product.equals(itemId)));
         console.log(cart.items);
         await cart.save()
@@ -530,7 +533,7 @@ const updateCart = async (req, res) => {
 
         let product = await Productcollection.findById(itemId);
 
-        // Check if the requested quantity exceeds the available stock
+
         if (amount > product.productstocks) {
             return res.json({ success: false, message: 'Product out of stock' });
         }
@@ -539,12 +542,9 @@ const updateCart = async (req, res) => {
         console.log('itemToUpdate.quantity ', cart);
         itemToUpdate.single_product_total_price = amount * (product.OfferPrice > 0 ? product.OfferPrice : product.productprice);
 
-        // Update the total, totalQuantity, or any other relevant fields in the cart if needed
-        // cart.total = 
-        // cart.totalQuantity = ...
-        // ...
+
         await itemToUpdate.save()
-        await cart.save(); // Save the updated cart
+        await cart.save();
 
         res.json({ success: true, message: 'Item quantity updated in the cart', cart });
     } catch (error) {
@@ -764,7 +764,7 @@ const editprofilepost = async (req, res) => {
                 city: req.body.city,
                 state: req.body.state,
                 pincode: req.body.pincode,
-                //  country: req.body.country,
+
             }]
 
 
@@ -1080,10 +1080,10 @@ const myorders = async (req, res) => {
         }
         const user = await collection1.findOne({ _id: userId })
         console.log("user232", user);
-        const orders = await ordercollection.find({ user: userId }).populate('products.productId');
+        const orders = await ordercollection.find({ user: userId }).sort({ orderTime: -1 }).populate('products.productId');
 
 
-        
+
         console.log('user.orders:', orders);
         res.render('myorders', { orderItems: orders, user });
     } catch (error) {
@@ -1298,17 +1298,13 @@ const invoiceDownload = async (req, res) => {
         });
     });
 
-    // Draw grand total
     doc.text(`Grand Total: ${grandTotal}`, tableLeft, tableTop + (tableRows.length + 1) * 20);
 
     console.log(tableRows)
-    // Create the directories if they don't exist
 
 
-
-    // Save the PDF to a file
     const pdfDir = 'public/invoice/';
-    // fs.mkdirSync(pdfDir, { recursive: true }); // Ensure the directory exists
+
     const pdfPath = path.join(pdfDir, 'sample.pdf');
     console.log(pdfPath);
 
@@ -1319,7 +1315,7 @@ const invoiceDownload = async (req, res) => {
 
 
 
-    
+
     setTimeout(() => {
         return res.redirect('/invoice/sample.pdf')
 
@@ -1391,7 +1387,12 @@ module.exports = {
     orderplacedGet,
     search,
     searchget,
-    invoiceDownload, walletLoad, wishLoad, addToWish, removeFromWishlist, wishlistAddCart
+    invoiceDownload,
+    walletLoad,
+    wishLoad,
+    addToWish,
+    removeFromWishlist,
+    wishlistAddCart
 
 }
 

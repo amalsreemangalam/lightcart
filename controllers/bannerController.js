@@ -3,7 +3,7 @@ const multer=require('multer');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, 'public/uploads/'); // Specify the destination folder
+      cb(null, 'public/uploads/'); 
     },
     filename: (req, file, cb) => {
       
@@ -58,7 +58,7 @@ const deletebanner=async(req,res)=>{
     const bannerId = req.params.id;
 
     try {
-        // Find the banner by ID and delete it
+        
         const deletedBanner = await bannerCollection.findByIdAndDelete(bannerId);
 
         if (!deletedBanner) {

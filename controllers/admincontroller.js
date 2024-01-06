@@ -465,6 +465,34 @@ const editcategoryget = async (req, res) => {
 
 
 
+// const editcategorypost = async (req, res) => {
+//     try {
+//         const productId = req.params.id;
+//         const updatedCategoryData = {
+//             categoryname: req.body.categoryname,
+//             categorydescription: req.body.categorydescription
+//         };
+
+
+//         const existingCategory = await categorycollection.findOne({ categoryname: updatedCategoryData.categoryname });
+//         if (existingCategory && existingCategory._id != productId) {
+
+//             req.flash('error', 'Category already exists');
+//             return res.redirect(`/editcategory/${productId}`);
+//         }
+
+
+//         const result = await categorycollection.findByIdAndUpdate(productId, updatedCategoryData, { new: true });
+//         if (result) {
+//             res.redirect('/categorymanagement');
+//         }
+//     } catch (error) {
+//         console.error('Error updating category:', error);
+//         res.status(500).send('Internal Server Error');
+//     }
+// };
+
+
 const editcategorypost = async (req, res) => {
     try {
         const productId = req.params.id;
@@ -473,14 +501,12 @@ const editcategorypost = async (req, res) => {
             categorydescription: req.body.categorydescription
         };
 
-
         const existingCategory = await categorycollection.findOne({ categoryname: updatedCategoryData.categoryname });
         if (existingCategory && existingCategory._id != productId) {
-
             req.flash('error', 'Category already exists');
             return res.redirect(`/editcategory/${productId}`);
         }
-
+        
 
         const result = await categorycollection.findByIdAndUpdate(productId, updatedCategoryData, { new: true });
         if (result) {
@@ -491,8 +517,6 @@ const editcategorypost = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
-
-
 
 
 
@@ -646,44 +670,7 @@ const salesReport = async (req, res) => {
             { header: "Updated At", key: "updatedAt", width: 25 },
         ];
 
-//         for (const orderItem of orderCursor) {
-//             for (const product of orderItem.products) {
-//                 worksheet.addRow({
-//                     orderId: orderItem._id,
-//                     userId: orderItem.user,
-//                     customerName: orderItem.customerName,
-//                     orderDate: orderItem.orderDate,
-//                     productId: product.productId,
-//                     quantity: product.individualquantity,
-//                     totalPrice: orderItem.totalPrice,
-//                     paymentMethod: orderItem.paymentMethod,
-//                     status: orderItem.status,
-//                     houseName: orderItem.address[0].houseName,
-//                     street: orderItem.address[0].street,
-//                     city: orderItem.address[0].city,
-//                     state: orderItem.address[0].state,
-//                     pincode: orderItem.address[0].pincode,
-//                     createdAt: orderItem.createdAt.toISOString(),
-//                     updatedAt: orderItem.updatedAt.toISOString(),
-//                 });
-//             }
-//         }
 
-
-//         workbook.xlsx.writeBuffer().then((buffer) => {
-//             const excelBuffer = Buffer.from(buffer);
-//             res.setHeader(
-//                 "Content-Type",
-//                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-//             );
-//             res.setHeader("Content-Disposition", "attachment; filename=excel.xlsx");
-//             res.send(excelBuffer);
-//         });
-//     } catch (error) {
-//         console.log(error);
-//         res.status(500).send("Internal Server Error");
-//     }
-// };
 
 
 for (const orderItem of orderCursor) {
@@ -721,7 +708,6 @@ res.status(500).send("Internal Server Error");
 };
 
 
-
 module.exports = {
     adminlogin,
     adminloginpost,
@@ -730,7 +716,6 @@ module.exports = {
     usermanagement,
     userToBlock,
     userToUnblock,
-    // productmanagement,
     editproductget,
     editproductpost,
     addproductget,
@@ -749,7 +734,7 @@ module.exports = {
     admindashboard,
     deleteimage,
     salesReport,
-
+   
 
 };
 

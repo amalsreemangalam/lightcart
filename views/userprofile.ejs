@@ -103,7 +103,7 @@
     
           <!-- Breadcrumb -->
           <nav aria-label="breadcrumb" class="main-breadcrumb">
-            <ol class="breadcrumb">
+            <ol class="breadcrumb" style="padding-left: 400px;">
              
               <li class="breadcrumb-item active" aria-current="page">User Profile</li>
             </ol>
@@ -118,10 +118,10 @@
                     <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
                     <div class="mt-3">
                       <h4><%=user.name%></h4>
-                      <h5>referral amount:<%=user.wallet%></h5>
-                     <h5>wallet amount:<%=walletAmount%></h5>
+                      <h6>Referral amount:<%=user.wallet%></h6>
+                     <h6>Wallet amount:<%=walletAmount%></h6>
                      <div class="row">
-                      <a class="btn btn-info" href="/wallet"> show Wallet</a>
+                      <a  class="btn btn-info"  style="margin-left: 30px;" href="/wallet"> show Wallet</a>
                   </div>
                     </div>
                   </div>
@@ -181,7 +181,7 @@
                   <hr>
                   <div class="row">
                     <div class="col-sm-12">
-                      <a class="btn btn-info "  href="/editprofile">Editprofile</a>
+                      <a class="btn btn-info "  style="margin-left: 200px;" href="/editprofile">Editprofile</a>
                     </div>
                   </div>
                 </div>

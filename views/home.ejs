@@ -121,18 +121,21 @@
                 <i class="fas fa-shopping-cart me-2"></i>
                 <span class="d-none d-md-block">My Cart</span>
               </a>
+              
             </div>
             <div>
               <div class="d-flex float-end">
                 <% if(userstatus){ %>
-                  <a href="/logout" class="nav-link">
-                    <i class="fas fa-sign-out-alt me-2"></i>
-                    <span class="d-none d-md-block">Logout</span>
-                  </a>
+                  
+              
+            
+
                   <a href="/userprofile" class="nav-link">
                     <i class="fas fa-user-circle me-2"></i>
                     <span class="d-none d-md-block">Profile</span>
                   </a>
+
+                 
                   <a href="/user/wishlist" class="nav-link">
                     <!-- Add an appropriate icon here -->
                     <i class="fas fa-heart me-2"></i>
@@ -142,8 +145,12 @@
                   <a href="/myorders" class="nav-link">
                     <!-- Add an appropriate icon here -->
                     <i class="fas fa-list me-2"></i>
-                    <span class="d-none d-md-block">My Orders</span>
+                    <span class="d-none d-md-block">My Orders</span>  
                   </a>
+
+
+                
+
                   <% } else { %>
                     <a href="/usersignup" class="nav-link">
                       <i class="fas fa-user-alt me-2"></i>
@@ -153,6 +160,7 @@
                       <i class="fas fa-sign-in-alt me-2"></i>
                       <span class="d-none d-md-block">Login</span>
                     </a>
+                   
                     <% } %>
               </div>
             </div>
@@ -261,7 +269,7 @@
   <section>
     <div class="container my-5">
       <header class="mb-4">
-        <h3>New products</h3>
+        <h5>New products</h5>
       </header>
       <div id="product-container" class="row">
         <% product.forEach(prod=> { %>

@@ -210,10 +210,21 @@
     </div>
 
 
+  
+    
+
     <script src="
   https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js
   ">
+
+  
       </script>
+
+
+
+
+
+
       <script>
         let myChart;
         let myChart1
@@ -239,7 +250,7 @@
             })
         }
 
-        async function salesChart(data, filter) { //function for generating the chart
+        async function salesChart(data, filter) { 
           if (myChart) {
             myChart.destroy();
           }
@@ -267,24 +278,9 @@
         window.onload = updateChart('MONTHLY')
       </script>
 
-<!-- <script>
 
-  async function downloadExcel(orderId) {
-    const response = await fetch(`/download-excel/${orderId}`);
-    
-    if (response.ok) {
-      // Trigger the download
-      const blob = await response.blob();
-      const link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.download = 'order_details.xlsx';
-      link.click();
-    } else {
-      console.error('Failed to download Excel');
-    }
-  }
 
-</script> -->
+</script> 
 <script>
   function salesreport(){
     console.log("vanu");
@@ -317,6 +313,8 @@
   .catch(error => console.error('Error during fetch:', error));
   }
 </script>
+
+
 </body>
 
 

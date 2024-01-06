@@ -14,71 +14,72 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
   <link rel="stylesheet" href="../public/assets/style.css">
   <style>
-
-.custom-navbar {
-   background-color: #123456; /* Replace with your desired color */
+    .card {
+    border: none;
 }
-    .gradient-custom {
-      /* fallback for old browsers */
-      background: #cd9cf2;
 
-      /* Chrome 10-25, Safari 5.1-6 */
-      background: -webkit-linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 255, 1));
+.card-body {
+    border-bottom: none;
+}
 
-      /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-      background: linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 255, 1))
-    }
+.card-title,
+.card-subtitle {
+    border-bottom: none;
+}
+
+.card-header,
+.card-footer {
+    border: none;
+}
+
     .btn-outline-primary {
-   font-size: 10px;
-   padding: 5px;
-   height: 20px;
-   width: 70px;
-}
-.custom-download-btn {
-   font-size: 10px;
-   padding: 5px;
-   height: 30px;
-   width: 100px;
-}
+      font-size: 10px;
+      padding: 5px;
+      height: 20px;
+      width: 70px;
+    }
 
-.custom-navbar {
-   background-color: #3498db; /* Updated color */
-}
-
-.gradient-custom {
-   background: linear-gradient(to top left, #3498db, #8e44ad);
-}
-
-.btn-outline-primary {
-   font-size: 14px;
-   padding: 10px;
-   height: 40px;
-   width: 120px;
-   border-radius: 5px;
-   transition: background-color 0.3s ease;
-}
-
-.btn-outline-primary:hover {
-   background-color: #3498db;
-   color: #fff;
-}
-
-.custom-download-btn {
-   font-size: 14px;
-   padding: 10px;
-   height: 40px;
-   width: 150px;
-   border-radius: 5px;
-   background-color: #27ae60; /* Updated color */
-   color: #fff;
-   transition: background-color 0.3s ease;
-}
-
-.custom-download-btn:hover {
-   background-color: #219d54; /* Darker shade for hover */
-}
+    .custom-download-btn {
+      font-size: 10px;
+      padding: 5px;
+      height: 30px;
+      width: 100px;
+    }
 
 
+    .gradient-custom {
+      background: linear-gradient(to top left, #3498db, #8e44ad);
+    }
+
+    .btn-outline-primary {
+      font-size: 14px;
+      padding: 10px;
+      height: 40px;
+      width: 120px;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+      background-color: #3498db;
+      color: #fff;
+    }
+
+    .custom-download-btn {
+      font-size: 14px;
+      padding: 10px;
+      height: 40px;
+      width: 150px;
+      border-radius: 5px;
+      background-color: #27ae60;
+      /* Updated color */
+      color: #fff;
+      transition: background-color 0.3s ease;
+    }
+
+    .custom-download-btn:hover {
+      background-color: #219d54;
+    }
   </style>
 </head>
 
@@ -87,158 +88,158 @@
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="#">LIGHT CART</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i> My Cart</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/"><i class="fas fa-user-circle"></i> Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                </li>
-            </ul>
-        </div>
+      <a class="navbar-brand" href="#">LIGHT CART</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i> My Cart</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/"><i class="fas fa-user-circle"></i> Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </li>
+        </ul>
+      </div>
     </div>
-</nav>
+  </nav>
 
 
 
   <section class="h-100 gradient-custom">
-    <div class="container py-5 h-100">
-      <div class="row d-flex justify-content-center align-items-center h-100">
-        <div class="col-lg-10 col-xl-8">
-          <div class="card" style="border-radius: 10px;">
+    <div class="container  py-5">
+      <div class="justify-content-center align-items-center">
+        <div class="col-lg-12 col-xl-12">
+          <div class="card " style=" border-radius: 10px;">
             <div class="card-header px-4 py-5">
               <h5 class="text-muted mb-0">Thanks for your Order, <span style="color: #a8729a;">
                   <%=user.name%>
                 </span>!</h5>
             </div>
-            <div class="card-body p-4">
-              <div class="d-flex justify-content-between align-items-center mb-4">
-                <p class="lead fw-normal mb-0" style="color: #a8729a;">Receipt</p>
-                <p class="small text-muted mb-0">Receipt Voucher : 1KAU9-84UIL</p>
-              </div>
-              <% console.log(orderItems) %>
-              <%orderItems.forEach(item=>{%>
-                <% console.log('orderItems0000',item); %>
-                <% item.products.slice().reverse().forEach((prod)=>{ console.log(prod)%>
-                  
-                <div class="card shadow-0  mb-4">
-                 
-
-                  
-                  <div class="">
-                    <div class="row"> 
+            <% orderItems.forEach(item=> { %>
+              <% item.products.slice().reverse().forEach(prod=> { %>
+            <div class="card-body p-4  ">
+                  <div class="card mb-4">
+                    <div class="row">
                       <div class="col-md-2">
-                        
                         <% if (prod.productId.productimage[0]) { %>
-                          <img src="<%= prod.productId.productimage[0] %>" class="border rounded me-3" style="width: 96px; height: 96px;" />
-                        <% } else { %>
-                          <p>No Image Available</p>
-                        <% } %>
+                          <img src="<%= prod.productId.productimage[0] %>" class="border rounded me-3"
+                            style="width: 96px; height: 96px;" />
+                          <% } else { %>
+                            <p>No Image Available</p>
+                            <% } %>
                       </div>
-                      
+
+
 
                       <div class="card shadow-0 mb-4">
                         <div class="card-body">
                           <h6 class="card-title">Order Date</h6>
-                          <p><strong>Date:</strong> <%= item.orderDate.toLocaleDateString() %></p>
+                          <p><strong>Date:</strong>
+                            <%= item.orderDate.toLocaleDateString() %>
+                          </p>
                         </div>
                       </div>
-                     
 
-                    
-                      <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+
+
+                      <div class="col-md-2 text-center d-flex justify-content-center align-items-center" style="margin-bottom: 200px;margin-left: 50px;">
                         <p class="text-muted mb-0 small">
-                          <%= prod.productId.productcategory %>  </p>
+                        <h5>
+                          <%= prod.productId.productcategory %>
+                            </p>
+                        </h5>
                       </div>
 
-                      <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                      <div class="col-md-2 text-center d-flex justify-content-center align-items-center"style="margin-bottom: 205px;margin-left: 50px;">
                         <p class="text-muted mb-0 small">Qty: <%= prod.individualquantity %>
                         </p>
                       </div>
 
-      
+
 
 
 
                       <div class="card shadow-0 mb-4">
                         <div class="card-body">
                           <h6 class="card-title">Shipping Address</h6>
-                          <p><strong>House Name:</strong> <%= item.address[0].houseName %></p>
-                          <p><strong>Street:</strong> <%= item.address[0].street %></p>
-                          <p><strong>City:</strong> <%= item.address[0].city %></p>
-                          <p><strong>State:</strong> <%= item.address[0].state %></p>
-                          <p><strong>Postal Code:</strong> <%= item.address[0].pincode %></p>
-                          <p><strong>Country:</strong> <%= item.address[0].country %></p>
+                          <p><strong>House Name:</strong>
+                            <%= item.address[0].houseName %>
+                          </p>
+                          <p><strong>Street:</strong>
+                            <%= item.address[0].street %>
+                          </p>
+                          <p><strong>City:</strong>
+                            <%= item.address[0].city %>
+                          </p>
+                          <p><strong>State:</strong>
+                            <%= item.address[0].state %>
+                          </p>
+                          <p><strong>Postal Code:</strong>
+                            <%= item.address[0].pincode %>
+                          </p>
+                          <p><strong>Country:</strong>
+                            <%= item.address[0].country %>
+                          </p>
                         </div>
                       </div>
-
-
-
-
-
-                      
-                      <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                        <p class="text-muted mb-0 small">
-                          ₹<%= prod.individualquantity * (prod.productId.OfferPrice > 0 ? prod.productId.OfferPrice : prod.productId.productprice) %>
+                      <div class="col text-center d-flex justify-content-center align-items-center" >
+                        <p class="text-muted mb-0">
+                          ₹<%= prod.individualquantity * (prod.productId.OfferPrice> 0 ? prod.productId.OfferPrice :
+                            prod.productId.productprice) %>
                         </p>
-                                                
+
                       </div>
                       <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                         <% if (item.status !=='Cancelled' ) { %>
-                          <% if (item.status === 'Delivered') { %>
+                          <% if (item.status==='Delivered' ) { %>
                             <!-- If status is Delivered, display Return button -->
                             <a href="/returnOrder/<%= item._id %>" class="btn btn-outline-primary">Return</a>
-                        <% } else if (item.status === 'Returned') { %>
-                            <!-- If status is Returned, display a message -->
-                            <p>Item Returned</p>
-                        <% } else { %>
-                            <!-- If status is not Cancelled, Delivered, or Returned, display Cancel Order button -->
-                            <a href="/cancelOrder/<%= item._id %>/<%= prod.productId._id %>" class="btn btn-outline-primary">Cancel Order</a>
-                        <% } %>
-                                <% } else { %>
-                                  <!-- If status is Cancelled, display Cancelled message -->
-                                  <p class="text-muted mb-0 small">Cancelled</p>
-                                  <% } %>
-
-
-
-
+                            <% } else if (item.status==='Returned' ) { %>
+                              <!-- If status is Returned, display a message -->
+                              <p>Item Returned</p>
+                              <% } else { %>
+                                <!-- If status is not Cancelled, Delivered, or Returned, display Cancel Order button -->
+                                <a href="/cancelOrder/<%= item._id %>/<%= prod.productId._id %>"
+                                  class="btn btn-outline-primary">Cancel Order</a>
+                                <% } %>
+                                  <% } else { %>
+                                    <!-- If status is Cancelled, display Cancelled message -->
+                                    <p class="text-muted mb-0 small">Cancelled</p>
+                                    <% } %>
 
 
 
                       </div>
                       <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                        <a href="/invoiceDownload?orderId=<%= item._id %>&productId=<%= prod.productId._id %>" class="btn btn-outline-primary custom-download-btn">Download Invoice</a>
+                        <a href="/invoiceDownload?orderId=<%= item._id %>&productId=<%= prod.productId._id %>"
+                          class="btn btn-outline-primary custom-download-btn">Download Invoice</a>
 
                       </div>
-                      
+
 
 
                     </div>
-              
+
+
                    
-                    <% }) %>
-
-                    
-                    <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
-                    <div class="row d-flex align-items-center">
-                      <div class="col-md-2">
-                        <p class="text-muted mb-0 small">Track Order</p>
-                      </div>
-                      <div class="col-md-10">
 
 
-                        <div class="progress" style="height: 6px; border-radius: 16px;">
-                          <div class="progress-bar" role="progressbar" style="width: <% 
+                      <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
+                      <div class="row d-flex align-items-center">
+                        <div class="col-md-2">
+                          <p class="text-muted mb-0 small">Track Order</p>
+                        </div>
+                        <div class="col-md-10">
+
+
+                          <div class="progress" style="height: 6px; border-radius: 16px;">
+                            <div class="progress-bar" role="progressbar" style="width: <% 
                   switch (item.status) {
                       case 'Pending':
                           %>0<%
@@ -279,27 +280,27 @@
                           %>0<%
                   }
               %>" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
+                          </div>
 
 
-                        <div class="d-flex justify-content-around mb-1">
-                          <p class="text-muted mt-1 mb-0 small ms-xl-5"></p>
-                          <p class="text-muted mt-1 mb-0 small ms-xl-5">
-                            <%=item.status%>
-                          </p>
+                          <div class="d-flex justify-content-around mb-1">
+                            <p class="text-muted mt-1 mb-0 small ms-xl-5"></p>
+                            <p class="text-muted mt-1 mb-0 small ms-xl-5">
+                              <%=item.status%>
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
                   </div>
-                </div>
-
-                <% })%>
-
-
             </div>
+            <% }) %>
+            <% })%>
+
+
           </div>
         </div>
       </div>
+    </div>
   </section>
   <div class="d-flex justify-content-center">
     <a href="/" class="btn btn-primary">Continue Shopping</a>
@@ -442,7 +443,7 @@
                 </li>
               </ul>
             </div>
-           
+
           </div>
         </div>
       </div>
@@ -450,7 +451,7 @@
   </div>
 
 
-  
+
 </body>
 
 </html>

@@ -27,7 +27,7 @@ const orderSchema = new mongoose.Schema({
     },
     individualquantity: {
         type: Number,
-        // required: true,
+        
     },
     orderDate: {
         type: Date,
@@ -56,6 +56,11 @@ const orderSchema = new mongoose.Schema({
         type:String,
         default:'Pending'
     },
+
+    orderTime: {
+        type: Date,
+        default: Date.now
+    },
     address:[{
         houseName: {
             type: String,
@@ -77,10 +82,7 @@ const orderSchema = new mongoose.Schema({
             type: Number,
          
         },
-        //   country: {
-        //       type: String,
-        //       required: true,
-        //   }
+    
     }],
   
 }, {
