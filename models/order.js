@@ -3,7 +3,6 @@ const orderProducts= new mongoose.Schema({
     productId: {
       type: mongoose.Schema.Types.ObjectId, 
       ref: 'Productscollection', 
-      
     },
     individualquantity: {
         type: Number,

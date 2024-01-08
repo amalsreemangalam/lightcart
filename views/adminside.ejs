@@ -128,6 +128,13 @@
             onclick=" updateChart('YERALY')">
             Yearly Sales
           </button>
+          
+
+          <button id="categorySalesBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#categoryModal"
+          onclick=" updateChart('category')">
+          category Sales
+        </button>
+
         </div>
       </div>
 
@@ -210,8 +217,16 @@
     </div>
 
 
-  
-    
+    <!-- <div class="container">
+      <div class="row">
+        <div class="col-12 ms-5 px-5">
+          <div style="margin-left: 200px; margin-top: 60px">
+            <canvas id="barchart" style="width: 100%; max-width: 420px"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+     -->
 
     <script src="
   https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js
@@ -263,7 +278,7 @@
               }
             },
             data: {
-              labels: data.saleData.map(row => row.month ?? row.year),
+              labels: data.saleData.map(row => row.month ?? row.year ??row._id),
               datasets: [{
                 barPercentage: 1,
                 barThickness: 90,
@@ -283,7 +298,7 @@
 </script> 
 <script>
   function salesreport(){
-    console.log("vanu");
+    
     const startDate=document.getElementById('start').value
     const enddate=document.getElementById('end').value
     // console.log(startDate);

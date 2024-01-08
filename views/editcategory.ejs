@@ -91,6 +91,9 @@
             <div>
             <label for="categoryname">Product Name</label>
             <input type="text" id="categoryname" name="categoryname" value="<%= category.categoryname || '' %>" required>
+            <% if (errorMessage) { %>
+                <p style="color: red;"><%= errorMessage %></p>
+            <% } %>
             
           
         </div>

@@ -101,8 +101,9 @@ const dashboardData = async (req, res) => {
     let categoryData
     let profitData
     const targetYear = new Date().getFullYear(); //sets the result for one year 
+    
     if (filter == 'MONTHLY') {
-        // montly sales daty
+       
         saleData = await ordercollection.aggregate([
             {
                 $match: {
@@ -189,12 +190,30 @@ const dashboardData = async (req, res) => {
         ]);
 
 
+    }else if(filter == "category"){
+        saleData = await ordercollection.aggregate([
+            { $unwind: "$products" },
+            {
+              $lookup: {
+                from: "productscollections",
+                localField: "products.productId",
+                foreignField: "_id",
+                as: "productDetail"
+              }
+            },
+            { $unwind: "$productDetail" },
+            {
+              $group: {
+                _id: "$productDetail.productcategory",
+                count: { $sum: 1 }
+              }
+            }
+           ])
+         console.log("Result with Populated Product Details", saleData);
     }
 
     return res.status(200).json({ saleData: saleData, filter: filter, categoryData: categoryData, profitData })
 }
-
-
 
 
 const usermanagement = async (req, res) => {
@@ -456,7 +475,8 @@ const editcategoryget = async (req, res) => {
     try {
         const productId = req.params.id;
         const category = await categorycollection.findById(productId);
-        res.render('editcategory', { category: category });
+        const errorMessage=""
+        res.render('editcategory', { category: category,errorMessage });
     } catch (error) {
         console.error(error);
         res.status(500).send('Error fetching product data');
@@ -503,8 +523,8 @@ const editcategorypost = async (req, res) => {
 
         const existingCategory = await categorycollection.findOne({ categoryname: updatedCategoryData.categoryname });
         if (existingCategory && existingCategory._id != productId) {
-            req.flash('error', 'Category already exists');
-            return res.redirect(`/editcategory/${productId}`);
+            const errorMessage='Category already exists';
+            return res.render('editcategory', {category:req.body.categoryname,errorMessage });
         }
         
 

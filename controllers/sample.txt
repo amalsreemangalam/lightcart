@@ -1153,3 +1153,24 @@ status pending ejs
  <!-- <div class="col-md-10">
                         <p class="text-muted mb-0 small">₹<%= calculateGrandTotal(orderItems) %></p>
                       </div> -->
+
+
+
+
+
+
+
+
+                      const categoryCounts = await Order.aggregate([
+      { $unwind: "$products" },
+      {
+        $lookup: {
+          from: "products",
+          localField: "products.productId",
+          foreignField: "_id",
+          as: "productDetails",
+        },
+      },
+      { $unwind: "$productDetails" },
+      { $group: { _id: "$productDetails.category", count: { $sum: 1 } } },
+    ]);
