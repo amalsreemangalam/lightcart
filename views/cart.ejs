@@ -436,7 +436,7 @@
         event.preventDefault();
         let itemId = this.dataset.itemId;
         let newAmount = parseInt(amounts[i].innerHTML) + 1;
-
+        amounts[i].innerHTML=newAmount
         fetch('/updateCart', {
           method: 'POST',
           headers: {
@@ -462,7 +462,7 @@
         event.preventDefault();
         let itemId = this.dataset.itemId;
         let newAmount = parseInt(amounts[i].innerHTML) - 1;
-
+        amounts[i].innerHTML=newAmount
         if (newAmount <= 0) {
           window.location.href = `/removeProduct/${itemId}`
         } else {
