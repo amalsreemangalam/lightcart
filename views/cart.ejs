@@ -11,16 +11,17 @@
     integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
-
-.custom-navbar {
-   background-color: #123456; /* Replace with your desired color */
-}
+    .custom-navbar {
+      background-color: #123456;
+      /* Replace with your desired color */
+    }
 
 
 
     .list-unstyled li a {
-    color: black;
-  }
+      color: black;
+    }
+
     .icon-hover-primary:hover {
       border-color: #3b71ca !important;
       background-color: white !important;
@@ -38,12 +39,13 @@
     .icon-hover-danger:hover i {
       color: #dc4c64 !important;
     }
+
     body {
-    background-image: url('https://img.archiexpo.com/images_ae/photo-m2/59228-17634232.jpg');
-    background-repeat: no-repeat;
-    background-attachment: fixed;  
-    background-size: cover;
-}
+      background-image: url('https://img.archiexpo.com/images_ae/photo-m2/59228-17634232.jpg');
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+    }
   </style>
 </head>
 
@@ -51,131 +53,132 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
-          <a class="navbar-brand" href="#">LIGHT CART</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-              <ul class="navbar-nav">
-                  <li class="nav-item">
-                      <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i> My Cart</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                  </li>
-              </ul>
-          </div>
+        <a class="navbar-brand" href="#">LIGHT CART</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i> My Cart</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </li>
+          </ul>
+        </div>
       </div>
-  </nav>
-  
+    </nav>
+
   </header>
 
   <!-- cart + summary -->
   <div class="container mt-5">
     <h1 class="mb-4 text-center">MY CART</h1>
     <div class="table-responsive">
-        <table class="table ">
-            <thead>
+      <table class="table ">
+        <thead>
+          <tr>
+            <th scope="col">Product</th>
+            <th scope="col">Image</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Total</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% let total=0 %>
+            <% if (cart && cart.items) {%>
+              <% for (const item of cart.items) { %>
                 <tr>
-                    <th scope="col">Product</th>
-                    <th scope="col">Image</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Total</th>
-                    <th scope="col">Action</th>
+
+                  <td>
+                    <h4>
+                      <% let product=products.find((ele)=>ele._id.equals(item.product)) %> <%=product.productname%>
+                    </h4>
+                  </td>
+                  <td>
+                    <% let image=products.find((ele)=>ele._id.equals(item.product))%>
+                      <img src=" <%=image.productimage[0]%>" alt="Product Image" style="width: 100px; height: 100px;" />
+                  </td>
+                  <td>
+
+                    <%if(product.OfferPrice){%>
+                      <text class="h5">Price:₹<s>
+                          <%= product.productprice%>
+                        </s> &#8377;<%= product.OfferPrice %></text> <br />
+                      <% }else{ %>%>
+                        <text class="h5">Price:₹<%= product.productprice%></text>
+                        <% } %>
+                  </td>
+                  <td class="">
+                    <div class="d-flex">
+                      <div class="minus plus-minus" data-item-id="<%=item.product%>">
+                        <svg width="12" height="4" xmlns="http://www.w3.org/2000/svg"
+                          xmlns:xlink="http://www.w3.org/1999/xlink">
+                          <defs>
+                            <path
+                              d="M11.357 3.332A.641.641 0 0 0 12 2.69V.643A.641.641 0 0 0 11.357 0H.643A.641.641 0 0 0 0 .643v2.046c0 .357.287.643.643.643h10.714Z"
+                              id="a" />
+                          </defs>
+                          <use fill="#FF7E1B" fill-rule="nonzero" xlink:href="#a" />
+                        </svg>
+                      </div>
+                      <span id="" data-item-id="<%=item.product %>" class="amount">
+                        <% console.log('itemquantity',item ); %>
+                          <%= item.quantity %>
+                      </span>
+                      <div class="plus plus-minus" data-item-id="<%=item.product%>">
+                        <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg"
+                          xmlns:xlink="http://www.w3.org/1999/xlink" id="plus">
+                          <defs>
+                            <path
+                              d="M12 7.023V4.977a.641.641 0 0 0-.643-.643h-3.69V.643A.641.641 0 0 0 7.022 0H4.977a.641.641 0 0 0-.643.643v3.69H.643A.641.641 0 0 0 0 4.978v2.046c0 .356.287.643.643.643h3.69v3.691c0 .356.288.643.644.643h2.046a.641.641 0 0 0 .643-.643v-3.69h3.691A.641.641 0 0 0 12 7.022Z"
+                              id="b" />
+                          </defs>
+                          <use fill="#FF7E1B" fill-rule="nonzero" xlink:href="#b" id="plus" />
+                        </svg>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>₹<%= item.single_product_total_price %>
+                  </td>
+                  <td>
+                    <a href="#" onclick="removeProduct('<%=item.product%>')" class="btn btn-danger">Remove</a>
+
+                  </td>
                 </tr>
-            </thead>
-            <tbody>
-                <% let total=0 %>
-                    <% if (cart && cart.items) {%>
-                        <% for (const item of cart.items) { %>
-                            <tr>
-
-                                <td>
-                                    <h4>
-                                        <% let product=products.find((ele)=>ele._id.equals(item.product)) %> <%=product.productname%>
-                            </h4>
-                        </td>
-                        <td>
-                            <% let image=products.find((ele)=>ele._id.equals(item.product))%>
-                                <img src=" <%=image.productimage[0]%>" alt="Product Image"
-                                                style="width: 100px; height: 100px;" />
-                                </td>
-                                <td>
-                                    
-                                  <%if(product.OfferPrice){%>
-                                    <text class="h5">Price:₹<s><%= product.productprice%></s>  &#8377;<%= product.OfferPrice %></text> <br />
-                          <% }else{ %>%>
-                            <text class="h5">Price:₹<%= product.productprice%></text>
-                            <% } %>	
-                                </td>
-                                <td class="">
-                                    <div class="d-flex">
-                                        <div class="minus plus-minus" data-item-id="<%=item.product%>">
-                                            <svg width="12" height="4" xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink">
-                                                <defs>
-                                                    <path
-                                                        d="M11.357 3.332A.641.641 0 0 0 12 2.69V.643A.641.641 0 0 0 11.357 0H.643A.641.641 0 0 0 0 .643v2.046c0 .357.287.643.643.643h10.714Z"
-                                                        id="a" />
-                                                </defs>
-                                                <use fill="#FF7E1B" fill-rule="nonzero" xlink:href="#a" />
-                                            </svg>
-                                        </div>
-                                        <span id="" data-item-id="<%=item.product %>" class="amount">
-                                          <% console.log('itemquantity',item ); %>
-                                            <%= item.quantity %>
-                                        </span>
-                                        <div class="plus plus-minus" data-item-id="<%=item.product%>">
-                                            <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink" id="plus">
-                                                <defs>
-                                                    <path
-                                                        d="M12 7.023V4.977a.641.641 0 0 0-.643-.643h-3.69V.643A.641.641 0 0 0 7.022 0H4.977a.641.641 0 0 0-.643.643v3.69H.643A.641.641 0 0 0 0 4.978v2.046c0 .356.287.643.643.643h3.69v3.691c0 .356.288.643.644.643h2.046a.641.641 0 0 0 .643-.643v-3.69h3.691A.641.641 0 0 0 12 7.022Z"
-                                                        id="b" />
-                                                </defs>
-                                                <use fill="#FF7E1B" fill-rule="nonzero" xlink:href="#b" id="plus" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td>₹<%= item.single_product_total_price %>
-                                </td>
-                                <td>
-                                    <a href="#" onclick="removeProduct('<%=item.product%>')" class="btn btn-danger">Remove</a>
-
-                                </td>
-                            </tr>
-                            <% total+=item.single_product_total_price %>
-                                <% } %>
-                                    <%} %>
+                <% total+=item.single_product_total_price %>
+                  <% } %>
+                    <%} %>
 
 
-            </tbody>
+        </tbody>
 
-        </table>
+      </table>
     </div>
     <div class="row justify-content-end">
-        <div class="col-md-4">
-            <h4>Total: ₹<%=total.toFixed(2) %>
-            </h4>
-            
-            <% if (cart.items.length>0) {%>
-                <a href="/checkout" class="btn btn-success btn-block mt-3">Checkout</a>
-                <% } %>
-        </div>
+      <div class="col-md-4">
+        <h4>Total: ₹<%=total.toFixed(2) %>
+        </h4>
+
+        <% if (cart.items.length>0) {%>
+          <a href="/checkout" class="btn btn-success btn-block mt-3">Checkout</a>
+          <% } %>
+      </div>
     </div>
     <div class="row mt-3">
-        <div class="col-md-12 text-center">
-            <a href="/" class="btn btn-primary">Continue Shopping</a>
-        </div>
+      <div class="col-md-12 text-center">
+        <a href="/" class="btn btn-primary">Continue Shopping</a>
+      </div>
     </div>
-</div>
+  </div>
   <!-- cart + summary -->
   <section>
     <div class="container my-5">
@@ -277,184 +280,163 @@
 
   <div style="background-color:gray;">
     <!-- Footer -->
-<!-- Your footer content remains unchanged -->
-<footer class="text-center text-lg-start text-muted bg-black mt-3">
-<!-- Section: Links  -->
-<section class="">
-  <div class="container text-center text-md-start pt-4 pb-4">
-  <!-- Grid row -->
-  <div class="row mt-3">
-    <!-- Grid column -->
-    <div class="col-12 col-lg-3 col-sm-12 mb-2">
-    <!-- Content -->
-    <a href="https://mdbootstrap.com/" target="_blank" class="text-white h2">
-      LIGHTCART
-    </a>
-    <p class="mt-1 text-white">
-    
-    </p>
-    </div>
-    <!-- Grid column -->
+    <!-- Your footer content remains unchanged -->
+    <footer class="text-center text-lg-start text-muted bg-black mt-3">
+      <!-- Section: Links  -->
+      <section class="">
+        <div class="container text-center text-md-start pt-4 pb-4">
+          <!-- Grid row -->
+          <div class="row mt-3">
+            <!-- Grid column -->
+            <div class="col-12 col-lg-3 col-sm-12 mb-2">
+              <!-- Content -->
+              <a href="https://mdbootstrap.com/" target="_blank" class="text-white h2">
+                LIGHTCART
+              </a>
+              <p class="mt-1 text-white">
 
-    <!-- Grid column -->
-    <div class="col-6 col-sm-4 col-lg-2">
-    <!-- Links -->
-    <h6 class="text-uppercase text-white fw-bold mb-2">
-      Store
-    </h6>
-    <ul class="list-unstyled mb-4">
-      <li><a class="text-white-50" href="#">About us</a></li>
-      <li><a class="text-white-50" href="#">Find store</a></li>
-      <li><a class="text-white-50" href="#">Categories</a></li>
-      <li><a class="text-white-50" href="#">Blogs</a></li>
-    </ul>
-    </div>
-    <!-- Grid column -->
+              </p>
+            </div>
+            <!-- Grid column -->
 
-    <!-- Grid column -->
-    <div class="col-6 col-sm-4 col-lg-2">
-    <!-- Links -->
-    <h6 class="text-uppercase text-white fw-bold mb-2">
-      Information
-    </h6>
-    <ul class="list-unstyled mb-4">
-      <li><a class="text-white-50" href="#">Help center</a></li>
-      <li><a class="text-white-50" href="#">Money refund</a></li>
-      <li><a class="text-white-50" href="#">Shipping info</a></li>
-      <li><a class="text-white-50" href="#">Refunds</a></li>
-    </ul>
-    </div>
-    <!-- Grid column -->
+            <!-- Grid column -->
+            <div class="col-6 col-sm-4 col-lg-2">
+              <!-- Links -->
+              <h6 class="text-uppercase text-white fw-bold mb-2">
+                Store
+              </h6>
+              <ul class="list-unstyled mb-4">
+                <li><a class="text-white-50" href="#">About us</a></li>
+                <li><a class="text-white-50" href="#">Find store</a></li>
+                <li><a class="text-white-50" href="#">Categories</a></li>
+                <li><a class="text-white-50" href="#">Blogs</a></li>
+              </ul>
+            </div>
+            <!-- Grid column -->
 
-    <!-- Grid column -->
-    <div class="col-6 col-sm-4 col-lg-2">
-    <!-- Links -->
-    <h6 class="text-uppercase text-white fw-bold mb-2">
-      Support
-    </h6>
-    <ul class="list-unstyled mb-4">
-      <li><a class="text-white-50" href="#">Help center</a></li>
-      <li><a class="text-white-50" href="#">Documents</a></li>
-      <li><a class="text-white-50" href="#">Account restore</a></li>
-      <li><a class="text-white-50" href="#">My orders</a></li>
-    </ul>
-    </div>
-    <!-- Grid column -->
+            <!-- Grid column -->
+            <div class="col-6 col-sm-4 col-lg-2">
+              <!-- Links -->
+              <h6 class="text-uppercase text-white fw-bold mb-2">
+                Information
+              </h6>
+              <ul class="list-unstyled mb-4">
+                <li><a class="text-white-50" href="#">Help center</a></li>
+                <li><a class="text-white-50" href="#">Money refund</a></li>
+                <li><a class="text-white-50" href="#">Shipping info</a></li>
+                <li><a class="text-white-50" href="#">Refunds</a></li>
+              </ul>
+            </div>
+            <!-- Grid column -->
 
-    <!-- Grid column -->
-    <div class="col-12 col-sm-12 col-lg-3">
-    <!-- Links -->
-    <h6 class="text-uppercase text-white fw-bold mb-2">Newsletter</h6>
-    <p class="text-white">Stay in touch with latest updates about our products and offers</p>
-    <div class="input-group mb-3">
-      <input type="email" class="form-control border" placeholder="Email" aria-label="Email" aria-describedby="button-addon2" />
-      <button class="btn btn-light border shadow-0" type="button" id="button-addon2" data-mdb-ripple-color="dark">
-      Join
-      </button>
-    </div>
-    </div>
-    <!-- Grid column -->
+            <!-- Grid column -->
+            <div class="col-6 col-sm-4 col-lg-2">
+              <!-- Links -->
+              <h6 class="text-uppercase text-white fw-bold mb-2">
+                Support
+              </h6>
+              <ul class="list-unstyled mb-4">
+                <li><a class="text-white-50" href="#">Help center</a></li>
+                <li><a class="text-white-50" href="#">Documents</a></li>
+                <li><a class="text-white-50" href="#">Account restore</a></li>
+                <li><a class="text-white-50" href="#">My orders</a></li>
+              </ul>
+            </div>
+            <!-- Grid column -->
+
+            <!-- Grid column -->
+            <div class="col-12 col-sm-12 col-lg-3">
+              <!-- Links -->
+              <h6 class="text-uppercase text-white fw-bold mb-2">Newsletter</h6>
+              <p class="text-white">Stay in touch with latest updates about our products and offers</p>
+              <div class="input-group mb-3">
+                <input type="email" class="form-control border" placeholder="Email" aria-label="Email"
+                  aria-describedby="button-addon2" />
+                <button class="btn btn-light border shadow-0" type="button" id="button-addon2"
+                  data-mdb-ripple-color="dark">
+                  Join
+                </button>
+              </div>
+            </div>
+            <!-- Grid column -->
+          </div>
+          <!-- Grid row -->
+        </div>
+      </section>
+      <!-- Section: Links  -->
+
+      <div class="">
+        <div class="container">
+          <div class="d-flex justify-content-between py-4 border-top">
+            <!--- payment --->
+            <div>
+              <i class="fab fa-lg fa-cc-visa text-white"></i>
+              <i class="fab fa-lg fa-cc-amex text-white"></i>
+              <i class="fab fa-lg fa-cc-mastercard text-white"></i>
+              <i class="fab fa-lg fa-cc-paypal text-white"></i>
+            </div>
+            <!--- payment --->
+
+            <!--- language selector --->
+            <div class="dropdown dropup">
+              <a class="dropdown-toggle text-white" href="#" id="Dropdown" role="button" data-mdb-toggle="dropdown"
+                aria-expanded="false"> <i class="flag-united-kingdom flag m-0 me-1"></i>English </a>
+
+              <ul class="dropdown-menu dropdown-menu-endp" aria-labelledby="Dropdown">
+                <li>
+                  <a class="dropdown-item" href="#"><i class="flag-united-kingdom flag"></i>English <i
+                      class="fa fa-check text-success ms-2"></i></a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#"><i class="flag-poland flag"></i>Polski</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#"><i class="flag-china flag"></i>中文</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#"><i class="flag-japan flag"></i>日本語</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#"><i class="flag-germany flag"></i>Deutsch</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#"><i class="flag-france flag"></i>Français</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#"><i class="flag-spain flag"></i>Español</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#"><i class="flag-russia flag"></i>Русский</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#"><i class="flag-portugal flag"></i>Português</a>
+                </li>
+              </ul>
+            </div>
+            <!--- language selector --->
+          </div>
+        </div>
+      </div>
+    </footer>
   </div>
-  <!-- Grid row -->
-  </div>
-</section>
-<!-- Section: Links  -->
 
-<div class="">
-  <div class="container">
-  <div class="d-flex justify-content-between py-4 border-top">
-    <!--- payment --->
-    <div>
-    <i class="fab fa-lg fa-cc-visa text-white"></i>
-    <i class="fab fa-lg fa-cc-amex text-white"></i>
-    <i class="fab fa-lg fa-cc-mastercard text-white"></i>
-    <i class="fab fa-lg fa-cc-paypal text-white"></i>
-    </div>
-    <!--- payment --->
 
-    <!--- language selector --->
-    <div class="dropdown dropup">
-    <a class="dropdown-toggle text-white" href="#" id="Dropdown" role="button" data-mdb-toggle="dropdown" aria-expanded="false"> <i class="flag-united-kingdom flag m-0 me-1"></i>English </a>
+  <script>
 
-    <ul class="dropdown-menu dropdown-menu-endp" aria-labelledby="Dropdown">
-      <li>
-      <a class="dropdown-item" href="#"><i class="flag-united-kingdom flag"></i>English <i class="fa fa-check text-success ms-2"></i></a>
-      </li>
-      <li><hr class="dropdown-divider" /></li>
-      <li>
-      <a class="dropdown-item" href="#"><i class="flag-poland flag"></i>Polski</a>
-      </li>
-      <li>
-      <a class="dropdown-item" href="#"><i class="flag-china flag"></i>中文</a>
-      </li>
-      <li>
-      <a class="dropdown-item" href="#"><i class="flag-japan flag"></i>日本語</a>
-      </li>
-      <li>
-      <a class="dropdown-item" href="#"><i class="flag-germany flag"></i>Deutsch</a>
-      </li>
-      <li>
-      <a class="dropdown-item" href="#"><i class="flag-france flag"></i>Français</a>
-      </li>
-      <li>
-      <a class="dropdown-item" href="#"><i class="flag-spain flag"></i>Español</a>
-      </li>
-      <li>
-      <a class="dropdown-item" href="#"><i class="flag-russia flag"></i>Русский</a>
-      </li>
-      <li>
-      <a class="dropdown-item" href="#"><i class="flag-portugal flag"></i>Português</a>
-      </li>
-    </ul>
-    </div>
-    <!--- language selector --->
-  </div>
-  </div>
-</div>
-</footer>
-</div>
 
-  
-<script>
+    let pluses = document.getElementsByClassName("plus");
+    let minuses = document.getElementsByClassName("minus");
+    let amounts = document.getElementsByClassName("amount");
 
-  
-  let pluses = document.getElementsByClassName("plus");
-  let minuses = document.getElementsByClassName("minus");
-  let amounts = document.getElementsByClassName("amount");
+    for (let i = 0; i < pluses.length; i++) {
+      pluses[i].addEventListener("click", function (event) {
+        event.preventDefault();
+        let itemId = this.dataset.itemId;
+        let newAmount = parseInt(amounts[i].innerHTML) + 1;
 
-  for (let i = 0; i < pluses.length; i++) {
-    pluses[i].addEventListener("click", function () {
-      let itemId = this.dataset.itemId;
-      let newAmount = parseInt(amounts[i].innerHTML) + 1;
-
-      fetch('/updateCart', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ itemId: itemId, amount: newAmount }),
-      })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Success:', data);
-          if (data.success) {
-            window.location.reload()
-          } else {
-            alert(data.message);
-          }
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-    });
-
-    minuses[i].addEventListener("click", function () {
-      let itemId = this.dataset.itemId;
-      let newAmount = parseInt(amounts[i].innerHTML) - 1;
-
-      if (newAmount <= 0) {
-        window.location.href = `/removeProduct/${itemId}`
-      } else {
         fetch('/updateCart', {
           method: 'POST',
           headers: {
@@ -474,36 +456,65 @@
           .catch((error) => {
             console.error('Error:', error);
           });
+      });
+
+      minuses[i].addEventListener("click", function (event) {
+        event.preventDefault();
+        let itemId = this.dataset.itemId;
+        let newAmount = parseInt(amounts[i].innerHTML) - 1;
+
+        if (newAmount <= 0) {
+          window.location.href = `/removeProduct/${itemId}`
+        } else {
+          fetch('/updateCart', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ itemId: itemId, amount: newAmount }),
+          })
+            .then(response => response.json())
+            .then(data => {
+              console.log('Success:', data);
+              if (data.success) {
+                window.location.reload()
+              } else {
+                alert(data.message);
+              }
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+            });
+        }
+      });
+    }
+
+
+
+
+
+  </script>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
+  </script>
+
+
+  <script>
+    function removeProduct(productId) {
+      if (confirm('Are you sure you want to remove this product?')) {
+        window.location.href = `/removeProduct/${productId}`;
       }
-    });
-  }
+    }
+  </script>
 
 
-
-
-
-</script>
-          
-
-
-          <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
-            integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
-            crossorigin="anonymous"></script>
-          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
-            integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
-            crossorigin="anonymous"></script>
-          </script>
-
-        
-            <script>
- function removeProduct(productId) {
-   if (confirm('Are you sure you want to remove this product?')) {
-     window.location.href = `/removeProduct/${productId}`;
-   }
- }
-</script>
-
-        
 </body>
 
 </html>
