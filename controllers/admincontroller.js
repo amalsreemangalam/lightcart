@@ -281,9 +281,9 @@ const editproductpost = async (req, res) => {
 
         const existingProduct = await productcollection.findOne({
             $and: [
-          { productname: { $regex: new RegExp('^' + enteredProductName + '$', 'i') } },
-            { _id: { $ne: productId  } }
-        ]
+                { productname: { $regex: new RegExp('^' + enteredProductName + '$', 'i') } },
+                { _id: { $ne: productId } }
+            ]
         });
         console.log("existssspro", existingProduct);
 
@@ -521,13 +521,15 @@ const editcategorypost = async (req, res) => {
             categorydescription: req.body.categorydescription
         };
 
-        const existingCategory = await categorycollection.findOne({ categoryname: updatedCategoryData.categoryname });
+        const existingCategory = await categorycollection.findOne({
+            categoryname: { $regex: new RegExp('^' + updatedCategoryData.categoryname + '$', 'i') }
+        });
+        
         if (existingCategory && existingCategory._id != productId) {
-            const errorMessage='Category already exists';
-            return res.render('editcategory', {category:req.body.categoryname,errorMessage });
+            const errorMessage = 'Category already exists';
+            return res.render('editcategory', { category: req.body.categoryname, errorMessage });
         }
         
-
         const result = await categorycollection.findByIdAndUpdate(productId, updatedCategoryData, { new: true });
         if (result) {
             res.redirect('/categorymanagement');
