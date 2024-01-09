@@ -204,17 +204,24 @@
       </div>
       
       <script>
-        // Get the current date in the format "YYYY-MM-DD"
-        var currentDate = new Date().toISOString().split('T')[0];
-      
-        // Set the maximum attribute for both date inputs to the current date
-        document.getElementById('start').max = currentDate;
-        document.getElementById('end').max = currentDate;
-      
-        // Optional: You can also handle the change event to ensure the end date is not before the start date
-        document.getElementById('start').addEventListener('change', function () {
-          document.getElementById('end').min = this.value;
-        });
+     // Get the current date in the format "YYYY-MM-DD"
+  var currentDate = new Date().toISOString().split('T')[0];
+
+// Set the maximum attribute for the start date to the current date
+document.getElementById('start').max = currentDate;
+
+// Optional: You can also handle the change event to ensure the end date is not before the start date
+document.getElementById('start').addEventListener('change', function () {
+  document.getElementById('end').min = this.value;
+});
+
+// Set the minimum attribute for the end date to the current date
+document.getElementById('end').min = currentDate;
+
+// Optional: You can also handle the change event to ensure the start date is not after the end date
+document.getElementById('end').addEventListener('change', function () {
+  document.getElementById('start').max = this.value;
+});
       </script>
 
 
