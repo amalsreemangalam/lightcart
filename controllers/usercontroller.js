@@ -756,25 +756,20 @@ const editprofilepost = async (req, res) => {
         const filter = { _id: id }; // Assuming id is the user's ID
 
         console.log("idis:", id)
+        const useData = await collection1.findById(id)
+        console.log(useData);
 
         newAddress = {
-            address: [{
+            
                 houseName: req.body.houseName,
                 street: req.body.street,
                 city: req.body.city,
                 state: req.body.state,
-                pincode: req.body.pincode,
-
-            }]
-
-
+                pincode: req.body.pincode
         }
-
-        const option = { upsert: true };
-        console.log(option);
-        console.log(newAddress)
-
-        await collection1.updateOne(filter, newAddress, option)
+        var myquery = { "_id":id , "address._id":req.body.addrId}; 
+        var newvalues = { $set: { "address.$.houseName": newAddress.houseName, "address.$.street": newAddress.street, "address.$.city": newAddress.city, "address.$.state": newAddress.state, "address.$.pincode": newAddress.pincode } };
+        await collection1.updateOne(myquery, newvalues)
 
         res.redirect("/userprofile")
     }
@@ -1012,7 +1007,9 @@ const checkoutaddaddressedit = async (req, res) => {
         const id = req.session.user
         const userdetails = await collection1.findById(id)
         console.log(userdetails);
+
         const selectedAddress = req.query.selectedAddress
+        console.log("this is the selected addresss", selectedAddress);
         res.render('checkoutaddaddressedit', { userdetails, selectedAddress })
     }
 }

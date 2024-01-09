@@ -436,7 +436,7 @@
         event.preventDefault();
         let itemId = this.dataset.itemId;
         let newAmount = parseInt(amounts[i].innerHTML) + 1;
-        // amounts[i].innerHTML=newAmount
+        amounts[i].innerHTML=newAmount
         fetch('/updateCart', {
           method: 'POST',
           headers: {
@@ -444,12 +444,13 @@
           },
           body: JSON.stringify({ itemId: itemId, amount: newAmount }),
         })
-          .then(response => response.json())
-          .then(data => {
-            console.log('Success:', data);
-            if (data.success) {
-              window.location.reload()
-            } else {
+        .then(response => response.json())
+        .then(data => {
+          console.log('Success:', data);
+          if (data.success) {
+            window.location.reload()
+          } else {
+              amounts[i].innerHTML=parseInt(amounts[i].innerHTML) - 1
               alert(data.message);
             }
           })
@@ -462,7 +463,7 @@
         event.preventDefault();
         let itemId = this.dataset.itemId;
         let newAmount = parseInt(amounts[i].innerHTML) - 1;
-        // amounts[i].innerHTML=newAmount
+        amounts[i].innerHTML=newAmount
         if (newAmount <= 0) {
           window.location.href = `/removeProduct/${itemId}`
         } else {

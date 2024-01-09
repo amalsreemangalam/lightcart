@@ -541,14 +541,12 @@ const editcategorypost = async (req, res) => {
 };
 
 
-
-
 const loadordermanagement = async (req, res) => {
     try {
         const orders = await ordercollection.find({})
             .populate('user', 'name')
             .populate('products.productId', 'productname')
-
+            console.log(JSON.stringify(orders[0].products[0].productId.productname))
         const formattedOrders = orders.map(order => ({
             orderId: order._id,
             username: order.customerName,
@@ -557,8 +555,8 @@ const loadordermanagement = async (req, res) => {
             status: order.status,
             address: order.address,
             products: order.products.map(product => ({
-                productName: product.productId.productname,
-                individualquantity: product.individualquantity,
+                productName: product?.productId?.productname,
+                individualquantity: product?.individualquantity,
             })),
         }));
         console.log("formattedOrders", formattedOrders);
@@ -568,6 +566,7 @@ const loadordermanagement = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 }
+
 
 
 
