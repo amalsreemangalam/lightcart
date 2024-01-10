@@ -303,7 +303,12 @@
                       <!-- Card footer -->
                       <div class="card-footer d-flex justify-content-between"
                         style="position: absolute ; bottom: 0;width: -webkit-fill-available">
-                        <a href="/cart/<%= prod._id %> " class="btn btn-primary shadow-0">Add to cart</a>
+                        <%if(prod.productstocks>0) { %>
+                          <a href="/cart/<%= prod._id %> " class="btn btn-primary shadow-0">Add to cart</a>
+
+                        <%}else{ %>
+                          <button class="btn btn-danger shadow-0">Out of stocke</button>
+                          <%  }%>
                         <a href="/addtowish/<%=prod._id%>" class="btn btn-outline-danger"><i class="fa fa-heart"></i></a>
                         <!-- <a href="wishlist.html"> -->
                         <!-- <i class="fas fa-heart"></i> -->
