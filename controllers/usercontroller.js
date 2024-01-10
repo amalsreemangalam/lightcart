@@ -428,13 +428,16 @@ const productdetails = async (req, res) => {
 
 const productaddtocart = async (req, res) => {
     const userid = req.session.user;
-    const productId = req.params.productId;
+    const productId = req.params.productId.trim();
 
     try {
         const isuser = await collection1.findOne({ _id: userid });
         const isproduct = await productcollection.findById(productId);
         const iscart = await cartcollection.findOne({ userId: isuser._id });
-
+        const product = await Productcollection.findById(productId)
+        if(product.productstocks<1){
+            return res.redirect('back')
+        }
         if (!iscart) {
             const addtocart = new cartcollection({
                 userId: isuser._id,
@@ -452,8 +455,9 @@ const productaddtocart = async (req, res) => {
             await addtocart.save();
         } else {
             const isProductInCart = iscart.items.find(
-                item => item.product.toString() === productId
+                item => item.product.equals(productId)
             );
+            console.log("the prodhydn sdfusjdfn luihdfihasrjh",isProductInCart);
 
             if (isProductInCart) {
                 console.log("isProductInCart", isProductInCart);
@@ -805,12 +809,15 @@ const checkoutaddadress = async (req, res) => {
 
 
 
+
+
+
 const orderplaced = async (req, res) => {
     try {
 
-
         const id = req.params.id
-
+   
+        
         const userId = req.session.user;
         console.log("id", id);
         console.log("userId", userId);
@@ -832,18 +839,14 @@ const orderplaced = async (req, res) => {
             };
         });
 
-        // console.log("addres",formattedAddress);
         const cart = await cartcollection.findOne({ userId: userId });
 
-        // Create an array to store order details
         const orderDetails = [];
 
-        // Iterate through items in the cart and add them to the orderDetails array
-        // let totalQuantity = 0;
+        
         const productsInOrder = [];
         for (const cartItem of cart.items) {
             const product = await productcollection.findById(cartItem.product._id);
-            // Use cartItem.product._id to get the product ID
             if (product) {
                 console.log("cartItem.quantity", cartItem.quantity);
                 productsInOrder.push({
@@ -851,18 +854,14 @@ const orderplaced = async (req, res) => {
                     productName: product.productname,
 
                     productPrice: product.productprice,
-                    individualquantity: cartItem.quantity, // Set the individual quantity or a default value
-                    // orderDate:product.orderDate
+                    individualquantity: cartItem.quantity, 
                 });
-                // totalQuantity += cartItem.individualquantity;
+               
             }
         }
+        
 
-
-
-        // Add orderDetails to the user's orders array
-        // Assuming order.array is your array
-
+        
         const order = new ordercollection({
             user: user._id,
             customerName: user.name,
@@ -872,28 +871,38 @@ const orderplaced = async (req, res) => {
             totalPrice: cart.total,
             paymentMethod: req.body.method,
             status: 'Pending',
-            // individualquantity:cart.individualquantity,
             address: addressDetails,
         });
        
-
-
         await order.save();
-
-
-
-        // await order.save();
-
-        // Save the updated user document
+        for (const cartItem of cart.items) {
+            const product = await productcollection.findById(cartItem.product._id);
+        
+            if (product) {
+        
+                // Update the product stock
+                const updatedStock = product.productstocks - cartItem.quantity;
+        
+                // Update the product document in the database with the new stock value
+                await productcollection.findByIdAndUpdate(
+                    cartItem.product._id,
+                    { $set: { productstocks: updatedStock } },
+                    { new: true }
+                );
+        
+                // Rest of your existing code...
+            }
+        }
+        
         await user.save();
 
-        // Empty the user's cart
+       
         cart.items = [];
         cart.discount = 0;
         cart.total = 0;
         cart.totalQuantity = 0;
 
-        // Save the updated cart document
+        
         await cart.save();
 
         console.log("suceesshekewdwhj");
@@ -901,10 +910,13 @@ const orderplaced = async (req, res) => {
 
     } catch (error) {
         console.error(error);
-        // Handle the error and send a response to the client
+ 
         res.status(500).send('Internal Server Error');
     }
 };
+
+
+
 
 const orderplacedGet = (req, res) => {
     res.render('orderplaced');
@@ -914,18 +926,14 @@ const orderplacedGet = (req, res) => {
 
 const paymentonline = async (req, res) => {
     try {
-        // Fetch the user's cart and calculate the total price as shown in the previous response
         const total = Number(req.body.totalPrices);
         console.log(total);
         const userId = req.session.user;
         const cart = await cartcollection.findOne({ userId }).populate('items.product');
 
-        // let totalPrice = 0;
-        // for (const cartItem of cart.items) {
-        //     totalPrice += cartItem.single_product_total_price;
-        // }
+       
 
-        // Create a Razorpay order
+        
         const orderOptions = {
             amount: total * 100, // amount in paise
             currency: 'INR', // change it to your currency code
@@ -934,7 +942,6 @@ const paymentonline = async (req, res) => {
 
         const razorpayOrder = await razorpay.orders.create(orderOptions);
 
-        // Return the Razorpay order details to the client
         res.json({
             orderId: razorpayOrder.id,
             amount: total * 100,
