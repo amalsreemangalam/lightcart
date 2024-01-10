@@ -1155,7 +1155,7 @@ const cancelOrder = async (req, res) => {
 
 
 
-        if (order.paymentMethod === 'onlinepayment' || order.paymentMethod === 'wallet') {
+        if (order.paymentMethod === 'onlinepayment' || order.paymentMethod === 'wallet'||order.paymentMethod==='cashondelivery') {
             const wallet = await walletcollection.findOneAndUpdate(
                 { customerid: users._id },
                 {
