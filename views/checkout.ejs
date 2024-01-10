@@ -432,7 +432,7 @@
       
       // Perform actions based on the selected payment method
       if (selectedMethod === "cashondelivery") {
-        const radioButtons = document.querySelectorAll('input[name="flexRadioDefault"]:checked');
+        const radioButtons = document.querySelectorAll('input[name="selectedAddress"]:checked');
 
         radioButtons.forEach(button => {
           const id = button.getAttribute('data-address-id');
@@ -459,7 +459,7 @@
       } else if (selectedMethod === "onlinepayment") {
 
         // fetch('/paymentonline',)
-        const radioButtons = document.querySelectorAll('input[name="flexRadioDefault"]:checked');
+        const radioButtons = document.querySelectorAll('input[name="selectedAddress"]:checked');
         
         
         
@@ -498,7 +498,7 @@
               handler: function (response) {
                 // Handle the successful payment response, e.g., update order status on the server
                 console.log('Payment successful:', response);
-                const radioButtons = document.querySelectorAll('input[name="flexRadioDefault"]:checked');
+                const radioButtons = document.querySelectorAll('input[name="selectedAddress"]:checked');
 
                 radioButtons.forEach(button => {
                   const id = button.getAttribute('data-address-id');
