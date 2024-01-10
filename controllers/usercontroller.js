@@ -875,7 +875,7 @@ const orderplaced = async (req, res) => {
             // individualquantity:cart.individualquantity,
             address: addressDetails,
         });
-        console.log('123445678', order);
+       
 
 
         await order.save();
@@ -1255,17 +1255,14 @@ const searchget = async (req, res) => {
 
 const invoiceDownload = async (req, res) => {
     const orderId = req.query.orderId;
-    // const productId = req.query.productId;
     console.log('orderId', orderId,);
 
     let doc = new PDFDocument({ size: "A4", margin: 50 });
 
-    // Add content to the PDF
-
 
     const order = await ordercollection.findById(orderId).populate('products.productId')
     console.log("order", order)
-
+    const total=order.totalPrice
     const tableHeaders = ['Product name', 'Quantity', 'Total Price'];
     const tableRows = [];
 
@@ -1279,11 +1276,10 @@ const invoiceDownload = async (req, res) => {
         const productName = product.productId.productname;
         const quantity = product.individualquantity;
         const totalPrice = quantity * product.productId.productprice;
-        grandTotal += totalPrice;  // Add to the grand total
-        tableRows.push([productName, quantity, totalPrice]);
+        grandTotal += totalPrice;
+        tableRows.push([productName,quantity,totalPrice]);  
     });
 
-    // Draw table headers
     tableHeaders.forEach((header, i) => {
         doc.text(header, tableLeft + i * 150, tableTop);
     });
@@ -1295,7 +1291,7 @@ const invoiceDownload = async (req, res) => {
         });
     });
 
-    doc.text(`Grand Total: ${grandTotal}`, tableLeft, tableTop + (tableRows.length + 1) * 20);
+    doc.text(`Grand Total With Offer: ${total}`, tableLeft, tableTop + (tableRows.length + 1) * 20);
 
     console.log(tableRows)
 
@@ -1307,10 +1303,6 @@ const invoiceDownload = async (req, res) => {
 
     doc.end();
     doc.pipe(fs.createWriteStream(pdfPath));
-
-
-
-
 
 
     setTimeout(() => {
@@ -1340,6 +1332,11 @@ const walletLoad = async (req, res) => {
     }
 
 }
+
+
+
+
+
 
 
 module.exports = {
@@ -1389,7 +1386,8 @@ module.exports = {
     wishLoad,
     addToWish,
     removeFromWishlist,
-    wishlistAddCart
+    wishlistAddCart,
+   
 
 }
 

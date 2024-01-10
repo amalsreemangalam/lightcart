@@ -1,5 +1,6 @@
 const couponCollection = require("../models/coupenmongo")
 const collection1 = require("../models/userloginmongodb")
+const cartcollection=require("../models/cartmongo")
 
 
 
@@ -112,11 +113,14 @@ const couponUndelete = async (req, res) => {
 
 const redeemCoupon = async (req, res) => {
     const couponCode = req.body.couponCode
+    const userid=req.session.user
+   
+    const cart=await cartcollection.findOne({userId:userid})
+    let total=cart.total
     console.log('coup',req.body.couponCode);
     if (!couponCode) {
         throw new Error("couponcode is not available")
     }
-
     const redeemCode = await couponCollection.findOne({couponCode:couponCode})
     console.log('code',redeemCode);
     if (redeemCode) {
@@ -126,6 +130,8 @@ const redeemCoupon = async (req, res) => {
         const minimumpurchase = redeemCode.minimumpurchase 
         const expirationDate = redeemCode.expirationDate
         const discountAmount = redeemCode.discountAmount
+        let totalprice=total-discountAmount
+        const update=await cartcollection.updateOne({ userId: userid }, { $set: { total: totalprice } });
         console.log("hereee");
         console.log("d",discountAmount,expirationDate,minimumpurchase);
         res.json({ minimumpurchase, expirationDate, discountAmount })

@@ -231,7 +231,7 @@
 
   <div class="input-group mt-3 mb-4" >
     <% coupen.forEach(element=> { %>
-
+                                    
       <div class="card" style="margin-bottom: 30px;">
         <div class="card-body" style="background-color:gray;">
           <h5 class="card-title">
@@ -450,7 +450,7 @@
             }),
           }).then((res) => {
             console.log("Order placed successfully");
-            // Redirect or perform other actions
+          
             return window.location.href = '/sucessorder';
           }).catch((error) => {
             console.error("Error placing order:", error);

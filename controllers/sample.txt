@@ -1174,3 +1174,9 @@ status pending ejs
       { $unwind: "$productDetails" },
       { $group: { _id: "$productDetails.category", count: { $sum: 1 } } },
     ]);
+
+
+
+
+
+     <% order.forEach(item=> { %>
