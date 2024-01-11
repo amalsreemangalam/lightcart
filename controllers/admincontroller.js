@@ -576,7 +576,7 @@ const loadordermanagement = async (req, res) => {
 const updateOrderStatus = async (req, res) => {
     const orderId = req.params.orderId;
     const newStatus = req.params.newStatus;
-
+    console.log();
     try {
         const order = await ordercollection.findById(orderId);
 
