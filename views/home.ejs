@@ -244,31 +244,15 @@
         <% }) %>
       </div>
     </div>
-    
-    
-
-      
+         
      </div>
-     
-        
-   
-
-        <!-- Jumbotron -->
-
-
-
-
-
-
-
+            
 
   </header>
 
 
+ 
 
-
-
-  <!-- Products -->
   <section>
     <div class="container my-5">
       <header class="mb-4">
@@ -277,7 +261,7 @@
       <div id="product-container" class="row">
         <% product.forEach(prod=> { %>
           <div class="col-lg-3 col-md-6 col-sm-6 prod">
-            <!-- Product card -->
+          
             <div class="card my-2 shadow-2-strong " style="height: 400px; border-radius: 10px;">
               <!-- Image container -->
               <div style="width: 250px; height: 200px; position: relative; overflow: hidden;">
@@ -286,7 +270,7 @@
                     style="object-fit: scale-down; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 10px; " />
                 </a>
               </div>
-              <!-- Card body -->
+              
               <div class="card-body d-flex flex-column">
                 <h5 class="card-title">
                   <%= prod.productname %>
@@ -296,7 +280,7 @@
                   <h4><span class="item_price">&#8377;<s>
                         <%= prod.productprice %>
                       </s></span><span> &#8377;<%= prod.OfferPrice %></span></h4>
-                  <!-- <h4><span class="item_price">&#8377;</span></h4> -->
+                 
                   <% }else{ %>
                     <h4><span class="item_price">&#8377;<%= prod.productprice %></span></h4>
                     <% } %>
@@ -310,8 +294,7 @@
                           <button class="btn btn-danger shadow-0">Out of stocke</button>
                           <%  }%>
                         <a href="/addtowish/<%=prod._id%>" class="btn btn-outline-danger"><i class="fa fa-heart"></i></a>
-                        <!-- <a href="wishlist.html"> -->
-                        <!-- <i class="fas fa-heart"></i> -->
+                       
                         </a>
                       </div>
               </div>
@@ -547,10 +530,6 @@
 </body>
 
 
-
-
-
-
 <script>
   document.getElementById('sort-select').addEventListener('change', function (event) {
 const sortOrder = event.target.value;
@@ -570,7 +549,6 @@ productElements.forEach(function (product) {
 
 });
 </script>
-
 
 
 
