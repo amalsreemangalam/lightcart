@@ -95,7 +95,7 @@ const signup = (req, res) => {
     if (!req.session.user) {
         res.render('usersignup');
     } else {
-        res.render('home');
+        res.redirect('/');
     }
 }
 

@@ -103,27 +103,18 @@
             let email = document.getElementById("email").value.trim();
             let phone = document.getElementById("phone").value.trim();
             let password = document.getElementById("password").value;
-            if (name.length>=3||name.trim() == ""  || /\./.test(name)) {
-        // Display validation message using a Bootstrap alert
-        let alertDiv = document.createElement("div");
-        // alertDiv.className = "alert alert-danger";
-        alertDiv.innerHTML = "Name must be filled properly";
+            if (!(/^[a-zA-Z].*[a-zA-Z]$/.test(name) && !/\./.test(name))) {
+   // Display validation message using a Bootstrap alert
+   let alertDiv = document.createElement("div");
+   alertDiv.innerHTML = "Name must be filled properly";
 
-        // Append the alert to the form
-        let form = document.querySelector('form');
-        form.insertBefore(alertDiv, form.firstChild);
+   // Append the alert to the form
+   let form = document.querySelector('form');
+   form.insertBefore(alertDiv, form.firstChild);  
 
-        // Prevent form submission
-        return false;
-    }
-
-    let validateName = (trimmed) => {
-      // Check if the length is at least 3 characters and does not contain '*'
-      if (trimmed.length >= 3 && !trimmed.includes('*')) {
-        return true;
-      }
-      return false;
-    };
+   // Prevent form submission
+   return false;
+}
 
 
             // Validate email format
