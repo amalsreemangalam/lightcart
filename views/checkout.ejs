@@ -436,7 +436,7 @@
       // Perform actions based on the selected payment method
       if (selectedMethod === "cashondelivery") {
         const radioButtons = document.querySelectorAll('input[name="selectedAddress"]:checked');
-
+const total = document.getElementById('totalPrice').innerText;
         radioButtons.forEach(button => {
           const id = button.getAttribute('data-address-id');
           console.log('Selected Address ID:', id);
@@ -449,6 +449,7 @@
             },
             body: JSON.stringify({
               method: selectedMethod,
+              totalPrices:Number(total),
               // other order details...
             }),
           }).then((res) => {

@@ -817,7 +817,8 @@ const orderplaced = async (req, res) => {
 
         const id = req.params.id
    
-        
+        const total = req.body.totalPrices
+        console.log("total price ann",total);
         const userId = req.session.user;
         console.log("id", id);
         console.log("userId", userId);
@@ -868,7 +869,7 @@ const orderplaced = async (req, res) => {
             orderDate: new Date(),
             products: productsInOrder,
             quantity: cart.totalQuantity,
-            totalPrice: cart.total,
+            totalPrice: total,
             paymentMethod: req.body.method,
             status: 'Pending',
             address: addressDetails,
