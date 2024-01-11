@@ -818,10 +818,10 @@ const orderplaced = async (req, res) => {
         const id = req.params.id
    
         const total = req.body.totalPrices
-        console.log("total price ann",total);
+        // console.log("total price ann",total);
         const userId = req.session.user;
-        console.log("id", id);
-        console.log("userId", userId);
+        // console.log("id", id);
+        // console.log("userId", userId);
 
         const user = await collection1.findOne({ _id: userId });
 
@@ -897,14 +897,8 @@ const orderplaced = async (req, res) => {
         
         await user.save();
 
-       
-        cart.items = [];
-        cart.discount = 0;
-        cart.total = 0;
-        cart.totalQuantity = 0;
-
-        
-        await cart.save();
+   
+          await cartcollection.deleteMany({ userId: userId });
 
         console.log("suceesshekewdwhj");
         return res.send()
@@ -928,13 +922,9 @@ const orderplacedGet = (req, res) => {
 const paymentonline = async (req, res) => {
     try {
         const total = Number(req.body.totalPrices);
-        console.log(total);
+        console.log("The total price here",total);
         const userId = req.session.user;
         const cart = await cartcollection.findOne({ userId }).populate('items.product');
-
-       
-
-        
         const orderOptions = {
             amount: total * 100, // amount in paise
             currency: 'INR', // change it to your currency code

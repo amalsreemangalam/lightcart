@@ -171,7 +171,7 @@
         <h4>Total: ₹<%=total.toFixed(2) %>
         </h4>
 
-        <% if (cart.items.length>0) {%>
+        <% if (cart?.items?.length>0) {%>
           <a href="/checkout" class="btn btn-success btn-block mt-3">Checkout</a>
           <% } %>
       </div>
